@@ -75,8 +75,8 @@ these correlated checkpoints, \TriGLU{} improves MathAvg from 52.224 to 52.997
 (+0.773 points) and the provisional CodeAvg from 32.671 to 33.659 (+0.988),
 while Reasoning and Language category averages are approximately tied
 (-0.213 and -0.128).  The clearest gains occur on harder generative tasks:
-OlympiadBench (+2.548), corrected LiveCodeBench (+1.063), and a manually
-audited GPQA-Diamond-Freeform diagnostic (+1.746).  These results are promising
+\textbf{OlympiadBench} (+2.548), \textbf{corrected LiveCodeBench} (+1.063), and a manually
+audited \textbf{GPQA-Diamond-Freeform} diagnostic (+1.746).  These results are promising
 but not definitive: they come from one training seed, checkpoint variation is
 not independent-seed uncertainty, several evaluation protocols required
 correction, and response-length caps remain in both training and evaluation.
@@ -247,26 +247,26 @@ implements a standard architecture from prior work.
 \begin{figure}[H]
 \centering
 \begin{tikzpicture}[
-  node distance=7mm and 10mm,
-  box/.style={draw=ink,rounded corners=2pt,fill=softgray,minimum height=7mm,minimum width=20mm,align=center,font=\small},
+  x=1cm,y=1cm,
+  box/.style={draw=ink,rounded corners=2pt,fill=softgray,minimum height=8mm,align=center,font=\small},
   op/.style={draw=accent,circle,fill=softblue,minimum size=7mm,font=\small\bfseries},
   arr/.style={-{Latex[length=2mm]},thick,draw=ink}
 ]
-\node[box] (x) {$x$\,(2048)};
-\node[box, right=of x, yshift=10mm] (base) {base SwiGLU\\$h_0$ (6144)};
-\node[box, right=of x, yshift=-10mm] (bneck) {FP32 bottleneck\\$z$ (512)};
-\node[box, right=of bneck] (three) {value $\odot$ gate $\odot$\\GeLU--SiLU branch\\(2048)};
-\node[box, right=of three] (side) {zero-init return\\$s$ (6144)};
-\node[box, right=of side] (mod) {$1+0.1\tanh(s)$};
-\node[op, right=13mm of base] (mul) {$\odot$};
-\node[box, right=of mul] (down) {base $W_d$\\output};
+\node[box,minimum width=20mm] (x) at (0,0) {$x$\,(2048)};
+\node[box,minimum width=27mm] (base) at (3.0,1.25) {base SwiGLU hidden\\$h_0$ (6144)};
+\node[box,minimum width=27mm] (bneck) at (3.0,-1.25) {FP32 bottleneck\\$z$ (512)};
+\node[box,minimum width=34mm] (three) at (6.5,-1.25) {value $\odot$ gate $\odot$ third\\three-stream product (2048)};
+\node[box,minimum width=27mm] (side) at (9.9,-1.25) {zero-init return\\$s$ (6144)};
+\node[box,minimum width=29mm] (mod) at (13.0,-1.25) {bounded modulator\\$1+0.1\tanh(s)$};
+\node[op] (mul) at (13.0,1.25) {$\odot$};
+\node[box,minimum width=25mm] (down) at (15.2,1.25) {base $W_d$\\output};
 \draw[arr] (x) -- (base);
 \draw[arr] (x) -- (bneck);
 \draw[arr] (bneck) -- (three);
 \draw[arr] (three) -- (side);
 \draw[arr] (side) -- (mod);
 \draw[arr] (base) -- (mul);
-\draw[arr] (mod.east) -| (mul.south);
+\draw[arr] (mod) -- (mul);
 \draw[arr] (mul) -- (down);
 \end{tikzpicture}
 \caption{Layer-10 \TriGLU{}/\ToTGLU{} intervention.  The original SwiGLU path
@@ -496,7 +496,9 @@ not independent-seed uncertainty or a confidence interval.
 \centering
 \caption{Corrected matched-checkpoint results (steps 158/196/226/256/294).
 Values are mean $\pm$ population standard deviation in percentage points.
-$^*$MBPP and therefore CodeAvg remain provisional.}
+$^*$MBPP and therefore CodeAvg remain provisional.  $^\dagger$All category
+averages are equal-weight descriptive summaries and are intentionally muted;
+the three bold rows are the hard generative benchmarks discussed in the text.}
 \label{tab:means}
 \small
 \begin{tabular}{lrrr}
@@ -505,25 +507,25 @@ Metric & \TriGLU{} & Baseline & Mean difference \\
 \midrule
 MATH-500 & $67.520\pm1.230$ & $66.880\pm0.412$ & $+0.640$ \\
 GSM8K & $82.942\pm0.322$ & $82.396\pm0.446$ & $+0.546$ \\
-OlympiadBench & $28.059\pm1.294$ & $25.511\pm0.533$ & $+2.548$ \\
+\textbf{OlympiadBench} & $\mathbf{28.059\pm1.294}$ & $\mathbf{25.511\pm0.533}$ & $\mathbf{+2.548}$ \\
 AMC 2023 Average@32 & $33.469\pm0.755$ & $34.109\pm0.950$ & $-0.640$ \\
-\textbf{MathAvg} & $\mathbf{52.997\pm0.184}$ & $\mathbf{52.224\pm0.393}$ & $\mathbf{+0.773}$ \\
+\textcolor{gray}{MathAvg$^\dagger$} & \textcolor{gray}{$52.997\pm0.184$} & \textcolor{gray}{$52.224\pm0.393$} & \textcolor{gray}{$+0.773$} \\
 AMC 2023 greedy & $38.000\pm1.000$ & $35.500\pm2.915$ & $+2.500$ \\
 \midrule
 HumanEval+ corrected & $60.854\pm0.896$ & $59.512\pm1.131$ & $+1.342$ \\
 MBPP$^*$ & $29.280\pm1.121$ & $28.720\pm0.844$ & $+0.560$ \\
-LiveCodeBench corrected & $10.845\pm0.401$ & $9.782\pm0.139$ & $+1.063$ \\
-\textbf{CodeAvg}$^*$ & $\mathbf{33.659\pm0.260}$ & $\mathbf{32.671\pm0.567}$ & $\mathbf{+0.988}$ \\
+\textbf{LiveCodeBench corrected} & $\mathbf{10.845\pm0.401}$ & $\mathbf{9.782\pm0.139}$ & $\mathbf{+1.063}$ \\
+\textcolor{gray}{CodeAvg$^{*\dagger}$} & \textcolor{gray}{$33.659\pm0.260$} & \textcolor{gray}{$32.671\pm0.567$} & \textcolor{gray}{$+0.988$} \\
 \midrule
 GPQA-Diamond (MCQ) & $26.566\pm1.880$ & $26.565\pm2.273$ & $+0.001$ \\
 MMLU-Pro & $33.895\pm0.576$ & $34.320\pm0.198$ & $-0.425$ \\
-\textbf{ReasoningAvg} & $\mathbf{30.230\pm0.691}$ & $\mathbf{30.443\pm1.121}$ & $\mathbf{-0.213}$ \\
-GPQA-Diamond-Freeform & $6.349\pm1.328$ & $4.603\pm1.053$ & $+1.746$ \\
+\textcolor{gray}{ReasoningAvg$^\dagger$} & \textcolor{gray}{$30.230\pm0.691$} & \textcolor{gray}{$30.443\pm1.121$} & \textcolor{gray}{$-0.213$} \\
+\textbf{GPQA-Diamond-Freeform} & $\mathbf{6.349\pm1.328}$ & $\mathbf{4.603\pm1.053}$ & $\mathbf{+1.746}$ \\
 \midrule
 C-Eval & $47.548\pm0.566$ & $46.182\pm0.560$ & $+1.366$ \\
 IFEval & $27.421\pm0.669$ & $26.752\pm0.657$ & $+0.669$ \\
 MGSM & $56.538\pm5.340$ & $58.960\pm0.199$ & $-2.422$ \\
-\textbf{LanguageAvg} & $\mathbf{43.836\pm1.724}$ & $\mathbf{43.964\pm0.334}$ & $\mathbf{-0.128}$ \\
+\textcolor{gray}{LanguageAvg$^\dagger$} & \textcolor{gray}{$43.836\pm1.724$} & \textcolor{gray}{$43.964\pm0.334$} & \textcolor{gray}{$-0.128$} \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -532,21 +534,49 @@ MGSM & $56.538\pm5.340$ & $58.960\pm0.199$ & $-2.422$ \\
 
 The primary Math result is positive: \TriGLU{} improves MathAvg by 0.773
 points across the five matched checkpoints.  The gain is not uniform.  It is
-largest on OlympiadBench and is accompanied by positive MATH-500 and GSM8K
+largest on \textbf{OlympiadBench} and is accompanied by positive MATH-500 and GSM8K
 differences, while AMC Average@32 is lower.  The separate greedy AMC diagnostic
 favors \TriGLU{} by 2.5 points, illustrating that sampled distribution-wide
 reliability and the greedy modal path need not move together.
 
 The OOD profile is also structured rather than uniformly positive.  Corrected
-HumanEval+ and LiveCodeBench favor \TriGLU{}, with the largest relative coding
-gain on the harder LiveCodeBench task.  GPQA-Diamond MCQ is effectively tied,
-MMLU-Pro slightly favors the baseline, and strict free-form GPQA favors
+HumanEval+ and \textbf{LiveCodeBench} favor \TriGLU{}, with the largest relative coding
+gain on the harder \textbf{LiveCodeBench} task.  GPQA-Diamond MCQ is effectively tied,
+MMLU-Pro slightly favors the baseline, and strict
+\textbf{GPQA-Diamond-Freeform} favors
 \TriGLU{}.  C-Eval and IFEval improve, but a large MGSM deterioration at
 step 294 creates high \TriGLU{} variance and removes the category-average gain.
 The source guide's intuition---extra expressivity may improve hard reasoning
 while occasionally destabilizing simpler knowledge retrieval or multilingual
 behavior---is consistent with this profile, but is not uniquely established by
 it.
+
+The OOD category averages should therefore be treated as deliberately weak
+summaries.  They assign equal weight to benchmarks with different domains,
+answer formats, random-choice floors, sample counts, and protocol maturity.
+Such an average can hide a gain on a strict generative diagnostic---most clearly
+\textbf{GPQA-Diamond-Freeform} here---behind a small loss on an unrelated constituent.
+The raw benchmark vector, protocol status, and cross-checkpoint stability are
+more informative than the sign of a single unweighted OOD average.
+
+The \textbf{GPQA-Diamond-Freeform} table cell is computed from checkpoint-level strict
+accuracy.  Each of the five checkpoints contributes 126 manually audited
+responses; uncertain judgments count as incorrect.  Averaging those five
+equal-denominator accuracies is equivalent to 40 correct checkpoint--question
+runs out of 630 for \TriGLU{} (6.349\%) and 29 out of 630 for the baseline
+(4.603\%).  A separate union diagnostic asks how many distinct questions were
+solved by at least one checkpoint: 18 of 126 for \TriGLU{} and 12 of 126 for
+the baseline.  That union statistic is useful for capability coverage but is
+not the value reported in Table~\ref{tab:means}.
+
+This caution is also consistent with the source paper's Qwen3-1.7B layer sweep:
+Layer 10 is selected for strong Math contribution, but it is not uniformly the
+best layer across OOD categories \citep{zhang2026onelayer}.  One plausible
+interpretation is that functional specialization remains relatively diffuse at
+this parameter scale, so a mathematically high-contribution layer can still
+produce heterogeneous transfer.  The stronger layer-role separation suggested
+by larger-model results is a cross-scale hypothesis, not something established
+by the present single-seed Qwen3-1.7B experiment.
 
 Training reward and downstream evaluation were not monotonically aligned.  At
 several checkpoints the EE variant reached equal or lower recent reward while
@@ -568,9 +598,13 @@ is the most important missing validation.
 
 \subsection{Full corrected checkpoint table}
 
-Figure~\ref{fig:mastertable} provides the complete per-checkpoint record.  The
-image is generated from the repository's machine-readable consolidated table;
-it excludes SFT, untuned-base, and early RL checkpoints by design.
+Table~\ref{tab:mastertable} provides the complete per-checkpoint record.  The
+native LaTeX table is generated from the repository's machine-readable consolidated table;
+it excludes SFT, untuned-base, and early RL checkpoints by design.  The
+report-specific renderer mutes every equal-weight Avg column and emphasizes
+\textbf{OlympiadBench}, \textbf{LiveCodeBench}, and
+\textbf{GPQA-Diamond-Freeform}; this visual hierarchy
+is presentation metadata, not a change to any score.
 
 The body contains ten matched cells: five checkpoints for \TriGLU{} and five
 for the baseline.  The final rows report the population mean and standard
@@ -589,15 +623,17 @@ with Section~5.4 rather than as an uncapped capability ceiling.
 
 \clearpage
 \begin{landscape}
-\begin{figure}[H]
+\begin{table}[H]
 \centering
-\includegraphics[width=0.98\linewidth]{figures/corrected_master_table.png}
 \caption{Full corrected Math and OOD results at matched RL steps 158, 196,
 226, 256, and 294, including across-checkpoint means and population standard
 deviations.  MathAvg uses AMC Average@32, not AMC greedy.  ReasoningAvg excludes
-GPQA-Diamond-Freeform.  MBPP and CodeAvg remain provisional.}
-\label{fig:mastertable}
-\end{figure}
+GPQA-Diamond-Freeform.  All Avg columns are intentionally muted; the three
+emphasized columns are hard generative benchmarks.  MBPP and CodeAvg remain
+provisional.}
+\label{tab:mastertable}
+\input{generated/corrected_master_table.tex}
+\end{table}
 \end{landscape}
 \clearpage
 
@@ -735,7 +771,8 @@ the added side architecture and its parameters.
 
 Across five matched checkpoints, the EE variant improves the primary Math
 average and the provisional Code average, with especially consistent gains on
-OlympiadBench, corrected LiveCodeBench, and strict GPQA-Diamond-Freeform.  It
+\textbf{OlympiadBench}, \textbf{corrected LiveCodeBench}, and strict
+\textbf{GPQA-Diamond-Freeform}.  It
 does not uniformly dominate: aggregate Reasoning and Language are tied or
 slightly lower, MGSM contains a severe late outlier, and serving throughput is
 roughly half that of vanilla Qwen under the measured setup.  The appropriate

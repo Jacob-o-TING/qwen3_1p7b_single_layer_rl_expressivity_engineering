@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-07-20T20:01:25.828234+00:00",
+  "source": "docs\\experiment_records\\compact_metrics\\2026-07-18_qwen3_1p7b_math_ood_corrected_master_table.json",
+  "source_sha256": "bac664863c367f130599ee33e59ae783594eb1635d04b3ba4180736a172029ad",
+  "output": "docs\\technical_report\\generated\\corrected_master_table.tex",
+  "output_sha256": "2b314d651992ff0c0b13d5af926d8a0f4e63bc68c8de7f31ec69dbd50a122393",
+  "row_count": 12,
+  "display_steps": [
+    158,
+    196,
+    226,
+    256,
+    294
+  ],
+  "bold_hard_benchmarks": [
+    "gpqa_freeform",
+    "livecodebench",
+    "olympiad"
+  ],
+  "muted_average_columns": [
+    "code_avg",
+    "language_avg",
+    "math_avg",
+    "reasoning_avg"
+  ],
+  "historical_master_table_modified": false
+}
