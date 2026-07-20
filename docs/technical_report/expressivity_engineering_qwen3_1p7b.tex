@@ -54,11 +54,15 @@
 \maketitle
 
 \begin{abstract}
-We introduce \EE{} (EE), a design perspective that studies how higher-order,
-multiplicative, and input-conditioned interactions can be added to neural
-network computation beyond pure linear channel mixing.  To test this proposal
-under a bounded compute budget, we use the layer-selective reinforcement
-learning workflow of \citet{zhang2026onelayer} as experimental guide rails:
+We introduce \EE{} (EE) from a multiplication-first distinction: a static
+linear map performs pure channel mixing, whereas multiplying a representation
+by itself, or by a transformed version of itself, creates higher-order and
+input-conditioned interaction.  Under this lens, nonlinear activation
+functions, GLU-family gates, attention, routed MoE/MoLoRA, and HyperNetworks
+are not disconnected tricks; they are different realizations of input-derived
+multiplication or dynamic weighting.  To test this proposal under a bounded
+compute budget, we use the layer-selective reinforcement learning workflow of
+\citet{zhang2026onelayer} as experimental guide rails:
 Qwen3-1.7B-Base is trained with Group Relative Policy Optimization while only
 decoder Layer 10 is updated.  The EE intervention retains the original SwiGLU
 path and adds an exact-no-op-initialized, FP32 side network that multiplicatively
@@ -86,21 +90,31 @@ a general scaling-law claim.
 
 \section{Introduction}
 
-Modern Transformer blocks alternate token mixing with channel mixing.  Within
-the feed-forward network (FFN), a linear map can mix channels but cannot by
-itself express multiplicative interactions among features.  Gated linear units
-already weaken this limitation by multiplying two learned streams; SwiGLU is a
-particularly successful example \citep{shazeer2020glu}.  Hypernetworks generate
-or modulate parameters from context \citep{ha2016hypernetworks}; mixtures of
-experts route inputs through specialized computation; polynomial activations
-explicitly introduce higher-order terms.  These methods are usually discussed
-in separate literatures despite sharing a practical objective: making the
-model's effective computation depend more richly on its current state.
+\EE{} begins from one operation: multiplication.  For a representation $x$, a
+static linear map $Wx$ performs channel mixing.  It can recombine coordinates,
+but a single such map does not create products between input-dependent
+features.  Multiplying a representation by itself, or by a learned
+preprocessing of itself, changes that algebraic structure.  Expressions such
+as $f(x)\odot g(x)$ contain feature products; expressions such as $W(x)x$ use
+the current state to construct the weights that act on that same state.  We
+take this self- or input-conditioned multiplication, rather than a list of
+particular modules, as the primitive of \EE{}.
 
-We propose \EE{} as a unifying engineering lens for that objective.  In this
-report, an EE operation is one that introduces a learned multiplicative,
-higher-order, routed, or dynamically parameterized interaction, as opposed to
-only applying another static linear channel-mixing map.  This is a working
+This primitive reveals a shared structure beneath mechanisms that are usually
+placed in separate literatures.  A nonlinear activation can be approximated
+over a bounded operating range by polynomial terms, whose powers are repeated
+self-multiplications.  GLU and SwiGLU multiply learned feature streams
+\citep{shazeer2020glu}.  Attention constructs an input-dependent weight matrix
+from queries and keys and multiplies it into values
+\citep{vaswani2017attention}.  HyperNetworks generate the parameters that act
+on another representation \citep{ha2016hypernetworks}.  MoE and MoLoRA multiply
+expert outputs by routed, input-dependent coefficients
+\citep{shazeer2017moe,zadouri2024molora}.  These are not mathematically
+identical modules, but they instantiate the same engineering move: replace
+only fixed linear channel mixing with computation whose effective transform is
+conditioned on, and multiplied with, the current representation.
+
+We propose \EE{} as a unifying engineering lens for this move.  It is a working
 taxonomy rather than a theorem that totally orders neural architectures by
 expressive power.  It is useful because it separates two questions:
 
@@ -122,9 +136,10 @@ naive update of exactly the same layer.
 Our contributions are:
 
 \begin{itemize}
-  \item a precise EE taxonomy connecting multiplicative FFNs, hypernetworks,
-        routed low-rank experts, grid-wise modulation, and polynomial
-        activations;
+  \item a multiplication-first EE taxonomy connecting general nonlinear
+        activations, GLU-family FFNs, attention, HyperNetworks, routed full and
+        low-rank experts, grid-wise modulation, and explicit polynomial
+        modules;
   \item an exact-function-preserving Layer-10 \TriGLU{}/\ToTGLU{} intervention
         for Qwen3-1.7B-Base;
   \item a matched six-GPU GRPO comparison from the same untuned base model,
@@ -142,22 +157,55 @@ Our contributions are:
 
 \subsection{A working definition}
 
-For an input vector $x$, a static linear map $Wx$ performs channel mixing.  EE
-introduces interactions such as
+For an input vector $x$, the baseline operation is fixed linear channel mixing,
+$y=Wx$.  The defining EE move is instead to multiply an input-derived quantity
+back into the same representation or into another transform of it:
 \begin{equation}
-  y = W x \odot g(x),
-  \qquad
-  y = \left(W + \Delta W(x)\right)x,
-  \qquad
-  y = \sum_e \pi_e(x) f_e(x),
-  \label{eq:ee-family}
+  y = f(x) \odot g(x)
+  \quad\text{or}\quad
+  y = W(x)x.
+  \label{eq:ee-primitive}
 \end{equation}
-where the effective transform depends on $x$, or where multiple learned
-streams are multiplied or routed.  Under this definition:
+The first form includes literal self-interaction when $f=g$, and interaction
+with a preprocessed self when $f$ and $g$ are different transforms of the same
+input.  The second is the matrix-valued version: $x$ generates some or all of
+the weights that are then applied to $x$.  Familiar mechanisms can be written
+as instances of these forms:
+\begin{align}
+  \text{activation:}\quad
+    &\phi(z) \approx \sum_{k=0}^{K} a_k z^{\odot k},
+    \label{eq:ee-activation}\\
+  \text{GLU:}\quad
+    &y = \phi(Ax) \odot Bx,
+    \label{eq:ee-glu}\\
+  \text{attention:}\quad
+    &Y = \operatorname{softmax}\!\left(\frac{Q(X)K(X)^\top}{\sqrt{d}}\right)V(X),
+    \label{eq:ee-attention}\\
+  \text{dynamic weights:}\quad
+    &y = \left(W + \Delta W(x)\right)x,
+    \label{eq:ee-hyper}\\
+  \text{routed experts:}\quad
+    &y = \sum_e \pi_e(x) f_e(x).
+  \label{eq:ee-family}
+\end{align}
+Equation~\ref{eq:ee-activation} is an approximation statement on a bounded
+domain, not a claim that every activation is globally polynomial.  It makes
+the key algebraic point: nonlinear activation functions introduce powers and
+self-interactions that a lone linear channel mixer cannot.  GELU, for example,
+is explicitly $z\Phi(z)$ \citep{hendrycks2016gelu}; PolyCom/PolyNorm makes the
+polynomial view trainable and explicit \citep{zhuo2024polycom}.  Under this
+definition:
 
 \begin{itemize}
-  \item GLU/SwiGLU uses multiplicative feature interactions
-        \citep{shazeer2020glu};
+  \item general nonlinear activations are the most local form of EE: they turn
+        each channel into a nonlinear self-interaction before later channel
+        mixing; explicit polynomial activations expose this structure rather
+        than creating it from nothing;
+  \item GLU/SwiGLU makes the multiplication visible by gating one learned
+        stream with another \citep{shazeer2020glu};
+  \item attention is dynamic weighting at token level: $Q(X)$ and $K(X)$
+        construct weights from the current sequence, and those weights
+        multiply $V(X)$ \citep{vaswani2017attention};
   \item HyperNetworks generate parameters for another network
         \citep{ha2016hypernetworks};
   \item HyperGrid decomposes task-conditioned modulation into grid-wise
@@ -165,18 +213,24 @@ streams are multiplied or routed.  Under this definition:
   \item HyperFormer generates task/layer/position-conditioned adapter
         parameters, and HyperLoRA generates constrained low-rank adapters
         \citep{mahabadi2021hyperformer,lv2024hyperlora};
-  \item MoLoRA treats lightweight low-rank adapters as routed experts
-        \citep{zadouri2024molora};
-  \item PolyCom/PolyNorm makes higher-order interactions explicit in the
-        activation family \citep{zhuo2024polycom}.
+  \item MoE multiplies full expert outputs by router coefficients
+        \citep{shazeer2017moe}, while MoLoRA applies the same routed-mixture
+        pattern to low-rank updates \citep{zadouri2024molora}.  At the routing
+        level, a conventional linear-logit MoE router is the full-expert
+        analogue of linearly routed MoLoRA; their expert parameterizations,
+        capacities, and compute profiles remain different;
+  \item PolyCom/PolyNorm makes higher-order activation interactions explicit
+        and trainable \citep{zhuo2024polycom}.
 \end{itemize}
 
-These methods are related, not interchangeable.  HyperFormer and HyperLoRA are
-primarily task-conditioned parameter generators; MoLoRA routes among learned
-lightweight experts; HyperGrid modulates structured regions of weight matrices;
-PolyNorm uses elementwise polynomial powers and normalization.  The present
-\TriGLU{} branch instead computes a per-token multiplicative modulation of one
-existing FFN hidden state.
+The claim is common primitive, not module equivalence.  HyperFormer and
+HyperLoRA are primarily task-conditioned parameter generators; attention is a
+per-token dynamic weight matrix over values; MoE routes among full experts;
+MoLoRA routes among low-rank updates; HyperGrid modulates structured regions of
+weight matrices; and PolyNorm uses elementwise polynomial powers and
+normalization.  The present \TriGLU{} branch is another point in this family:
+it computes a per-token multiplicative modulation of one existing FFN hidden
+state.
 
 \subsection{Scope beyond Transformers}
 
@@ -189,11 +243,15 @@ FLOPs, activation memory, kernel-launch overhead, and optimization difficulty.
 It does mean that richer channel computation can be explored without directly
 increasing the number of attention score pairs or the KV-cache length.
 
-Attention is itself an input-conditioned token-mixing mechanism and can be
-described within the broader EE taxonomy.  This controlled study nevertheless
-keeps the attention architecture unchanged: only the Layer-10 FFN computation
+Attention is therefore not merely adjacent background; it is a canonical EE
+mechanism at token-mixing scale.  Its effective matrix
+$\operatorname{softmax}(QK^\top/\sqrt{d})$ is generated from the current hidden
+states before it weights the values.  This controlled study nevertheless keeps
+the attention architecture unchanged: only the Layer-10 FFN computation
 differs between conditions, while the ordinary Layer-10 attention parameters
-remain trainable in both.
+remain trainable in both.  The experiment tests whether the same broad
+multiplication-first principle can be pushed further inside the FFN without
+changing attention.
 
 \section{Model}
 
@@ -761,9 +819,12 @@ quality/throughput frontier at large scale remains an empirical question.
 
 \section{Conclusion}
 
-We proposed \EE{} as a practical lens for organizing multiplicative,
-higher-order, routed, and dynamically parameterized neural computation.  Using
-the layer-localization and experimental workflow of
+We proposed \EE{} from a multiplication-first distinction: fixed linear maps
+mix channels, while self-multiplication, multiplication by a transformed self,
+and state-generated weights create higher-order or input-conditioned
+interaction.  This lens places nonlinear activations, GLUs, attention,
+HyperNetworks, MoE, and MoLoRA along one shared design axis without claiming
+that the modules are interchangeable.  Using the layer-localization and experimental workflow of
 \citet{zhang2026onelayer} as guide rails, we tested one high-capacity EE module
 at Qwen3-1.7B-Base Layer 10 under matched single-layer GRPO.  The intervention
 starts as an exact functional no-op and differs from the baseline only through
