@@ -25,6 +25,30 @@ model traces, verdicts, and compact runtime evidence are preserved for
 reproducibility. Untracked training artifacts and large generated outputs are
 not included.
 
+The main completed research wave is a matched six-GPU GRPO comparison between
+the naive Layer-10 whole-layer update and Layer-10 TriGLU. Both start from the
+same untuned Qwen3-1.7B-Base revision, use the same shuffled data ledger and
+seeds, and have complete Math and out-of-distribution evaluations at matched
+steps 158, 196, 226, 256, and 294. The consolidated result table is in
+`docs/experiment_records/2026-07-18_qwen3-1p7b-math-ood-corrected-consolidated-master-table.md`.
+
+### Current implementation and evidence status
+
+| Variant | Inference integration | Training evidence | Current boundary |
+| --- | --- | --- | --- |
+| Whole-layer baseline | Standard Hugging Face and vLLM Qwen route | Matched six-GPU GRPO through step 294 | Primary control |
+| TriGLU | Registered `Qwen3TriGLUForCausalLM`, out-of-tree vLLM plugin, exact greedy-token parity in the bounded gate, and validated live weight synchronization | Matched six-GPU GRPO through step 294 | Primary added-expressivity result |
+| SHS | Reference PyTorch/cuBLAS custom projection inside vLLM V1; long-decode continuous batching measured | SFT and bounded runtime/weight-sync evidence | Historical runs resolved the generic wrapper; the registered SHS CausalLM route remains pending |
+| OFT | Hugging Face/vLLM scaffold and completed SFT checkpoint path | SFT only; no GRPO update was launched | Deferred until a matched adaptation-policy comparison is defined |
+
+TriGLU's bounded registered-vLLM gate reached 2,872.1 generated tokens/s/GPU
+at pressure 64, or 52.8% of the matched vanilla Qwen rate and 151.8% of the
+historical SHS reference-path rate. These are operational throughput results,
+not a claim of full-logit backend parity. SHS continuous batching was also
+demonstrated, but its historical runs selected the generic
+`TransformersForCausalLM` route; the separately registered SHS generation
+route is therefore still an explicit pending obligation.
+
 ## What is included
 
 - Paper-aligned configs for Qwen3-1.7B-Base, Layer 10, middle layers 11-15,
@@ -36,7 +60,8 @@ not included.
 - Explicit training modes for adapter-only, backbone-only, joint, and baseline
   runs.
 - veRL launch glue for materialized RLHF parquet, custom reward scoring, and
-  patched synchronous HF rollout for architecture-variant runs.
+  architecture-aware vLLM rollout, export, and live weight synchronization.
+- Six-rank matched GRPO orchestration and six-way TP=1 parallel evaluation.
 - Smoke tests that validate config, registry, layer selection, and dry-run
   artifact layout locally.
 - Curated manual-audit packages under `audit_inputs/` and compact runtime
@@ -57,7 +82,7 @@ Primary target:
 - Paper anchors for Qwen3-1.7B: Layer 10 and Layer 12 are high-contribution;
   the heuristic middle-5 selection is layers 11-15.
 
-Paper hyperparameters captured in `configs/base_qwen3_1p7b.yaml`:
+Paper-aligned hyperparameters captured in `configs/base_qwen3_1p7b.yaml`:
 
 | Field | Value |
 | --- | --- |
@@ -72,6 +97,30 @@ Paper hyperparameters captured in `configs/base_qwen3_1p7b.yaml`:
 | Clip range | `0.2` |
 | Epochs | `4` |
 | Adaptive LR boosted/base | `1e-5` / `5e-6` |
+
+### Six-GPU matched-run batch contract
+
+The completed RTX 5090 comparison did not use the paper-aligned
+`512/128/8` train/mini/micro batch tuple. To use all six ranks without leaving
+two GPUs idle, it used the explicitly approved `504/126/6` tuple:
+
+| Field | Six-rank value |
+| --- | ---: |
+| Train batch size | `504` prompts |
+| PPO mini batch size | `126` prompts |
+| PPO micro batch size | `6` prompts |
+| Group size | `4` responses per prompt |
+| Responses per update | `2,016` |
+| Prompts through step 98 | `49,392` |
+| Deterministically omitted rows at step 98 | `608 / 50,000` |
+
+Both variants use the same deterministic shuffled permutation, omitted-row
+set, initialization seed, rollout seed, response cap, and veRL parquet hashes.
+The loader uses `drop_last=True`; consequently, step 98 is labelled a
+**near-one-pass** milestone rather than an exact full epoch. No irregular tail
+batch was introduced. This is a matched architecture comparison with a 1.56%
+exposure deviation from `512 x 98`, not an exact reproduction of the paper's
+batch arithmetic.
 
 ## Layout
 
@@ -256,7 +305,7 @@ Package and sync without storing secrets in files:
 On the remote machine, prefer absolute Python paths:
 
 ```bash
-cd /root/autodl-tmp/qwen3_1p7b_single_layer_rl
+cd /root/autodl-tmp/qwen3_1p7b_single_layer_rl_expressivity_engineering
 PYTHON_BIN=/root/miniconda3/bin/python \
 bash scripts/remote/autodl_remote_launch.sh configs/training_modes/selected_layer_no_adapter.yaml layer10_no_adapter_pilot
 ```
@@ -264,20 +313,33 @@ bash scripts/remote/autodl_remote_launch.sh configs/training_modes/selected_laye
 See `docs/autodl_sync_and_remote.md` for `screen`, logging, and artifact
 pullback conventions.
 
-The remote runner for architecture variants uses a patched veRL `v0.6.1`
-checkout with synchronous HF rollout, so generation executes the same model
-surgery as actor training. vLLM remains useful for a later plain-baseline speed
-run, but it should not be used for SHS/TriGLU/OFT unless the custom
-architecture is explicitly supported by the inference engine.
+The repository preserves both the earlier synchronous-HF fallback and the
+later architecture-aware vLLM path. Baseline uses the native Qwen vLLM route.
+TriGLU uses its registered causal-LM class and plugin, with semantic dispatch
+receipts and actor-to-vLLM weight synchronization. SHS has measured vLLM V1
+continuous batching through its historical generic-wrapper path, but its
+registered causal-LM route is not yet closed. OFT has integration scaffolding
+but no matched GRPO result. Backend-specific scores should not be treated as
+strictly interchangeable until the pending Eval Parity Matrix is complete.
 
-### Ordered production SFT
+### Historical SFT pilot
 
-The production SFT launcher auto-detects the visible GPU count and preserves an
+Before the GRPO wave, a two-epoch, 50K-example SFT pilot was completed for SHS,
+the whole-layer baseline, TriGLU, and OFT. It was operationally successful but
+not a successful model-selection proxy: SHS, baseline, and TriGLU differed by
+only 0.32 points in the four-task average, while OFT obtained the lowest
+teacher-forced validation loss and simultaneously collapsed on autoregressive
+math evaluation. The project therefore treats this SFT wave as negative and
+diagnostic evidence about objective mismatch, not as its main architecture
+result. The primary comparison is the later matched GRPO wave from the untuned
+base model.
+
+The preserved SFT launcher auto-detects the visible GPU count and maintains an
 effective packed batch size of 8. With micro-batch size 1, this selects gradient
 accumulation 8 on one GPU and 2 on four GPUs:
 
 ```bash
-cd /root/autodl-tmp/qwen3_1p7b_single_layer_rl
+cd /root/autodl-tmp/qwen3_1p7b_single_layer_rl_expressivity_engineering
 bash scripts/start_sft_ordered_variants.sh
 bash scripts/monitor_sft.sh
 ```
@@ -321,6 +383,15 @@ bash scripts/launch_layer10_ordered_variants.sh
 
 Implementation dimensions and trainability rules are recorded in
 `docs/qwen3_layer10_variant_dimensions.md`.
+
+OFT was not advanced into the matched GRPO comparison. The planned OFT policy
+froze the original Layer-10 SwiGLU projections and trained orthogonal rotations,
+whereas TriGLU trained the original SwiGLU jointly with its side branch. A
+direct result would therefore conflate added expressivity with different
+backbone-SwiGLU adaptation constraints. The OFT tracker remained at step zero;
+no OFT GRPO update ran. A future OFT experiment must first define a matched
+adaptation policy rather than reuse the deferred configuration as if it were a
+fair architecture control.
 
 ## Extension pattern
 
