@@ -1,0 +1,33 @@
+{
+  "benchmark": true,
+  "cold_step_seconds": 2.3294429583474994,
+  "compile_mode": "eager",
+  "correctness_loss": 0.5441509855095872,
+  "dispatch_receipt": {
+    "actual": [
+      "reference",
+      "reference",
+      "reference"
+    ],
+    "custom_backward": null,
+    "fallback": false,
+    "requested": "reference"
+  },
+  "dynamo_counters": {},
+  "global_step": 56,
+  "max_memory_allocated_gb": 18.43775749206543,
+  "max_memory_reserved_gb": 19.537109375,
+  "run_id": "reference_eager",
+  "step_seconds_mean": 1.4527783306874336,
+  "step_seconds_median": 1.4526015841402113,
+  "step_seconds_p10": 1.4446725100278854,
+  "step_seconds_p90": 1.4570594290271401,
+  "step_seconds_stdev": 0.029811985482899442,
+  "timed_assistant_tokens": 561498,
+  "timed_assistant_tokens_per_second": 7729.988645057878,
+  "timed_non_padding_tokens": 684144,
+  "timed_non_padding_tokens_per_second": 9418.422419286404,
+  "timed_steps": 50,
+  "wall_seconds": 82.46959373075515,
+  "warmup_steps": 5
+}

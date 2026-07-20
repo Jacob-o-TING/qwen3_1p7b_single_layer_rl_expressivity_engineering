@@ -1,0 +1,10 @@
+{
+  "export_path": "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/freeform_eval/qwen3_1p7b_gpqa_diamond_freeform126_greedy3072_manual_agent_audit_6x5090_steps158_196_226_256_294_20260718_v1/exports/baseline_step226",
+  "global_step": 226,
+  "source_checkpoint": "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/grpo_priority/triglu_priority_6x5090_grpo_step128_to294_then_baseline128_to196_20260715_v1/baseline_6x5090_grpo_resume196_to294_cosine5e7_to5e8_seed20260707_v1/checkpoints/global_step_226",
+  "status": "EXPORT_COMPLETE",
+  "variant": "baseline",
+  "weight_files": [
+    "model.safetensors"
+  ]
+}

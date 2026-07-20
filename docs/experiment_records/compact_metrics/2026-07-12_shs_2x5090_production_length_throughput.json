@@ -1,0 +1,65 @@
+{
+  "artifact_archive_sha256": "071e33ddbe9f83c108e62300d41d3cc7377684692f798334a62194c1579dfae5",
+  "backend": "reference_pytorch_cublas_inside_vllm_v1",
+  "decision": {
+    "current_engine_configuration_economical_for_grpo": false,
+    "production_grpo_authorized": false,
+    "throughput_gate": "passed"
+  },
+  "engine": {
+    "available_kv_cache_gib": 1.22,
+    "full_4096_token_concurrency": 2.79,
+    "gpu_memory_utilization": 0.8,
+    "kv_cache_tokens": 11440,
+    "max_model_len": 4096,
+    "max_num_batched_tokens": 131072,
+    "max_num_seqs": 64,
+    "profile_peak_activation_gib": 20.6,
+    "tensor_parallel_size": 1
+  },
+  "identity": {
+    "base_source_commit": "623bbdfe3d8ff7fbec344db923a99d327b150e70",
+    "checkpoint_sha256": "ebb4cd92f6e890c17cf0e14a883557358dff927e901b69588f1867e6dd016712",
+    "export_model_sha256": "6266ca7fdba2f8e117d0560897562468163e9ddf997a4a15ec10944b3d22c583",
+    "prompt_manifest_sha256": "512f2e2c2720aa48dc7678d597e5954c19a7a53e05257f7b622f3d066820e278",
+    "runner_sha256": "59ebe9739e556c293a6b637680018387eee7f3e77d0a9a89babaa6405a50c7df"
+  },
+  "matched_pressure64": {
+    "mean_tokens_per_second_per_gpu": 494.2915657102735,
+    "pair_tokens_per_second": 958.9659854306989,
+    "rtx5090_over_rtx_pro6000": 0.2184424455145278,
+    "rtx_pro6000_anchor_tokens_per_second_per_gpu": 2262.8
+  },
+  "production_pressure64": {
+    "cap_hit_fraction": 0.1015625,
+    "cap_hits": 13,
+    "concurrent_overlap_fraction": 0.731518181879926,
+    "mean_tokens_per_second_per_gpu": 259.8710250252775,
+    "output_length_mean": 870.53125,
+    "output_length_p50": 467.0,
+    "output_length_p90": 3038.0,
+    "pair_start_skew_seconds": 1.5549030303955078,
+    "pair_tokens_per_second": 446.7502917217485,
+    "request_latency_p50_seconds": null,
+    "request_latency_p90_seconds": null,
+    "steady_peak_memory_mib": {
+      "gpu0": 7537.0,
+      "gpu1": 7383.0
+    }
+  },
+  "projection_8x5090": {
+    "fixed_four_replica_token_work": 2065012,
+    "ideal_aggregate_tokens_per_second": 1787.001166886994,
+    "pure_rollout_hours": {
+      "20_batches": 6.42,
+      "50_batches": 16.05,
+      "98_batches": 31.46,
+      "196_batches": 62.91,
+      "391_batches": 125.51
+    },
+    "pure_rollout_seconds_per_global_batch": 1155.573951637261
+  },
+  "run_id": "shs_2x5090_production_length_throughput_20260712_v1",
+  "scheduler_metrics_available": false,
+  "topology": "two_same_host_independent_tp1_replicas"
+}

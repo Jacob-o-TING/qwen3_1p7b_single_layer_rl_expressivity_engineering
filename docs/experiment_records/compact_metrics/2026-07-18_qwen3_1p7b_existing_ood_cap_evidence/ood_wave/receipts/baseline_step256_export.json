@@ -1,0 +1,53 @@
+{
+  "export_path": "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/exports/baseline_step256",
+  "files": [
+    {
+      "bytes": 0,
+      "name": "EXPORT_COMPLETE"
+    },
+    {
+      "bytes": 707,
+      "name": "added_tokens.json"
+    },
+    {
+      "bytes": 4116,
+      "name": "chat_template.jinja"
+    },
+    {
+      "bytes": 1360,
+      "name": "config.json"
+    },
+    {
+      "bytes": 117,
+      "name": "generation_config.json"
+    },
+    {
+      "bytes": 1671853,
+      "name": "merges.txt"
+    },
+    {
+      "bytes": 4063515640,
+      "name": "model.safetensors"
+    },
+    {
+      "bytes": 616,
+      "name": "special_tokens_map.json"
+    },
+    {
+      "bytes": 11422654,
+      "name": "tokenizer.json"
+    },
+    {
+      "bytes": 5407,
+      "name": "tokenizer_config.json"
+    },
+    {
+      "bytes": 2776833,
+      "name": "vocab.json"
+    }
+  ],
+  "global_step": 256,
+  "source_checkpoint": "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/grpo_priority/triglu_priority_6x5090_grpo_step128_to294_then_baseline128_to196_20260715_v1/baseline_6x5090_grpo_resume196_to294_cosine5e7_to5e8_seed20260707_v1/checkpoints/global_step_256",
+  "status": "EXPORT_COMPLETE",
+  "variant": "baseline"
+}

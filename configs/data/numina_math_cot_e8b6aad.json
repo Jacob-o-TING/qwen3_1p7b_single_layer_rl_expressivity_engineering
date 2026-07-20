@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "dataset_id": "AI-MO/NuminaMath-CoT",
+  "download_provider": "modelscope",
+  "download_provider_revision": null,
+  "download_provider_revision_note": "ModelScope streaming did not expose an immutable revision. The observed normalized content/order digests in the generated provenance manifest are the mirror integrity identity.",
+  "canonical_upstream": "https://huggingface.co/datasets/AI-MO/NuminaMath-CoT",
+  "canonical_upstream_revision": "e8b6aad745189763d0fd9521ac0844ce44675bef",
+  "canonical_upstream_revision_url": "https://huggingface.co/datasets/AI-MO/NuminaMath-CoT/commit/e8b6aad745189763d0fd9521ac0844ce44675bef",
+  "expected_split_rows": {
+    "train": 859494,
+    "test": 100
+  },
+  "upstream_data_files": [
+    {
+      "path": "data/test-00000-of-00001.parquet",
+      "size_bytes": 165933,
+      "lfs_sha256": "62f94a9529fadf5fa08711ac932205eb4ee9fe57320052c8bb6a61ba0759d731"
+    },
+    {
+      "path": "data/train-00000-of-00005.parquet",
+      "size_bytes": 246635854,
+      "lfs_sha256": "25c0fa2ca96dd8078470ad1bbc439d0d211fd8b7d22e04abf7f61e9be9bf9ec3"
+    },
+    {
+      "path": "data/train-00001-of-00005.parquet",
+      "size_bytes": 246936512,
+      "lfs_sha256": "2d4ba17018b6563728e0a92b38ee965479476cc41975923c224391e90b436236"
+    },
+    {
+      "path": "data/train-00002-of-00005.parquet",
+      "size_bytes": 246784426,
+      "lfs_sha256": "c607c18379548f4fda05981f871518adf2506adc870825f5ccbf91a1fbb38183"
+    },
+    {
+      "path": "data/train-00003-of-00005.parquet",
+      "size_bytes": 246896920,
+      "lfs_sha256": "e07293604d1ae0d16dc2708c9c51205760a0253c999e1a5a2ffd971474b3c06d"
+    },
+    {
+      "path": "data/train-00004-of-00005.parquet",
+      "size_bytes": 246931989,
+      "lfs_sha256": "e3929523d643d93c705444c349b3cc6467cfd27ce8fe502211279889d9b753b9"
+    }
+  ]
+}

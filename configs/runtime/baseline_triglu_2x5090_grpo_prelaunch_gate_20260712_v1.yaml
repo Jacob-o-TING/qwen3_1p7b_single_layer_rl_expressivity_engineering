@@ -1,0 +1,94 @@
+inherits: ../base_qwen3_1p7b.yaml
+
+experiment:
+  name: baseline_triglu_2x5090_grpo_prelaunch_gate_20260712_v1
+  seed: 20260707
+  init_seed: 20260707
+  rollout_seed: 20260707
+  initialization_contract: untuned_base_exact_noop
+
+prelaunch_gate:
+  run_id: baseline_triglu_2x5090_grpo_prelaunch_gate_20260712_v1
+  variants:
+    - baseline
+    - triglu
+  base_model: /root/autodl-tmp/qwen3_single_layer_rl/models/Qwen3-1.7B-Base
+  dataset_jsonl: data/numina_math_cot_50k_decontam_v3/train.jsonl
+  selection_ledger: data_manifests/numina_math_cot_50k_decontam_v3/selected_rows.tsv
+  num_prompts: 8
+  prompts_per_update: 4
+  group_size: 4
+  response_cap: 128
+  temperature: 1.0
+  top_p: 1.0
+  max_model_len: 2048
+  max_num_seqs: 32
+  max_num_batched_tokens: 32768
+  gpu_memory_utilization: 0.85
+  learning_rate: 5.0e-6
+  clip_range: 0.2
+  kl_coefficient: 0.001
+  target_layer: 10
+  triglu:
+    side_dim: 512
+    side_hidden: 2048
+    side_scale: 0.1
+    initial_effect: exact_identity_multiplier
+  acceptance:
+    require_finite_logprobs: true
+    rollout_actor_mean_abs_logprob_delta_max: 0.10
+    rollout_actor_max_abs_logprob_delta_max: 1.00
+    resume_parameter_max_abs_delta: 0.0
+    require_live_sync_receiver_hash_match: true
+    require_live_sync_fresh_reload_greedy_match: true
+    require_reward_verifier_wiring_match: true
+
+freeze_policy:
+  mode: single_layer
+  backbone_train_mode: selected
+  train_layers:
+    - 10
+  freeze_embeddings: true
+  freeze_lm_head: true
+  # Baseline has no adapter parameters. TriGLU must train its side branch
+  # together with the selected Layer-10 backbone.
+  train_adapter_modules: true
+  adapter_name_markers:
+    - .adapters.
+    - .adapter.
+    - .oft_like.
+    - .oft_like
+    - .shs.
+    - .triglu_side.
+
+architecture_variant:
+  name: qwen_swiglu_triglu_side
+  params:
+    target_layers:
+      - 10
+    hidden_size: 2048
+    intermediate_size: 6144
+    side_dim: 512
+    side_hidden: 2048
+    side_scale: 0.1
+    side_semantics: residual_delta
+    initial_effect: exact_identity_multiplier
+    zero_init_components:
+      - triglu_side.up.weight
+      - triglu_side.up.bias
+
+runtime:
+  nnodes: 1
+  nproc_per_node: 2
+  inference_backend: vllm
+  actor_gpu: 0
+  rollout_gpu: 1
+  mixed_precision: bf16
+
+pending_obligations_carried_forward:
+  PENDING-01: deferred; Eval Parity Matrix is explicitly out of scope
+  PENDING-02: deferred; historical mixed-precision TriGLU is used without pure-BF16 changes
+  PENDING-03: deferred; SHS CausalLM is explicitly out of scope
+
+logging:
+  run_id_template: baseline_triglu_2x5090_grpo_prelaunch_gate_20260712_v1

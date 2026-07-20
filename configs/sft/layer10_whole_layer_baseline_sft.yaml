@@ -1,0 +1,13 @@
+inherits: base_qwen3_1p7b_layer10_sft.yaml
+experiment:
+  name: qwen3_1p7b_layer10_wholelayer_baseline
+freeze_policy:
+  mode: single_layer
+  backbone_train_mode: selected
+  train_layers: [10]
+  freeze_embeddings: true
+  freeze_lm_head: true
+  train_adapter_modules: false
+architecture_variant:
+  name: identity
+  params: {}

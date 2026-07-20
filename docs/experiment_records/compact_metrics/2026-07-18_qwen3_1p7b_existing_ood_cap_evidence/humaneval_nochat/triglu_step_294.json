@@ -1,0 +1,148 @@
+{
+  "cells": {
+    "evalscope_raw_instruction_nochat": {
+      "cap_hits": 6,
+      "collapse_loops": 0,
+      "contains_hebrew": 0,
+      "english_fragment_loops": 0,
+      "execution_statuses": {
+        "error": 64,
+        "success": 100
+      },
+      "execution_timeouts": 3,
+      "finish_reasons": {
+        "length": 6,
+        "stop": 158
+      },
+      "generated_tokens": {
+        "max": 3072,
+        "mean": 476.7012195121951,
+        "p50": 445.5,
+        "p90": 722.4000000000002
+      },
+      "hebrew_loops": 0,
+      "parser_strategies": {
+        "first_fenced_code_block": 103,
+        "unchanged": 61
+      },
+      "passed": 100,
+      "rows": 164,
+      "score": 0.6097560975609756,
+      "syntax_valid_completions": 159
+    }
+  },
+  "decision": null,
+  "full_validation": {
+    "cell": "evalscope_raw_instruction_nochat",
+    "materially_recovered": true,
+    "maximum_collapse_loops": 16,
+    "minimum_passes": 49,
+    "observed_collapse_loops": 0,
+    "observed_passes": 100
+  },
+  "model_label": "triglu_step294",
+  "protocol": "humanevalplus_evalscope_raw_instruction_nochat_full164",
+  "run_id": "qwen3_1p7b_heplus_nochat_triglu294_full164_20260717_v1",
+  "sample_count": 164,
+  "scientific_boundary": {
+    "checkpoint_mutated": false,
+    "model_mutated": false,
+    "paper_protocol_parity_claimed": false,
+    "parser": "humanevalplus_parser_v2_fixed",
+    "sandbox": "uid65534+no_new_privs+rlimits+seccomp_no_network_no_exec"
+  },
+  "status": "complete",
+  "task_ledger_sha256": "7bb4ed06a3a4c725a9893f38e76087c9d6bf2c3caa8d0c880e061ffecc0a1baa",
+  "worker_summaries": [
+    {
+      "cell": "evalscope_raw_instruction_nochat",
+      "dispatch_receipt_sha256": "c22e0396f22699ed150e2edc21ec55675223dd3a67ccdb223bf27322fce228e8",
+      "engine_load_seconds": 20.754588117823005,
+      "generated_tokens": 13304,
+      "generation_seconds": 58.14430353604257,
+      "receipts_sha256": "d9eb8d627b82737781fc60efc471442e601f3ecdaf27f4f3cb012f5b582140b7",
+      "review_seconds": 305.15413842722774,
+      "rows": 28,
+      "shard_count": 6,
+      "shard_index": 0,
+      "task_ids_sha256": "2132dc962c42c0d503aa71436330ab9cc0127ce1688161492d521b41afb074bb",
+      "vllm_plugin": "triglu",
+      "worker_id": "evalscope_raw_instruction_nochat.shard00-of-06"
+    },
+    {
+      "cell": "evalscope_raw_instruction_nochat",
+      "dispatch_receipt_sha256": "78d3a716fb6e03d081ef26f17538e41f512f01a90b4a8be375b821163804eafa",
+      "engine_load_seconds": 21.698760256171227,
+      "generated_tokens": 13240,
+      "generation_seconds": 59.359052799642086,
+      "receipts_sha256": "7e7e7d771e2781c621584aeb5a03e03912a12dc06fdfa0059ae709385eb47355",
+      "review_seconds": 4.938206594437361,
+      "rows": 28,
+      "shard_count": 6,
+      "shard_index": 1,
+      "task_ids_sha256": "869e442b2fcfacc1e8d2f6edd97fc0373ffe6f947d0d9d9be38088a368deae97",
+      "vllm_plugin": "triglu",
+      "worker_id": "evalscope_raw_instruction_nochat.shard01-of-06"
+    },
+    {
+      "cell": "evalscope_raw_instruction_nochat",
+      "dispatch_receipt_sha256": "aa30594ff0ba4f459f888cea8abfffdab0a978e7028779ab0e666ecd3767fc71",
+      "engine_load_seconds": 20.609358806163073,
+      "generated_tokens": 16348,
+      "generation_seconds": 57.3230179194361,
+      "receipts_sha256": "5a11d60ff42afde6b1c475ce753e9ea60b402f4a4a47203c1bf76309ca5979b8",
+      "review_seconds": 310.242106506601,
+      "rows": 27,
+      "shard_count": 6,
+      "shard_index": 2,
+      "task_ids_sha256": "b84e0c24d8d66fd87347ba04dd982a7ddec5a0afb0962f713554eae0439ae8f2",
+      "vllm_plugin": "triglu",
+      "worker_id": "evalscope_raw_instruction_nochat.shard02-of-06"
+    },
+    {
+      "cell": "evalscope_raw_instruction_nochat",
+      "dispatch_receipt_sha256": "e2f899c673b25c38d80730e424cabb3fbe84d3dee5b4d2f1d325423031b2e26c",
+      "engine_load_seconds": 20.711917396634817,
+      "generated_tokens": 10284,
+      "generation_seconds": 16.31784245930612,
+      "receipts_sha256": "099b0f4f3124fe8fa05484a72824f65bf8782abb90d6f75534244e1d47d7e977",
+      "review_seconds": 3.618180375546217,
+      "rows": 27,
+      "shard_count": 6,
+      "shard_index": 3,
+      "task_ids_sha256": "8ded9e4086d7b733f5c0932375d9691b6c66806578acc3da877272698769ec2c",
+      "vllm_plugin": "triglu",
+      "worker_id": "evalscope_raw_instruction_nochat.shard03-of-06"
+    },
+    {
+      "cell": "evalscope_raw_instruction_nochat",
+      "dispatch_receipt_sha256": "0199f1341a2953982195ba50d2017dd02c809d79d949ea3a3ac4510390472108",
+      "engine_load_seconds": 20.739868205040693,
+      "generated_tokens": 10254,
+      "generation_seconds": 19.875365590676665,
+      "receipts_sha256": "5572b7be59e7eb07dd32a739752d9eeef3750db925514144c1206202d6969847",
+      "review_seconds": 321.21805381961167,
+      "rows": 27,
+      "shard_count": 6,
+      "shard_index": 4,
+      "task_ids_sha256": "ffee05f49ec0daf311827350c05956da02024b45f7cc29716c5b526a44b46cb3",
+      "vllm_plugin": "triglu",
+      "worker_id": "evalscope_raw_instruction_nochat.shard04-of-06"
+    },
+    {
+      "cell": "evalscope_raw_instruction_nochat",
+      "dispatch_receipt_sha256": "62f9e6bacc78a63bbb83451b92302f4e319bb2f7b8cc3ddef305ef9be0771012",
+      "engine_load_seconds": 19.578070079907775,
+      "generated_tokens": 14749,
+      "generation_seconds": 57.18371241353452,
+      "receipts_sha256": "3981e18041989561012aff30f99de435442636d6eb8409f966a5d514d0ea53bc",
+      "review_seconds": 4.466790506616235,
+      "rows": 27,
+      "shard_count": 6,
+      "shard_index": 5,
+      "task_ids_sha256": "357685c6bf5af204c7360b3c6396191ace265b048e627d5855af80030e8e87d0",
+      "vllm_plugin": "triglu",
+      "worker_id": "evalscope_raw_instruction_nochat.shard05-of-06"
+    }
+  ]
+}

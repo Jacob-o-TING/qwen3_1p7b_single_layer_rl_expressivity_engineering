@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "date": "2026-07-18",
+  "status": "MANUAL_AUDIT_COMPLETE",
+  "protocol": "GPQA-Diamond-Freeform-126 greedy3072 manual row-by-row audit",
+  "questions": 126,
+  "responses": 1260,
+  "unique_verdict_ids": 1260,
+  "semantic_totals": {
+    "correct": 69,
+    "incorrect": 1178,
+    "uncertain": 13
+  },
+  "disagreement_rows": 80,
+  "cells": {
+    "baseline_step158": {"correct": 8, "incorrect": 117, "uncertain": 1, "strict_accuracy": 0.06349206349206349},
+    "baseline_step196": {"correct": 6, "incorrect": 119, "uncertain": 1, "strict_accuracy": 0.047619047619047616},
+    "baseline_step226": {"correct": 4, "incorrect": 120, "uncertain": 2, "strict_accuracy": 0.031746031746031744},
+    "baseline_step256": {"correct": 5, "incorrect": 120, "uncertain": 1, "strict_accuracy": 0.03968253968253968},
+    "baseline_step294": {"correct": 6, "incorrect": 118, "uncertain": 2, "strict_accuracy": 0.047619047619047616},
+    "triglu_step158": {"correct": 7, "incorrect": 118, "uncertain": 1, "strict_accuracy": 0.05555555555555555},
+    "triglu_step196": {"correct": 6, "incorrect": 119, "uncertain": 1, "strict_accuracy": 0.047619047619047616},
+    "triglu_step226": {"correct": 7, "incorrect": 117, "uncertain": 2, "strict_accuracy": 0.05555555555555555},
+    "triglu_step256": {"correct": 10, "incorrect": 115, "uncertain": 1, "strict_accuracy": 0.07936507936507936},
+    "triglu_step294": {"correct": 10, "incorrect": 115, "uncertain": 1, "strict_accuracy": 0.07936507936507936}
+  },
+  "across_checkpoints": {
+    "baseline": {"checkpoint_count": 5, "mean_accuracy_strict": 0.04603174603174603, "population_std_accuracy_strict": 0.01052896758842984},
+    "triglu": {"checkpoint_count": 5, "mean_accuracy_strict": 0.06349206349206349, "population_std_accuracy_strict": 0.013280317881493262}
+  },
+  "variant_aggregate": {
+    "baseline": {
+      "unique_correct_questions": 12,
+      "correct_checkpoint_runs": 29,
+      "correct_question_indices": [27, 29, 35, 38, 50, 55, 62, 78, 94, 104, 107, 109]
+    },
+    "triglu": {
+      "unique_correct_questions": 18,
+      "correct_checkpoint_runs": 40,
+      "correct_question_indices": [0, 7, 9, 27, 29, 38, 47, 50, 54, 55, 71, 78, 79, 94, 99, 104, 109, 118]
+    }
+  },
+  "failure_category_counts": {
+    "reasoning_error": 702,
+    "factual_error": 208,
+    "insufficient_or_vague": 151,
+    "truncated": 92,
+    "malformed_or_no_answer": 22,
+    "reference_or_question_ambiguity": 11,
+    "contradictory_answer": 5,
+    "correct": 69
+  },
+  "cap_hit_audit": {
+    "original_cap_hit_rows": 96,
+    "correct": 0,
+    "incorrect": 96,
+    "uncertain": 0,
+    "future_replacements_require_targeted_manual_reaudit": true,
+    "original_verdicts_are_immutable": true
+  },
+  "source_sha256": {
+    "final_summary.json": "a5c1c9d0484fc84f1a8d152bfd14c67e8dc150e42ed35ea4a1f96c69c0ae2154",
+    "verdicts.jsonl": "2b71fc2da07cd8b1c699c15cb56b4ef17b3375a65b3811d11007ccda710772ea",
+    "audit_rows.jsonl": "83a80b6ff45d5a0ca52b3afc8e9a7ee85354c305cffc054fddffa00a7dfbd544",
+    "review_uncertain.jsonl": "bef49249e2ecd3d716995f740d4cd4c832ae95726ab5ea0c638bd62ad9f9acfa",
+    "review_disagreements.jsonl": "6c3ca3e337aa6afb96eea8e3ac05aadb571dbfa4bc9071867f10975783313cee"
+  }
+}

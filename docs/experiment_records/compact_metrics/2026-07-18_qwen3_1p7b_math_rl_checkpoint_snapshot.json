@@ -1,0 +1,1225 @@
+{
+  "cap_dedupe": "latest receipt by benchmark protocol + AMC shard + item_id + sample_id; AMC sampled vs greedy split by generation config",
+  "cells": {
+    "baseline_step128": {
+      "benchmarks": {
+        "paper_amc23": {
+          "accuracy": 0.3140625,
+          "correct": 402.0,
+          "rows": 1280
+        },
+        "paper_amc23_greedy": {
+          "accuracy": 0.4,
+          "correct": 16.0,
+          "rows": 40
+        },
+        "paper_gsm8k": {
+          "accuracy": 0.8294162244124337,
+          "correct": 1094.0,
+          "rows": 1319
+        },
+        "paper_math500": {
+          "accuracy": 0.666,
+          "correct": 333.0,
+          "rows": 500
+        },
+        "paper_olympiadbench": {
+          "accuracy": 0.24592592592592594,
+          "correct": 166.0,
+          "rows": 675
+        }
+      },
+      "cap_hits": {
+        "paper_amc23": {
+          "cap_hit_rate": 0.03515625,
+          "cap_hits": 45,
+          "rows": 1280
+        },
+        "paper_amc23_greedy": {
+          "cap_hit_rate": 0.05,
+          "cap_hits": 2,
+          "rows": 40
+        },
+        "paper_gsm8k": {
+          "cap_hit_rate": 0.003032600454890068,
+          "cap_hits": 4,
+          "rows": 1319
+        },
+        "paper_math500": {
+          "cap_hit_rate": 0.054,
+          "cap_hits": 27,
+          "rows": 500
+        },
+        "paper_olympiadbench": {
+          "cap_hit_rate": 0.14074074074074075,
+          "cap_hits": 95,
+          "rows": 675
+        }
+      },
+      "math_avg": 51.38511625845899,
+      "source_root": "runs/grpo_interleaved/triglu_baseline_6x5090_grpo_retro30_60_then_98to196_interleaved_20260714_v1/evaluations/baseline_step_128",
+      "step": 128,
+      "variant": "baseline"
+    },
+    "baseline_step158": {
+      "benchmarks": {
+        "paper_amc23": {
+          "accuracy": 0.3375,
+          "correct": 432.0,
+          "rows": 1280
+        },
+        "paper_amc23_greedy": {
+          "accuracy": 0.35,
+          "correct": 14.0,
+          "rows": 40
+        },
+        "paper_gsm8k": {
+          "accuracy": 0.8294162244124337,
+          "correct": 1094.0,
+          "rows": 1319
+        },
+        "paper_math500": {
+          "accuracy": 0.668,
+          "correct": 334.0,
+          "rows": 500
+        },
+        "paper_olympiadbench": {
+          "accuracy": 0.2637037037037037,
+          "correct": 178.0,
+          "rows": 675
+        }
+      },
+      "cap_hits": {
+        "paper_amc23": {
+          "cap_hit_rate": 0.03984375,
+          "cap_hits": 51,
+          "rows": 1280
+        },
+        "paper_amc23_greedy": {
+          "cap_hit_rate": 0.05,
+          "cap_hits": 2,
+          "rows": 40
+        },
+        "paper_gsm8k": {
+          "cap_hit_rate": 0.004548900682335102,
+          "cap_hits": 6,
+          "rows": 1319
+        },
+        "paper_math500": {
+          "cap_hit_rate": 0.052,
+          "cap_hits": 26,
+          "rows": 500
+        },
+        "paper_olympiadbench": {
+          "cap_hit_rate": 0.12148148148148148,
+          "cap_hits": 82,
+          "rows": 675
+        }
+      },
+      "math_avg": 52.46549820290344,
+      "source_root": "runs/grpo_reordered/baseline_then_oft_fp32_6x5090_grpo_after_triglu196_20260715_v1/evaluations/baseline_step_158",
+      "step": 158,
+      "variant": "baseline"
+    },
+    "baseline_step196": {
+      "benchmarks": {
+        "paper_amc23": {
+          "accuracy": 0.3265625,
+          "correct": 418.0,
+          "rows": 1280
+        },
+        "paper_amc23_greedy": {
+          "accuracy": 0.375,
+          "correct": 15.0,
+          "rows": 40
+        },
+        "paper_gsm8k": {
+          "accuracy": 0.8203184230477635,
+          "correct": 1082.0,
+          "rows": 1319
+        },
+        "paper_math500": {
+          "accuracy": 0.672,
+          "correct": 336.0,
+          "rows": 500
+        },
+        "paper_olympiadbench": {
+          "accuracy": 0.24888888888888888,
+          "correct": 168.0,
+          "rows": 675
+        }
+      },
+      "cap_hits": {
+        "paper_amc23": {
+          "cap_hit_rate": 0.04140625,
+          "cap_hits": 53,
+          "rows": 1280
+        },
+        "paper_amc23_greedy": {
+          "cap_hit_rate": 0.025,
+          "cap_hits": 1,
+          "rows": 40
+        },
+        "paper_gsm8k": {
+          "cap_hit_rate": 0.0037907505686125853,
+          "cap_hits": 5,
+          "rows": 1319
+        },
+        "paper_math500": {
+          "cap_hit_rate": 0.046,
+          "cap_hits": 23,
+          "rows": 500
+        },
+        "paper_olympiadbench": {
+          "cap_hit_rate": 0.1274074074074074,
+          "cap_hits": 86,
+          "rows": 675
+        }
+      },
+      "math_avg": 51.694245298416305,
+      "source_root": "runs/grpo_priority/triglu_priority_6x5090_grpo_step128_to294_then_baseline128_to196_20260715_v1/evaluations/baseline_step_196",
+      "step": 196,
+      "variant": "baseline"
+    },
+    "baseline_step20": {
+      "benchmarks": {
+        "paper_amc23": {
+          "accuracy": 0.23064894448788115,
+          "correct": 295.0,
+          "rows": 1279
+        },
+        "paper_amc23_greedy": {
+          "accuracy": 0.375,
+          "correct": 15.0,
+          "rows": 40
+        },
+        "paper_gsm8k": {
+          "accuracy": 0.8286580742987112,
+          "correct": 1093.0,
+          "rows": 1319
+        },
+        "paper_math500": {
+          "accuracy": 0.63,
+          "correct": 315.0,
+          "rows": 500
+        },
+        "paper_olympiadbench": {
+          "accuracy": 0.2577777777777778,
+          "correct": 174.0,
+          "rows": 675
+        }
+      },
+      "cap_hits": {
+        "paper_amc23": {
+          "cap_hit_rate": 0.05078125,
+          "cap_hits": 65,
+          "rows": 1280
+        },
+        "paper_amc23_greedy": {
+          "cap_hit_rate": 0.125,
+          "cap_hits": 5,
+          "rows": 40
+        },
+        "paper_gsm8k": {
+          "cap_hit_rate": 0.004548900682335102,
+          "cap_hits": 6,
+          "rows": 1319
+        },
+        "paper_math500": {
+          "cap_hit_rate": 0.062,
+          "cap_hits": 31,
+          "rows": 500
+        },
+        "paper_olympiadbench": {
+          "cap_hit_rate": 0.15555555555555556,
+          "cap_hits": 105,
+          "rows": 675
+        }
+      },
+      "math_avg": 48.67711991410925,
+      "source_root": "runs/grpo_serial/triglu_baseline_6x5090_grpo_20to98_serial_20260712_v1/evaluations/baseline_step_20",
+      "step": 20,
+      "variant": "baseline"
+    },
+    "baseline_step226": {
+      "benchmarks": {
+        "paper_amc23": {
+          "accuracy": 0.3515625,
+          "correct": 450.0,
+          "rows": 1280
+        },
+        "paper_amc23_greedy": {
+          "accuracy": 0.325,
+          "correct": 13.0,
+          "rows": 40
+        },
+        "paper_gsm8k": {
+          "accuracy": 0.8263836239575436,
+          "correct": 1090.0,
+          "rows": 1319
+        },
+        "paper_math500": {
+          "accuracy": 0.674,
+          "correct": 337.0,
+          "rows": 500
+        },
+        "paper_olympiadbench": {
+          "accuracy": 0.2577777777777778,
+          "correct": 174.0,
+          "rows": 675
+        }
+      },
+      "cap_hits": {
+        "paper_amc23": {
+          "cap_hit_rate": 0.03671875,
+          "cap_hits": 47,
+          "rows": 1280
+        },
+        "paper_amc23_greedy": {
+          "cap_hit_rate": 0.05,
+          "cap_hits": 2,
+          "rows": 40
+        },
+        "paper_gsm8k": {
+          "cap_hit_rate": 0.006065200909780136,
+          "cap_hits": 8,
+          "rows": 1319
+        },
+        "paper_math500": {
+          "cap_hit_rate": 0.044,
+          "cap_hits": 22,
+          "rows": 500
+        },
+        "paper_olympiadbench": {
+          "cap_hit_rate": 0.13925925925925925,
+          "cap_hits": 94,
+          "rows": 675
+        }
+      },
+      "math_avg": 52.74309754338303,
+      "source_root": "runs/grpo_priority/triglu_priority_6x5090_grpo_step128_to294_then_baseline128_to196_20260715_v1/evaluations/baseline_step_226",
+      "step": 226,
+      "variant": "baseline"
+    },
+    "baseline_step256": {
+      "benchmarks": {
+        "paper_amc23": {
+          "accuracy": 0.33828125,
+          "correct": 433.0,
+          "rows": 1280
+        },
+        "paper_amc23_greedy": {
+          "accuracy": 0.4,
+          "correct": 16.0,
+          "rows": 40
+        },
+        "paper_gsm8k": {
+          "accuracy": 0.8172858225928734,
+          "correct": 1078.0,
+          "rows": 1319
+        },
+        "paper_math500": {
+          "accuracy": 0.668,
+          "correct": 334.0,
+          "rows": 500
+        },
+        "paper_olympiadbench": {
+          "accuracy": 0.25037037037037035,
+          "correct": 169.0,
+          "rows": 675
+        }
+      },
+      "cap_hits": {
+        "paper_amc23": {
+          "cap_hit_rate": 0.040625,
+          "cap_hits": 52,
+          "rows": 1280
+        },
+        "paper_amc23_greedy": {
+          "cap_hit_rate": 0.025,
+          "cap_hits": 1,
+          "rows": 40
+        },
+        "paper_gsm8k": {
+          "cap_hit_rate": 0.009097801364670205,
+          "cap_hits": 12,
+          "rows": 1319
+        },
+        "paper_math500": {
+          "cap_hit_rate": 0.054,
+          "cap_hits": 27,
+          "rows": 500
+        },
+        "paper_olympiadbench": {
+          "cap_hit_rate": 0.12,
+          "cap_hits": 81,
+          "rows": 675
+        }
+      },
+      "math_avg": 51.84843607408109,
+      "source_root": "runs/grpo_priority/triglu_priority_6x5090_grpo_step128_to294_then_baseline128_to196_20260715_v1/evaluations/baseline_step_256",
+      "step": 256,
+      "variant": "baseline"
+    },
+    "baseline_step294": {
+      "benchmarks": {
+        "paper_amc23": {
+          "accuracy": 0.3515625,
+          "correct": 450.0,
+          "rows": 1280
+        },
+        "paper_amc23_greedy": {
+          "accuracy": 0.325,
+          "correct": 13.0,
+          "rows": 40
+        },
+        "paper_gsm8k": {
+          "accuracy": 0.8263836239575436,
+          "correct": 1090.0,
+          "rows": 1319
+        },
+        "paper_math500": {
+          "accuracy": 0.662,
+          "correct": 331.0,
+          "rows": 500
+        },
+        "paper_olympiadbench": {
+          "accuracy": 0.2548148148148148,
+          "correct": 172.0,
+          "rows": 675
+        }
+      },
+      "cap_hits": {
+        "paper_amc23": {
+          "cap_hit_rate": 0.034375,
+          "cap_hits": 44,
+          "rows": 1280
+        },
+        "paper_amc23_greedy": {
+          "cap_hit_rate": 0.075,
+          "cap_hits": 3,
+          "rows": 40
+        },
+        "paper_gsm8k": {
+          "cap_hit_rate": 0.0037907505686125853,
+          "cap_hits": 5,
+          "rows": 1319
+        },
+        "paper_math500": {
+          "cap_hit_rate": 0.042,
+          "cap_hits": 21,
+          "rows": 500
+        },
+        "paper_olympiadbench": {
+          "cap_hit_rate": 0.1259259259259259,
+          "cap_hits": 85,
+          "rows": 675
+        }
+      },
+      "math_avg": 52.369023469308964,
+      "source_root": "runs/grpo_priority/triglu_priority_6x5090_grpo_step128_to294_then_baseline128_to196_20260715_v1/evaluations/baseline_step_294",
+      "step": 294,
+      "variant": "baseline"
+    },
+    "baseline_step30": {
+      "benchmarks": {
+        "paper_amc23": {
+          "accuracy": 0.259375,
+          "correct": 332.0,
+          "rows": 1280
+        },
+        "paper_amc23_greedy": {
+          "accuracy": 0.4,
+          "correct": 16.0,
+          "rows": 40
+        },
+        "paper_gsm8k": {
+          "accuracy": 0.8248673237300985,
+          "correct": 1088.0,
+          "rows": 1319
+        },
+        "paper_math500": {
+          "accuracy": 0.672,
+          "correct": 336.0,
+          "rows": 500
+        },
+        "paper_olympiadbench": {
+          "accuracy": 0.2474074074074074,
+          "correct": 167.0,
+          "rows": 675
+        }
+      },
+      "cap_hits": {
+        "paper_amc23": {
+          "cap_hit_rate": 0.03828125,
+          "cap_hits": 49,
+          "rows": 1280
+        },
+        "paper_amc23_greedy": {
+          "cap_hit_rate": 0.15,
+          "cap_hits": 6,
+          "rows": 40
+        },
+        "paper_gsm8k": {
+          "cap_hit_rate": 0.00530705079605762,
+          "cap_hits": 7,
+          "rows": 1319
+        },
+        "paper_math500": {
+          "cap_hit_rate": 0.07,
+          "cap_hits": 35,
+          "rows": 500
+        },
+        "paper_olympiadbench": {
+          "cap_hit_rate": 0.14962962962962964,
+          "cap_hits": 101,
+          "rows": 675
+        }
+      },
+      "math_avg": 50.091243278437645,
+      "source_root": "runs/grpo_interleaved/triglu_baseline_6x5090_grpo_retro30_60_then_98to196_interleaved_20260714_v1/evaluations/baseline_step_30",
+      "step": 30,
+      "variant": "baseline"
+    },
+    "baseline_step60": {
+      "benchmarks": {
+        "paper_amc23": {
+          "accuracy": 0.30625,
+          "correct": 392.0,
+          "rows": 1280
+        },
+        "paper_amc23_greedy": {
+          "accuracy": 0.375,
+          "correct": 15.0,
+          "rows": 40
+        },
+        "paper_gsm8k": {
+          "accuracy": 0.8339651250947687,
+          "correct": 1100.0,
+          "rows": 1319
+        },
+        "paper_math500": {
+          "accuracy": 0.662,
+          "correct": 331.0,
+          "rows": 500
+        },
+        "paper_olympiadbench": {
+          "accuracy": 0.24444444444444444,
+          "correct": 165.0,
+          "rows": 675
+        }
+      },
+      "cap_hits": {
+        "paper_amc23": {
+          "cap_hit_rate": 0.02578125,
+          "cap_hits": 33,
+          "rows": 1280
+        },
+        "paper_amc23_greedy": {
+          "cap_hit_rate": 0.075,
+          "cap_hits": 3,
+          "rows": 40
+        },
+        "paper_gsm8k": {
+          "cap_hit_rate": 0.003032600454890068,
+          "cap_hits": 4,
+          "rows": 1319
+        },
+        "paper_math500": {
+          "cap_hit_rate": 0.058,
+          "cap_hits": 29,
+          "rows": 500
+        },
+        "paper_olympiadbench": {
+          "cap_hit_rate": 0.1288888888888889,
+          "cap_hits": 87,
+          "rows": 675
+        }
+      },
+      "math_avg": 51.16648923848033,
+      "source_root": "runs/grpo_interleaved/triglu_baseline_6x5090_grpo_retro30_60_then_98to196_interleaved_20260714_v1/evaluations/baseline_step_60",
+      "step": 60,
+      "variant": "baseline"
+    },
+    "baseline_step98": {
+      "benchmarks": {
+        "paper_amc23": {
+          "accuracy": 0.3140625,
+          "correct": 402.0,
+          "rows": 1280
+        },
+        "paper_amc23_greedy": {
+          "accuracy": 0.425,
+          "correct": 17.0,
+          "rows": 40
+        },
+        "paper_gsm8k": {
+          "accuracy": 0.8309325246398787,
+          "correct": 1096.0,
+          "rows": 1319
+        },
+        "paper_math500": {
+          "accuracy": 0.662,
+          "correct": 331.0,
+          "rows": 500
+        },
+        "paper_olympiadbench": {
+          "accuracy": 0.25037037037037035,
+          "correct": 169.0,
+          "rows": 675
+        }
+      },
+      "cap_hits": {
+        "paper_amc23": {
+          "cap_hit_rate": 0.03515625,
+          "cap_hits": 45,
+          "rows": 1280
+        },
+        "paper_amc23_greedy": {
+          "cap_hit_rate": 0.025,
+          "cap_hits": 1,
+          "rows": 40
+        },
+        "paper_gsm8k": {
+          "cap_hit_rate": 0.001516300227445034,
+          "cap_hits": 2,
+          "rows": 1319
+        },
+        "paper_math500": {
+          "cap_hit_rate": 0.044,
+          "cap_hits": 22,
+          "rows": 500
+        },
+        "paper_olympiadbench": {
+          "cap_hit_rate": 0.14074074074074075,
+          "cap_hits": 95,
+          "rows": 675
+        }
+      },
+      "math_avg": 51.434134875256234,
+      "source_root": "runs/grpo_serial/triglu_baseline_6x5090_grpo_20to98_serial_20260712_v1/evaluations/baseline_step_98",
+      "step": 98,
+      "variant": "baseline"
+    },
+    "triglu_step128": {
+      "benchmarks": {
+        "paper_amc23": {
+          "accuracy": 0.309375,
+          "correct": 396.0,
+          "rows": 1280
+        },
+        "paper_amc23_greedy": {
+          "accuracy": 0.45,
+          "correct": 18.0,
+          "rows": 40
+        },
+        "paper_gsm8k": {
+          "accuracy": 0.8248673237300985,
+          "correct": 1088.0,
+          "rows": 1319
+        },
+        "paper_math500": {
+          "accuracy": 0.656,
+          "correct": 328.0,
+          "rows": 500
+        },
+        "paper_olympiadbench": {
+          "accuracy": 0.26666666666666666,
+          "correct": 180.0,
+          "rows": 675
+        }
+      },
+      "cap_hits": {
+        "paper_amc23": {
+          "cap_hit_rate": 0.040625,
+          "cap_hits": 52,
+          "rows": 1280
+        },
+        "paper_amc23_greedy": {
+          "cap_hit_rate": 0.05,
+          "cap_hits": 2,
+          "rows": 40
+        },
+        "paper_gsm8k": {
+          "cap_hit_rate": 0.00530705079605762,
+          "cap_hits": 7,
+          "rows": 1319
+        },
+        "paper_math500": {
+          "cap_hit_rate": 0.064,
+          "cap_hits": 32,
+          "rows": 500
+        },
+        "paper_olympiadbench": {
+          "cap_hit_rate": 0.15407407407407409,
+          "cap_hits": 104,
+          "rows": 675
+        }
+      },
+      "math_avg": 51.422724759919134,
+      "source_root": "runs/grpo_interleaved/triglu_baseline_6x5090_grpo_retro30_60_then_98to196_interleaved_20260714_v1/evaluations/triglu_step_128",
+      "step": 128,
+      "variant": "triglu"
+    },
+    "triglu_step158": {
+      "benchmarks": {
+        "paper_amc23": {
+          "accuracy": 0.33359375,
+          "correct": 427.0,
+          "rows": 1280
+        },
+        "paper_amc23_greedy": {
+          "accuracy": 0.4,
+          "correct": 16.0,
+          "rows": 40
+        },
+        "paper_gsm8k": {
+          "accuracy": 0.8294162244124337,
+          "correct": 1094.0,
+          "rows": 1319
+        },
+        "paper_math500": {
+          "accuracy": 0.692,
+          "correct": 346.0,
+          "rows": 500
+        },
+        "paper_olympiadbench": {
+          "accuracy": 0.26814814814814814,
+          "correct": 181.0,
+          "rows": 675
+        }
+      },
+      "cap_hits": {
+        "paper_amc23": {
+          "cap_hit_rate": 0.03671875,
+          "cap_hits": 47,
+          "rows": 1280
+        },
+        "paper_amc23_greedy": {
+          "cap_hit_rate": 0.125,
+          "cap_hits": 5,
+          "rows": 40
+        },
+        "paper_gsm8k": {
+          "cap_hit_rate": 0.0037907505686125853,
+          "cap_hits": 5,
+          "rows": 1319
+        },
+        "paper_math500": {
+          "cap_hit_rate": 0.056,
+          "cap_hits": 28,
+          "rows": 500
+        },
+        "paper_olympiadbench": {
+          "cap_hit_rate": 0.16592592592592592,
+          "cap_hits": 112,
+          "rows": 675
+        }
+      },
+      "math_avg": 53.07895306401454,
+      "source_root": "runs/grpo_priority/triglu_priority_6x5090_grpo_step128_to294_then_baseline128_to196_20260715_v1/evaluations/triglu_step_158",
+      "step": 158,
+      "variant": "triglu"
+    },
+    "triglu_step196": {
+      "benchmarks": {
+        "paper_amc23": {
+          "accuracy": 0.33671875,
+          "correct": 431.0,
+          "rows": 1280
+        },
+        "paper_amc23_greedy": {
+          "accuracy": 0.375,
+          "correct": 15.0,
+          "rows": 40
+        },
+        "paper_gsm8k": {
+          "accuracy": 0.8271417740712661,
+          "correct": 1091.0,
+          "rows": 1319
+        },
+        "paper_math500": {
+          "accuracy": 0.668,
+          "correct": 334.0,
+          "rows": 500
+        },
+        "paper_olympiadbench": {
+          "accuracy": 0.28296296296296297,
+          "correct": 191.0,
+          "rows": 675
+        }
+      },
+      "cap_hits": {
+        "paper_amc23": {
+          "cap_hit_rate": 0.03828125,
+          "cap_hits": 49,
+          "rows": 1280
+        },
+        "paper_amc23_greedy": {
+          "cap_hit_rate": 0.15,
+          "cap_hits": 6,
+          "rows": 40
+        },
+        "paper_gsm8k": {
+          "cap_hit_rate": 0.002274450341167551,
+          "cap_hits": 3,
+          "rows": 1319
+        },
+        "paper_math500": {
+          "cap_hit_rate": 0.056,
+          "cap_hits": 28,
+          "rows": 500
+        },
+        "paper_olympiadbench": {
+          "cap_hit_rate": 0.16296296296296298,
+          "cap_hits": 110,
+          "rows": 675
+        }
+      },
+      "math_avg": 52.87058717585573,
+      "source_root": "runs/grpo_priority/triglu_priority_6x5090_grpo_step128_to294_then_baseline128_to196_20260715_v1/evaluations/triglu_step_196",
+      "step": 196,
+      "variant": "triglu"
+    },
+    "triglu_step20": {
+      "benchmarks": {
+        "paper_amc23": {
+          "accuracy": 0.21875,
+          "correct": 280.0,
+          "rows": 1280
+        },
+        "paper_amc23_greedy": {
+          "accuracy": 0.375,
+          "correct": 15.0,
+          "rows": 40
+        },
+        "paper_gsm8k": {
+          "accuracy": 0.8354814253222138,
+          "correct": 1102.0,
+          "rows": 1319
+        },
+        "paper_math500": {
+          "accuracy": 0.64,
+          "correct": 320.0,
+          "rows": 500
+        },
+        "paper_olympiadbench": {
+          "accuracy": 0.2548148148148148,
+          "correct": 172.0,
+          "rows": 675
+        }
+      },
+      "cap_hits": {
+        "paper_amc23": {
+          "cap_hit_rate": 0.04140625,
+          "cap_hits": 53,
+          "rows": 1280
+        },
+        "paper_amc23_greedy": {
+          "cap_hit_rate": 0.125,
+          "cap_hits": 5,
+          "rows": 40
+        },
+        "paper_gsm8k": {
+          "cap_hit_rate": 0.003032600454890068,
+          "cap_hits": 4,
+          "rows": 1319
+        },
+        "paper_math500": {
+          "cap_hit_rate": 0.078,
+          "cap_hits": 39,
+          "rows": 500
+        },
+        "paper_olympiadbench": {
+          "cap_hit_rate": 0.15407407407407409,
+          "cap_hits": 104,
+          "rows": 675
+        }
+      },
+      "math_avg": 48.726156003425714,
+      "source_root": "runs/grpo_serial/triglu_baseline_6x5090_grpo_20to98_serial_20260712_v1/evaluations/triglu_step_20",
+      "step": 20,
+      "variant": "triglu"
+    },
+    "triglu_step226": {
+      "benchmarks": {
+        "paper_amc23": {
+          "accuracy": 0.33828125,
+          "correct": 433.0,
+          "rows": 1280
+        },
+        "paper_amc23_greedy": {
+          "accuracy": 0.375,
+          "correct": 15.0,
+          "rows": 40
+        },
+        "paper_gsm8k": {
+          "accuracy": 0.8263836239575436,
+          "correct": 1090.0,
+          "rows": 1319
+        },
+        "paper_math500": {
+          "accuracy": 0.662,
+          "correct": 331.0,
+          "rows": 500
+        },
+        "paper_olympiadbench": {
+          "accuracy": 0.29777777777777775,
+          "correct": 201.0,
+          "rows": 675
+        }
+      },
+      "cap_hits": {
+        "paper_amc23": {
+          "cap_hit_rate": 0.03984375,
+          "cap_hits": 51,
+          "rows": 1280
+        },
+        "paper_amc23_greedy": {
+          "cap_hit_rate": 0.075,
+          "cap_hits": 3,
+          "rows": 40
+        },
+        "paper_gsm8k": {
+          "cap_hit_rate": 0.0037907505686125853,
+          "cap_hits": 5,
+          "rows": 1319
+        },
+        "paper_math500": {
+          "cap_hit_rate": 0.056,
+          "cap_hits": 28,
+          "rows": 500
+        },
+        "paper_olympiadbench": {
+          "cap_hit_rate": 0.12444444444444444,
+          "cap_hits": 84,
+          "rows": 675
+        }
+      },
+      "math_avg": 53.11106629338303,
+      "source_root": "runs/grpo_priority/triglu_priority_6x5090_grpo_step128_to294_then_baseline128_to196_20260715_v1/evaluations/triglu_step_226",
+      "step": 226,
+      "variant": "triglu"
+    },
+    "triglu_step256": {
+      "benchmarks": {
+        "paper_amc23": {
+          "accuracy": 0.32109375,
+          "correct": 411.0,
+          "rows": 1280
+        },
+        "paper_amc23_greedy": {
+          "accuracy": 0.375,
+          "correct": 15.0,
+          "rows": 40
+        },
+        "paper_gsm8k": {
+          "accuracy": 0.8354814253222138,
+          "correct": 1102.0,
+          "rows": 1319
+        },
+        "paper_math500": {
+          "accuracy": 0.688,
+          "correct": 344.0,
+          "rows": 500
+        },
+        "paper_olympiadbench": {
+          "accuracy": 0.2637037037037037,
+          "correct": 178.0,
+          "rows": 675
+        }
+      },
+      "cap_hits": {
+        "paper_amc23": {
+          "cap_hit_rate": 0.04375,
+          "cap_hits": 56,
+          "rows": 1280
+        },
+        "paper_amc23_greedy": {
+          "cap_hit_rate": 0.125,
+          "cap_hits": 5,
+          "rows": 40
+        },
+        "paper_gsm8k": {
+          "cap_hit_rate": 0.0037907505686125853,
+          "cap_hits": 5,
+          "rows": 1319
+        },
+        "paper_math500": {
+          "cap_hit_rate": 0.05,
+          "cap_hits": 25,
+          "rows": 500
+        },
+        "paper_olympiadbench": {
+          "cap_hit_rate": 0.1437037037037037,
+          "cap_hits": 97,
+          "rows": 675
+        }
+      },
+      "math_avg": 52.70697197564793,
+      "source_root": "runs/grpo_priority/triglu_priority_6x5090_grpo_step128_to294_then_baseline128_to196_20260715_v1/evaluations/triglu_step_256",
+      "step": 256,
+      "variant": "triglu"
+    },
+    "triglu_step294": {
+      "benchmarks": {
+        "paper_amc23": {
+          "accuracy": 0.34375,
+          "correct": 440.0,
+          "rows": 1280
+        },
+        "paper_amc23_greedy": {
+          "accuracy": 0.375,
+          "correct": 15.0,
+          "rows": 40
+        },
+        "paper_gsm8k": {
+          "accuracy": 0.8286580742987112,
+          "correct": 1093.0,
+          "rows": 1319
+        },
+        "paper_math500": {
+          "accuracy": 0.666,
+          "correct": 333.0,
+          "rows": 500
+        },
+        "paper_olympiadbench": {
+          "accuracy": 0.2903703703703704,
+          "correct": 196.0,
+          "rows": 675
+        }
+      },
+      "cap_hits": {
+        "paper_amc23": {
+          "cap_hit_rate": 0.03203125,
+          "cap_hits": 41,
+          "rows": 1280
+        },
+        "paper_amc23_greedy": {
+          "cap_hit_rate": 0.125,
+          "cap_hits": 5,
+          "rows": 40
+        },
+        "paper_gsm8k": {
+          "cap_hit_rate": 0.002274450341167551,
+          "cap_hits": 3,
+          "rows": 1319
+        },
+        "paper_math500": {
+          "cap_hit_rate": 0.046,
+          "cap_hits": 23,
+          "rows": 500
+        },
+        "paper_olympiadbench": {
+          "cap_hit_rate": 0.15407407407407409,
+          "cap_hits": 104,
+          "rows": 675
+        }
+      },
+      "math_avg": 53.21946111672704,
+      "source_root": "runs/grpo_priority/triglu_priority_6x5090_grpo_step128_to294_then_baseline128_to196_20260715_v1/evaluations/triglu_step_294",
+      "step": 294,
+      "variant": "triglu"
+    },
+    "triglu_step30": {
+      "benchmarks": {
+        "paper_amc23": {
+          "accuracy": 0.25703125,
+          "correct": 329.0,
+          "rows": 1280
+        },
+        "paper_amc23_greedy": {
+          "accuracy": 0.375,
+          "correct": 15.0,
+          "rows": 40
+        },
+        "paper_gsm8k": {
+          "accuracy": 0.8233510235026535,
+          "correct": 1086.0,
+          "rows": 1319
+        },
+        "paper_math500": {
+          "accuracy": 0.636,
+          "correct": 318.0,
+          "rows": 500
+        },
+        "paper_olympiadbench": {
+          "accuracy": 0.2548148148148148,
+          "correct": 172.0,
+          "rows": 675
+        }
+      },
+      "cap_hits": {
+        "paper_amc23": {
+          "cap_hit_rate": 0.0375,
+          "cap_hits": 48,
+          "rows": 1280
+        },
+        "paper_amc23_greedy": {
+          "cap_hit_rate": 0.1,
+          "cap_hits": 4,
+          "rows": 40
+        },
+        "paper_gsm8k": {
+          "cap_hit_rate": 0.0037907505686125853,
+          "cap_hits": 5,
+          "rows": 1319
+        },
+        "paper_math500": {
+          "cap_hit_rate": 0.076,
+          "cap_hits": 38,
+          "rows": 500
+        },
+        "paper_olympiadbench": {
+          "cap_hit_rate": 0.16444444444444445,
+          "cap_hits": 111,
+          "rows": 675
+        }
+      },
+      "math_avg": 49.27992720793671,
+      "source_root": "runs/grpo_interleaved/triglu_baseline_6x5090_grpo_retro30_60_then_98to196_interleaved_20260714_v1/evaluations/triglu_step_30",
+      "step": 30,
+      "variant": "triglu"
+    },
+    "triglu_step60": {
+      "benchmarks": {
+        "paper_amc23": {
+          "accuracy": 0.28046875,
+          "correct": 359.0,
+          "rows": 1280
+        },
+        "paper_amc23_greedy": {
+          "accuracy": 0.35,
+          "correct": 14.0,
+          "rows": 40
+        },
+        "paper_gsm8k": {
+          "accuracy": 0.8309325246398787,
+          "correct": 1096.0,
+          "rows": 1319
+        },
+        "paper_math500": {
+          "accuracy": 0.658,
+          "correct": 329.0,
+          "rows": 500
+        },
+        "paper_olympiadbench": {
+          "accuracy": 0.2577777777777778,
+          "correct": 174.0,
+          "rows": 675
+        }
+      },
+      "cap_hits": {
+        "paper_amc23": {
+          "cap_hit_rate": 0.03046875,
+          "cap_hits": 39,
+          "rows": 1280
+        },
+        "paper_amc23_greedy": {
+          "cap_hit_rate": 0.075,
+          "cap_hits": 3,
+          "rows": 40
+        },
+        "paper_gsm8k": {
+          "cap_hit_rate": 0.0037907505686125853,
+          "cap_hits": 5,
+          "rows": 1319
+        },
+        "paper_math500": {
+          "cap_hit_rate": 0.062,
+          "cap_hits": 31,
+          "rows": 500
+        },
+        "paper_olympiadbench": {
+          "cap_hit_rate": 0.18814814814814815,
+          "cap_hits": 127,
+          "rows": 675
+        }
+      },
+      "math_avg": 50.67947631044141,
+      "source_root": "runs/grpo_interleaved/triglu_baseline_6x5090_grpo_retro30_60_then_98to196_interleaved_20260714_v1/evaluations/triglu_step_60",
+      "step": 60,
+      "variant": "triglu"
+    },
+    "triglu_step98": {
+      "benchmarks": {
+        "paper_amc23": {
+          "accuracy": 0.3203125,
+          "correct": 410.0,
+          "rows": 1280
+        },
+        "paper_amc23_greedy": {
+          "accuracy": 0.375,
+          "correct": 15.0,
+          "rows": 40
+        },
+        "paper_gsm8k": {
+          "accuracy": 0.8271417740712661,
+          "correct": 1091.0,
+          "rows": 1319
+        },
+        "paper_math500": {
+          "accuracy": 0.638,
+          "correct": 319.0,
+          "rows": 500
+        },
+        "paper_olympiadbench": {
+          "accuracy": 0.26814814814814814,
+          "correct": 181.0,
+          "rows": 675
+        }
+      },
+      "cap_hits": {
+        "paper_amc23": {
+          "cap_hit_rate": 0.03515625,
+          "cap_hits": 45,
+          "rows": 1280
+        },
+        "paper_amc23_greedy": {
+          "cap_hit_rate": 0.075,
+          "cap_hits": 3,
+          "rows": 40
+        },
+        "paper_gsm8k": {
+          "cap_hit_rate": 0.006823351023502654,
+          "cap_hits": 9,
+          "rows": 1319
+        },
+        "paper_math500": {
+          "cap_hit_rate": 0.076,
+          "cap_hits": 38,
+          "rows": 500
+        },
+        "paper_olympiadbench": {
+          "cap_hit_rate": 0.17333333333333334,
+          "cap_hits": 117,
+          "rows": 675
+        }
+      },
+      "math_avg": 51.34006055548536,
+      "source_root": "runs/grpo_serial/triglu_baseline_6x5090_grpo_20to98_serial_20260712_v1/evaluations/triglu_step_98",
+      "step": 98,
+      "variant": "triglu"
+    }
+  },
+  "root_precedence": [
+    "runs/grpo_priority/triglu_priority_6x5090_grpo_step128_to294_then_baseline128_to196_20260715_v1",
+    "runs/grpo_reordered/baseline_then_oft_fp32_6x5090_grpo_after_triglu196_20260715_v1",
+    "runs/grpo_interleaved/triglu_baseline_6x5090_grpo_retro30_60_then_98to196_interleaved_20260714_v1",
+    "runs/grpo_serial/triglu_baseline_6x5090_grpo_20to98_serial_20260712_v1"
+  ],
+  "schema_version": 1,
+  "scope": "authoritative RL math checkpoint snapshot",
+  "steps": [
+    20,
+    30,
+    60,
+    98,
+    128,
+    158,
+    196,
+    226,
+    256,
+    294
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "code": {
+    "code_avg_post_parser": 0.2043113320,
+    "code_avg_pre_parser": 0.1311406003,
+    "definition": "equal-weight HumanEval+ + MBPP + corrected LiveCodeBench; only HumanEval+ changes between pre and post",
+    "humaneval_plus": {
+      "post_parser_passed": 36,
+      "post_parser_score": 0.2195121951,
+      "pre_parser_passed": 0,
+      "pre_parser_score": 0.0,
+      "rows": 164
+    },
+    "live_code_bench": {
+      "corrected_passed": 107,
+      "corrected_score": 0.1014218009,
+      "historical_score": 0.0,
+      "historical_score_valid": false,
+      "review_receipts_sha256": "ced757612dca339de6c96531baf4d9b8c3053a30d5ebafa6a08ed52e293b8776",
+      "rows": 1055,
+      "source_predictions_unchanged": true
+    },
+    "mbpp": {
+      "historical_passed": 146,
+      "historical_score": 0.292,
+      "rows": 500,
+      "targeted_fixed_sandbox_lower_bound_passed": 150,
+      "targeted_fixed_sandbox_lower_bound_score": 0.3
+    }
+  },
+  "failure_modes": {
+    "humaneval_plus": {
+      "no_valid_python": 42,
+      "other_runtime": 6,
+      "passed": 36,
+      "runtime_name_error": 59,
+      "semantic_assertion": 21
+    },
+    "mbpp_targeted_corrected": {
+      "missing_or_wrong_implementation": 207,
+      "passed": 150,
+      "runtime": 28,
+      "semantic_assertion": 114,
+      "syntax": 1
+    }
+  },
+  "gpqa_diamond": {
+    "correct": 59,
+    "domain_counts": {
+      "biology": {"correct": 4, "total": 19},
+      "chemistry": {"correct": 26, "total": 93},
+      "physics": {"correct": 29, "total": 86}
+    },
+    "format": "four-choice A-D",
+    "score": 0.297979798,
+    "total": 198
+  },
+  "mmlu_pro": {
+    "correct": 3943,
+    "format": "ten-choice A-J",
+    "score": 0.3277094415,
+    "subjects": {
+      "biology": {"correct": 371, "total": 717},
+      "business": {"correct": 224, "total": 789},
+      "chemistry": {"correct": 386, "total": 1132},
+      "computer science": {"correct": 120, "total": 410},
+      "economics": {"correct": 389, "total": 844},
+      "engineering": {"correct": 216, "total": 969},
+      "health": {"correct": 259, "total": 818},
+      "history": {"correct": 78, "total": 381},
+      "law": {"correct": 197, "total": 1101},
+      "math": {"correct": 627, "total": 1351},
+      "other": {"correct": 255, "total": 924},
+      "philosophy": {"correct": 122, "total": 499},
+      "physics": {"correct": 320, "total": 1299},
+      "psychology": {"correct": 379, "total": 798}
+    },
+    "total": 12032
+  },
+  "run": "qwen3_1p7b_ood_6x5090_step294_20260716_v1/triglu",
+  "status": "complete_available_triglu_predictions"
+}

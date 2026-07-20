@@ -1,0 +1,40 @@
+run:
+  id: shs_2x5090_kv_balanced_throughput_20260712_v1
+  screen: qwen_shs_2x5090_kv_balanced_20260712_v1
+  output_root: runs/runtime_smokes/shs_2x5090_kv_balanced_throughput_20260712_v1
+  log: logs/shs_2x5090_kv_balanced_throughput_20260712_v1.log
+
+paths:
+  project_root: /root/autodl-tmp/qwen3_1p7b_single_layer_rl
+  python: /root/autodl-tmp/qwen3_1p7b_single_layer_rl/envs/vllm0102_verl061/bin/python
+  staged_runner: /root/autodl-tmp/qwen3_1p7b_single_layer_rl/scripts/run_shs_2x5090_production_length_throughput.py
+  staged_template: /root/autodl-tmp/qwen3_1p7b_single_layer_rl/configs/runtime/shs_2x5090_production_length_throughput_20260712_v1.yaml
+  immutable_control_manifest: /root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/runtime_smokes/shs_2x5090_production_length_throughput_20260712_v1/manifest.json
+
+identity:
+  base_source_commit: bd7bd1e797d6e9424aed6950a003a5253b0e6a3e
+  checkpoint_sha256: ebb4cd92f6e890c17cf0e14a883557358dff927e901b69588f1867e6dd016712
+  export_model_sha256: 6266ca7fdba2f8e117d0560897562468163e9ddf997a4a15ec10944b3d22c583
+  immutable_control_manifest_sha256: 929b3d56790438255d410c695f0a0459d1cbd1fb1bccaab04a78441ef3b23db8
+
+profiles:
+  primary:
+    label: mbt32768_mem085
+    max_num_batched_tokens: 32768
+    gpu_memory_utilization: 0.85
+  conditional:
+    label: mbt16384_mem085
+    max_num_batched_tokens: 16384
+    gpu_memory_utilization: 0.85
+
+conditional_trigger:
+  minimum_kv_cache_tokens: 32768
+  minimum_full_context_concurrency: 8.0
+  run_on_primary_oom: true
+  missing_profile_receipt: fail_stop
+
+claims:
+  production_grpo_authorized: false
+  explicit_kv_cache_memory: false
+  gpu_memory_utilization_above_0p85: false
+  immutable_control_relabelled: false

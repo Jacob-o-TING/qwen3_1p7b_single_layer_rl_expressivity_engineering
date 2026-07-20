@@ -1,0 +1,31 @@
+{
+  "classification": "generation_protocol_collapse_not_parser_miss",
+  "configured_max_tokens": 3072,
+  "fenced_code_outputs": 1,
+  "hebrew_no_code_outputs": 153,
+  "parser_changed_rows": 2,
+  "parser_strategies": {
+    "first_fenced_code_block": 1,
+    "strip_prefix_to_python_declaration": 1,
+    "unchanged": 162
+  },
+  "passed": 1,
+  "passed_task_ids": [
+    "HumanEval/50"
+  ],
+  "raw_report_score": 0.0061,
+  "raw_report_sha256": "8a4db7d72928a45d2c9c057c690fc7d47a53fe5cf5e4bc7e0b150c19002e794b",
+  "review_receipts_sha256": "9423ce846c4e0eaf9f317a92da66c35a263c7f6a7f7b92ed219d694c6d1ce33e",
+  "rows": 164,
+  "scientific_boundary": {
+    "checkpoint_mutated": false,
+    "generation_invoked": false,
+    "model_loaded": false,
+    "predictions_mutated": false
+  },
+  "single_hebrew_label_loop_outputs": 139,
+  "source_prediction_sha256": "4976c4442b404a2a5a36bbd7287434bfc46a1be3b912a67666a4a542f48a29b6",
+  "summary_sha256": "7ec2b9a1f99524d600de8c8a3401c95a0b24eb2c4185728d5e6316aa642ec7c3",
+  "untuned_parser_v2_score": 0.006097560975609756,
+  "umably_loop_outputs": 10
+}

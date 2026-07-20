@@ -1,0 +1,26 @@
+inherits: ../base_qwen3_1p7b.yaml
+experiment:
+  name: qwen3_1p7b_layer10_plus_oft_like_grpo
+freeze_policy:
+  mode: single_layer
+  backbone_train_mode: selected
+  train_layers:
+    - 10
+  freeze_embeddings: true
+  freeze_lm_head: true
+  train_adapter_modules: true
+architecture_variant:
+  name: oft_like
+  params:
+    target_modules:
+      - self_attn.q_proj
+      - self_attn.k_proj
+      - self_attn.v_proj
+      - self_attn.o_proj
+      - mlp.gate_proj
+      - mlp.up_proj
+      - mlp.down_proj
+    rank: 16
+    block_size: 64
+    init: identity
+    train_only_transform: false

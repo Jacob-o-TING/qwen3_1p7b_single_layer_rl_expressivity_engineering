@@ -1,0 +1,9 @@
+{
+  "corrected_humanevalplus_root": "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/eval_protocol/qwen3_1p7b_heplus_prompt_matrix_full164_20260717_v1/models/triglu_step294",
+  "corrected_humanevalplus_summary_sha256": "9a56d83b318c83e2b733c811d6f45cde55f4c9cf15481c66fa1394a5af360fdd",
+  "label": "triglu_step294",
+  "predictions_regenerated": false,
+  "source_root": "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_ood_6x5090_step294_20260716_v1/triglu",
+  "source_summary_sha256": "9c571d24117333fa4e10ea1cf1acc367faffc326b83ec55f0f5b1793f642455f",
+  "status": "IMPORTED_COMPLETE"
+}

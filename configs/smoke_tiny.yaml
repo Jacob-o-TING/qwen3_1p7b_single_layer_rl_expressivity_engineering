@@ -1,0 +1,46 @@
+schema_version: 1
+experiment:
+  name: smoke_tiny
+  seed: 1234
+  output_root: runs
+model:
+  name_or_path: dry-run/tiny-qwen-shape
+  family: qwen3
+  num_layers: 28
+  context_length: 128
+dataset:
+  name: inline_smoke
+  target_size_after_decontam: 4
+freeze_policy:
+  mode: single_layer
+  backbone_train_mode: selected
+  train_layers:
+    - 10
+  freeze_embeddings: true
+  freeze_lm_head: true
+  train_adapter_modules: false
+  adapter_name_markers:
+    - .adapters.
+    - .adapter.
+    - .oft_like.
+architecture_variant:
+  name: identity
+  params: {}
+grpo:
+  framework: verl
+  algorithm: GRPO
+  learning_rate: 5.0e-6
+  train_batch_size: 4
+  ppo_mini_batch_size: 2
+  ppo_micro_batch_size: 1
+  group_size: 2
+  max_prompt_length: 64
+  max_response_length: 64
+  kl_coefficient: 0.001
+  clip_range: 0.2
+  epochs: 1
+runtime:
+  dry_run: true
+  nproc_per_node: 1
+logging:
+  run_id_template: "{experiment_name}_{variant_name}_seed{seed}"

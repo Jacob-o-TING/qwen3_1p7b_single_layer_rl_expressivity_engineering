@@ -1,0 +1,108 @@
+{
+  "candidate_source_split_mapping": {
+    "data/numina_math_cot_50k/train.jsonl": "train",
+    "data/numina_math_cot_50k/val.jsonl": "test"
+  },
+  "ledger": {
+    "columns": [
+      "role",
+      "materialized_index",
+      "source_split",
+      "source_index",
+      "problem_sha256",
+      "normalized_record_sha256",
+      "source_category"
+    ],
+    "path": "selected_rows.tsv",
+    "row_count": 50100,
+    "sha256": "1097fdde429daf60eca6cbfb9b4e9f2f49ca5386133bd6618155087069a3968d"
+  },
+  "materialized": {
+    "train": {
+      "path": "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/data/numina_math_cot_50k_decontam_v3/train.jsonl",
+      "row_count": 50000,
+      "sha256": "723d9cacd4fed74efa871ef0d1ff59535f5882f23cf798ff09bb9b2b3a5dc4fc"
+    },
+    "validation": {
+      "path": "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/data/numina_math_cot_50k_decontam_v3/val.jsonl",
+      "row_count": 100,
+      "sha256": "eba82e85f726e165ea95da8b1788ff4ee8944f864f34bedbbc3cd4d96e850392"
+    }
+  },
+  "schema_version": 1,
+  "selection_semantics": "Each row maps a materialized output index to the zero-based global index in its online split. Source deduplication retained the first normalized-problem occurrence.",
+  "source_contract": {
+    "canonical_upstream": "https://huggingface.co/datasets/AI-MO/NuminaMath-CoT",
+    "canonical_upstream_revision": "e8b6aad745189763d0fd9521ac0844ce44675bef",
+    "canonical_upstream_revision_url": "https://huggingface.co/datasets/AI-MO/NuminaMath-CoT/commit/e8b6aad745189763d0fd9521ac0844ce44675bef",
+    "dataset_id": "AI-MO/NuminaMath-CoT",
+    "download_provider": "modelscope",
+    "download_provider_revision": null,
+    "download_provider_revision_note": "ModelScope streaming did not expose an immutable revision. The observed normalized content/order digests in the generated provenance manifest are the mirror integrity identity.",
+    "expected_split_rows": {
+      "test": 100,
+      "train": 859494
+    },
+    "schema_version": 1,
+    "upstream_data_files": [
+      {
+        "lfs_sha256": "62f94a9529fadf5fa08711ac932205eb4ee9fe57320052c8bb6a61ba0759d731",
+        "path": "data/test-00000-of-00001.parquet",
+        "size_bytes": 165933
+      },
+      {
+        "lfs_sha256": "25c0fa2ca96dd8078470ad1bbc439d0d211fd8b7d22e04abf7f61e9be9bf9ec3",
+        "path": "data/train-00000-of-00005.parquet",
+        "size_bytes": 246635854
+      },
+      {
+        "lfs_sha256": "2d4ba17018b6563728e0a92b38ee965479476cc41975923c224391e90b436236",
+        "path": "data/train-00001-of-00005.parquet",
+        "size_bytes": 246936512
+      },
+      {
+        "lfs_sha256": "c607c18379548f4fda05981f871518adf2506adc870825f5ccbf91a1fbb38183",
+        "path": "data/train-00002-of-00005.parquet",
+        "size_bytes": 246784426
+      },
+      {
+        "lfs_sha256": "e07293604d1ae0d16dc2708c9c51205760a0253c999e1a5a2ffd971474b3c06d",
+        "path": "data/train-00003-of-00005.parquet",
+        "size_bytes": 246896920
+      },
+      {
+        "lfs_sha256": "e3929523d643d93c705444c349b3cc6467cfd27ce8fe502211279889d9b753b9",
+        "path": "data/train-00004-of-00005.parquet",
+        "size_bytes": 246931989
+      }
+    ]
+  },
+  "source_contract_path": "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/configs/data/numina_math_cot_e8b6aad.json",
+  "source_contract_sha256": "e85cb2238e7c4e256ad7c23067bf0e3b0ea42129a575caffee3796e3c7793f8a",
+  "source_hub_used": "modelscope",
+  "source_splits": {
+    "test": {
+      "all_normalized_records_match": true,
+      "duplicate_resolution": "first normalized-problem occurrence",
+      "matched_count": 99,
+      "source_index_base": 0,
+      "source_normalized_record_order_sha256": "bb50ead2c881784eb1651a8e9edf0249100506b1fa4f9031df017d991d40893e",
+      "source_problem_order_sha256": "57e348522d07289e1aaa104f2677d669ce4543d48374536c60f4b186ae85d0df",
+      "source_row_count": 100,
+      "source_split": "test",
+      "target_count": 99
+    },
+    "train": {
+      "all_normalized_records_match": true,
+      "duplicate_resolution": "first normalized-problem occurrence",
+      "matched_count": 50001,
+      "source_index_base": 0,
+      "source_normalized_record_order_sha256": "43a0545ce4389e636dc3f7b1755238511cefe30e8264ca9ffc56602a5b5d659d",
+      "source_problem_order_sha256": "97fabdaa6cbf0ec1d37d1f508290399ab785acd59b50f500ffe30fff511024a5",
+      "source_row_count": 859494,
+      "source_split": "train",
+      "target_count": 50001
+    }
+  },
+  "validation_selection_manifest": "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/data/numina_math_cot_50k_decontam_v3/validation_manifest.json"
+}

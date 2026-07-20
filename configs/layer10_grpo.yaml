@@ -1,0 +1,12 @@
+inherits: base_qwen3_1p7b.yaml
+experiment:
+  name: qwen3_1p7b_layer10_grpo
+freeze_policy:
+  mode: single_layer
+  backbone_train_mode: selected
+  train_layers:
+    - 10
+  train_adapter_modules: false
+architecture_variant:
+  name: identity
+  params: {}

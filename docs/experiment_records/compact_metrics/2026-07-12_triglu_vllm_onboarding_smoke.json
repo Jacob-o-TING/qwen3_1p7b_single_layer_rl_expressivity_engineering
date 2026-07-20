@@ -1,0 +1,85 @@
+{
+  "archive_sha256": "f4a523f76b7607628894d76398f5cde80c217e924efeadc67b2a59ffe7742267",
+  "checkpoint_sha256": "8a463168b4dce0f698357a821dfaca2d7b7fa90032841adb717251e323c48ab8",
+  "engine": {
+    "gpu_memory_utilization": 0.85,
+    "max_model_len": 2048,
+    "max_num_batched_tokens": 32768,
+    "max_num_seqs": 64,
+    "model_impl": "auto_registered_custom_transformers_wrapper",
+    "tensor_parallel_size": 1,
+    "triglu_engine_load_seconds": 15.834687825292349,
+    "triglu_full_length_concurrency": 93.23,
+    "triglu_kv_cache_gib": 20.4,
+    "vanilla_engine_load_seconds": 15.065253859385848
+  },
+  "hf_export_parity": {
+    "greedy_tokens_equal": true,
+    "loading_errors": 0,
+    "logits_cosine": 0.9999942183494568,
+    "logits_max_abs": 0.0,
+    "logits_relative_l2": 0.0,
+    "missing_keys": 0,
+    "side_parameter_dtypes": [
+      "torch.float32"
+    ],
+    "top1_equal": true,
+    "unexpected_keys": 0
+  },
+  "methodology_id": "custom_ffn_vllm_onboarding_methodology_20260712_v1",
+  "production_authorization": {
+    "eval_parity_matrix": false,
+    "fifty_batch_grpo": false,
+    "triglu_vllm_onboarding": true
+  },
+  "run_id": "triglu_vllm_onboarding_smoke_20260712_v1",
+  "schema_version": 1,
+  "status": "passed",
+  "throughput": {
+    "historical_shs_p64_tokens_per_second_per_gpu": 1892.1,
+    "matched_max_tokens": 1024,
+    "matched_min_tokens": 800,
+    "rows": [
+      {
+        "pressure": 16,
+        "triglu_cap_hits": 14,
+        "triglu_mean_tokens": 1002.25,
+        "triglu_tokens_per_second_per_gpu": 809.8660679969653,
+        "vanilla_cap_hits": 11,
+        "vanilla_mean_tokens": 995.8125,
+        "vanilla_tokens_per_second_per_gpu": 1690.4273997386936
+      },
+      {
+        "pressure": 32,
+        "triglu_cap_hits": 20,
+        "triglu_mean_tokens": 971.3125,
+        "triglu_tokens_per_second_per_gpu": 1480.6017617654716,
+        "vanilla_cap_hits": 20,
+        "vanilla_mean_tokens": 980.09375,
+        "vanilla_tokens_per_second_per_gpu": 3097.384799718886
+      },
+      {
+        "pressure": 64,
+        "triglu_cap_hits": 43,
+        "triglu_mean_tokens": 972.078125,
+        "triglu_tokens_per_second_per_gpu": 2872.0778263998163,
+        "vanilla_cap_hits": 47,
+        "vanilla_mean_tokens": 982.65625,
+        "vanilla_tokens_per_second_per_gpu": 5442.10380855642
+      }
+    ],
+    "triglu_fraction_of_historical_shs": 1.5179313072246796,
+    "triglu_fraction_of_vanilla": 0.527751385757132
+  },
+  "vllm_dispatch": {
+    "backend": "reference_pytorch_cublas",
+    "fallback": false,
+    "greedy_tokens_equal_hf": true,
+    "layer_index": 10,
+    "parameter_device": "cuda:0",
+    "parameter_dtype": "torch.float32",
+    "resolved_architecture": "Qwen3TriGLUForCausalLM",
+    "side_dim": 512,
+    "side_hidden": 2048
+  }
+}

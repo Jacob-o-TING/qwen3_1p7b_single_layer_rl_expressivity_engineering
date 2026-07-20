@@ -1,0 +1,33 @@
+inherits: base_qwen3_1p7b_layer10_sft.yaml
+experiment:
+  name: qwen3_1p7b_layer10_shs_g32_h2048_r64
+freeze_policy:
+  mode: single_layer
+  backbone_train_mode: selected
+  train_layers: [10]
+  freeze_embeddings: true
+  freeze_lm_head: true
+  train_adapter_modules: true
+architecture_variant:
+  name: qwen_swiglu_shs
+  params:
+    target_layers: [10]
+    hidden_size: 2048
+    intermediate_size: 6144
+    hypergrid_rows: 32
+    hypergrid_cols: 32
+    hypergrid_generator_hidden: 2048
+    hypergrid_add_rank: 64
+    hypergrid_shuffle_seed: 20260707
+    hypergrid_projection_seed_offsets:
+      gate: 101
+      up: 202
+      down: 303
+    hypergrid_shuffle_seed_offsets:
+      mul_row: 0
+      mul_col: 7919
+      add_row: 15485863
+      add_col: 15493782
+    hypergrid_mul_init_scale: 0.001
+    hypergrid_add_init_scale: 0.001
+    initial_effect: exact_zero_delta

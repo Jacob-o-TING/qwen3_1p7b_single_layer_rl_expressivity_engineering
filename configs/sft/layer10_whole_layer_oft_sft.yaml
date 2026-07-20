@@ -1,0 +1,29 @@
+inherits: base_qwen3_1p7b_layer10_sft.yaml
+experiment:
+  name: qwen3_1p7b_layer10_oft_swiglu_b64
+freeze_policy:
+  mode: single_layer
+  backbone_train_mode: selected
+  train_layers: [10]
+  freeze_embeddings: true
+  freeze_lm_head: true
+  train_adapter_modules: true
+  freeze_selected_mlp_base: true
+  selected_mlp_base_modules:
+    - gate_proj
+    - up_proj
+    - down_proj
+    - base_mlp.gate_proj
+    - base_mlp.up_proj
+    - base_mlp.down_proj
+    - base_linear
+architecture_variant:
+  name: qwen_swiglu_oft
+  params:
+    target_layers: [10]
+    target_modules:
+      - mlp.gate_proj
+      - mlp.up_proj
+      - mlp.down_proj
+    block_size: 64
+    init: identity

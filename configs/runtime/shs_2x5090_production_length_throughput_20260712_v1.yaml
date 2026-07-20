@@ -1,0 +1,61 @@
+run:
+  id: shs_2x5090_production_length_throughput_20260712_v1
+  screen: qwen_shs_2x5090_longdecode_20260712_v1
+  output_root: runs/runtime_smokes/shs_2x5090_production_length_throughput_20260712_v1
+  log: logs/shs_2x5090_production_length_throughput_20260712_v1.log
+  seed: 20260712
+
+paths:
+  project_root: /root/autodl-tmp/qwen3_1p7b_single_layer_rl
+  python: /root/autodl-tmp/qwen3_1p7b_single_layer_rl/envs/vllm0102_verl061/bin/python
+  model_export: /root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/rtx5090_pair_bringup_20260712_v1/gate_b/fullmodel_parity/deployment_export
+  checkpoint: /root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/sft_ordered_20260711_sft50k_v1/layer10_whole_layer_shs/checkpoints/step_00003916/trainable_state.pt
+  train_parquet: /root/autodl-tmp/qwen3_1p7b_single_layer_rl/data/numina_math_cot_50k_decontam_v3_verl/train.parquet
+
+identity:
+  base_source_commit: 623bbdfe3d8ff7fbec344db923a99d327b150e70
+  checkpoint_sha256: ebb4cd92f6e890c17cf0e14a883557358dff927e901b69588f1867e6dd016712
+  export_model_sha256: 6266ca7fdba2f8e117d0560897562468163e9ddf997a4a15ec10944b3d22c583
+  export_config_sha256: 6fb2be47e145d65f40c30f4dcd113a43c79d7359decbbb56f4cf683bc2021c7a
+
+engine:
+  gpu_indices: [0, 1]
+  tensor_parallel_size: 1
+  model_impl: transformers
+  enforce_eager: true
+  max_model_len: 4096
+  max_num_seqs: 64
+  max_num_batched_tokens: 131072
+  gpu_memory_utilization: 0.80
+  enable_prefix_caching: false
+  enable_chunked_prefill: true
+  backend: reference
+
+workload:
+  pressures: [16, 32, 64]
+  group_size: 4
+  max_prompt_tokens: 1024
+  prompts_per_gpu: 16
+  prompt_selection: deterministic_seeded_without_replacement
+  cells:
+    matched_800_1024:
+      temperature: 0.8
+      top_p: 0.95
+      min_tokens: 800
+      max_tokens: 1024
+    production_cap3072:
+      temperature: 1.0
+      top_p: 1.0
+      min_tokens: 0
+      max_tokens: 3072
+
+gates:
+  stage_timeout_seconds: 1800
+  control_poll_seconds: 1.0
+  memory_stop_fraction: 0.98
+  production_mean_target_tokens: 897.60
+  production_mean_relative_tolerance: 0.25
+  required_dispatches_per_gpu: 3
+  matched_rtx_pro6000_anchor_tokens_per_second_per_gpu: 2262.8
+  c2_tokens_per_replica_step: 516253
+  production_cap_hit_anchor_fraction: 0.0879

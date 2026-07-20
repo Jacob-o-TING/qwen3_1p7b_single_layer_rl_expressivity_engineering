@@ -1,0 +1,34 @@
+framework: evalscope
+version: 1.8.1
+model_adapter: qwen_single_layer_sft
+datasets:
+  main:
+    - paper_math500
+    - paper_gsm8k
+    - paper_olympiadbench
+  amc:
+    name: paper_amc23
+    repeats: 32
+    temperature: 1.0
+    top_p: 1.0
+    do_sample: true
+benchmark_snapshot:
+  qwen_eval_revision: a45202bd16f1ec06f433442dc1152d0074773465
+  math500_revision: 6e4ed1a2a79af7d8630a6b768ec859cb5af4d3be
+  expected_counts:
+    math_500: 500
+    gsm8k: 1319
+    paper_olympiadbench: 675
+    paper_amc23: 40
+generation:
+  max_tokens: 3072
+  eval_batch_size: 8
+  temperature: 0.0
+  do_sample: false
+evaluation_runs: 3
+seed: 20260707
+notes:
+  - Resolve and save benchmark-info JSON before the first full run.
+  - Use the same EvalScope version, dataset hub, cache, prompt templates, and filters for every variant.
+  - The custom adapter is required because SHS and TriGLU cannot be merged into a stock Qwen checkpoint.
+  - The paper specifies AMC Average@32 but does not publish sampling hyperparameters; temperature 1.0 and top-p 1.0 preserve the native softmax distribution and add only seeded multinomial sampling.

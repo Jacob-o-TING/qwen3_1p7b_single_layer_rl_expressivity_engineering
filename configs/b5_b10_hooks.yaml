@@ -1,0 +1,36 @@
+inherits: base_qwen3_1p7b.yaml
+experiment:
+  name: qwen3_1p7b_b5_b10_planning
+layer_sets:
+  paper_reported_top5_by_math_contribution:
+    - 10
+    - 12
+    - 9
+    - 2
+    - 13
+  b5_placeholder:
+    source: Replace with exact contribution-ranked top 5 from your scan.
+    layers:
+      - 10
+      - 12
+      - 9
+      - 2
+      - 13
+  b10_placeholder:
+    source: Replace with exact contribution-ranked top 10 from your scan.
+    layers:
+      - 10
+      - 12
+      - 9
+      - 2
+      - 13
+      - 11
+      - 7
+      - 8
+      - 14
+      - 15
+freeze_policy:
+  mode: selected_layers
+  backbone_train_mode: selected
+  train_layers_from_set: b5_placeholder
+  train_adapter_modules: false

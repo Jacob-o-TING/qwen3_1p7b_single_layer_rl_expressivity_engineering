@@ -1,0 +1,37 @@
+inherits: ../base_qwen3_1p7b.yaml
+experiment:
+  name: qwen3_1p7b_layer10_sft
+  seed: 20260707
+  init_seed: 20260707
+model:
+  local_path: models/Qwen3-1.7B-Base
+dataset:
+  sft_train: data/numina_math_cot_50k_decontam_v3/train.jsonl
+  sft_val: data/numina_math_cot_50k_decontam_v3/val.jsonl
+  shuffle: true
+  dataloader_seed: 20260707
+sft:
+  optimizer: AdamW
+  learning_rate: 5.0e-6
+  weight_decay: 0.01
+  epochs: 2
+  max_seq_length: 2048
+  per_device_micro_batch_size: 1
+  gradient_accumulation_steps: 8
+  warmup_ratio: 0.03
+  max_grad_norm: 1.0
+  gradient_checkpointing: false
+  compile_mode: eager
+  log_every_steps: 1
+  checkpoint_fractions: [0.10, 0.25, 0.50, 0.75, 1.00]
+  validation_at_checkpoint_fractions: true
+  validation_max_micro_batches: 16
+  keep_last_checkpoints: 5
+  cache_dir: data/sft_cache
+runtime:
+  launcher: torchrun
+  nproc_per_node: 4
+  backend: ddp
+  mixed_precision: bf16
+logging:
+  run_id_template: "{experiment_name}_{variant_name}_numina50k_sft2ep_seed{seed}"

@@ -1,0 +1,3 @@
+{"backend": "triton", "buffer_devices": ["cuda:0"], "custom_backward": false, "in_features": 2048, "out_features": 6144, "pid": 25394}
+{"backend": "triton", "buffer_devices": ["cuda:0"], "custom_backward": false, "in_features": 2048, "out_features": 6144, "pid": 25394}
+{"backend": "triton", "buffer_devices": ["cuda:0"], "custom_backward": false, "in_features": 6144, "out_features": 2048, "pid": 25394}

@@ -1,0 +1,71 @@
+run_id: qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1
+screen: qwen_other_majorsteps6_20260718_v1
+result_root: runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1
+
+owner_approved:
+  date: 2026-07-18
+  variants: [triglu, baseline]
+  global_steps: [158, 196, 226, 256, 294]
+  execution_order:
+    - triglu_step158
+    - baseline_step158
+    - triglu_step196
+    - baseline_step196_import
+    - triglu_step226
+    - baseline_step226
+    - triglu_step256
+    - baseline_step256
+    - triglu_step294_import
+    - baseline_step294
+
+protocol:
+  backend: vllm_v1
+  tensor_parallel_size: 1
+  replicas: 6
+  seed: 20260707
+  decoding: greedy_pass_at_1
+  max_tokens: 3072
+  gpu_memory_utilization: 0.85
+  max_num_seqs: 128
+  max_num_batched_tokens: 32768
+  generic_sharding: deterministic_six_way_by_canonical_sample_identity
+  livecodebench_subset: release_latest
+  livecodebench_expected_samples: 1055
+  primary_humanevalplus: evalscope_raw_instruction_nochat_parser_v2
+  heritage_humanevalplus: evalscope_chat_instruction_parser_v2
+
+benchmarks:
+  reasoning:
+    gpqa_diamond: 198
+    mmlu_pro: 12032
+  code:
+    humaneval_plus: 164
+    mbpp: 500
+    live_code_bench: 1055
+  language:
+    ceval: 1346
+    ifeval: 541
+    mgsm: 2750
+
+imports:
+  triglu_step294: runs/ood_eval/qwen3_1p7b_ood_6x5090_step294_20260716_v1/triglu
+  baseline_step196: runs/ood_eval/qwen3_1p7b_ood_6x5090_baseline_step196_20260717_v1
+
+reporting:
+  group_rows_by_global_step: true
+  show_primary_corrected_protocol: true
+  show_heritage_chat_protocol: true
+  show_partial_numerator_denominator: true
+  show_ood_8_average: false
+  show_ood_category_average: false
+  category_means: [code, reasoning, language]
+
+storage:
+  minimum_free_gb_before_cell: 40
+  serial_temporary_exports: true
+  prune_temporary_export_after_cell: true
+
+pending_obligations_carried_forward:
+  PENDING-01: deferred; checkpoint-grid vLLM evaluation does not close HF-vLLM parity
+  PENDING-02: deferred; historical mixed-precision TriGLU checkpoints remain in use
+  PENDING-03: deferred; SHS is outside this evaluation wave

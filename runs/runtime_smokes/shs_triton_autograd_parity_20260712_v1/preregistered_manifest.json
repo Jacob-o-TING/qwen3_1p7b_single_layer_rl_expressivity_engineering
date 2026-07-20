@@ -1,0 +1,27 @@
+{
+  "backend": "triton_forward_reference_recompute_backward",
+  "checkpoint_trainable_sha256": "ebb4cd92f6e890c17cf0e14a883557358dff927e901b69588f1867e6dd016712",
+  "claims": {
+    "custom_backward": false,
+    "production_candidate": false,
+    "production_ready": false,
+    "reference_recompute_backward": true,
+    "triton_forward": true
+  },
+  "run_id": "shs_triton_autograd_parity_20260712_v1",
+  "seed": 20260712,
+  "source_hashes": {
+    "kernel": "6641c7935d4a92cd8212b8f34e41e7f885cf9ed2234c5be76f77fc82ae2edcad",
+    "runner": "f89049f2a306d01bf7956befe2654c27c2d230ffea3f9c7dc869e0e2c6761263",
+    "variant_module": "bb777e692bd4e52850ca865fd8400117d6c92d5d508927027937298aca6a3b6e"
+  },
+  "status": "preregistered",
+  "tail_tokens": 256,
+  "thresholds": {
+    "gradient_cosine_min": 0.999,
+    "gradient_relative_l2_max": 0.05,
+    "loss_abs_max": 0.01
+  },
+  "timestamp_utc": "2026-07-11T18:24:51.747598+00:00",
+  "validation_cache_sha256": "8dbfd62220a075af6e7a7f426baa72f6503aae081bdf28d80fd2dbdf18f513c9"
+}

@@ -1,0 +1,539 @@
+{
+  "by_language": {
+    "bn": {
+      "accuracy_delta_pp": 6.0,
+      "baseline_accuracy": 0.536,
+      "baseline_correct": 134,
+      "baseline_only_correct": 26,
+      "failure_flags": {
+        "concise_non_degenerate_wrong": {
+          "count": 18,
+          "denominator": 26,
+          "fraction": 0.6923076923076923
+        },
+        "correct_value_seen_then_lost": {
+          "count": 7,
+          "denominator": 26,
+          "fraction": 0.2692307692307692
+        },
+        "extended_non_degenerate_wrong": {
+          "count": 2,
+          "denominator": 26,
+          "fraction": 0.07692307692307693
+        },
+        "repetition_degeneration": {
+          "count": 6,
+          "denominator": 26,
+          "fraction": 0.23076923076923078
+        },
+        "termination_or_extraction_risk": {
+          "count": 1,
+          "denominator": 26,
+          "fraction": 0.038461538461538464
+        },
+        "token_loop": {
+          "count": 0,
+          "denominator": 26,
+          "fraction": 0.0
+        }
+      },
+      "total": 250,
+      "triglu_accuracy": 0.476,
+      "triglu_correct": 119,
+      "triglu_only_correct": 11
+    },
+    "de": {
+      "accuracy_delta_pp": 26.400000000000002,
+      "baseline_accuracy": 0.732,
+      "baseline_correct": 183,
+      "baseline_only_correct": 73,
+      "failure_flags": {
+        "concise_non_degenerate_wrong": {
+          "count": 19,
+          "denominator": 73,
+          "fraction": 0.2602739726027397
+        },
+        "correct_value_seen_then_lost": {
+          "count": 4,
+          "denominator": 73,
+          "fraction": 0.0547945205479452
+        },
+        "extended_non_degenerate_wrong": {
+          "count": 7,
+          "denominator": 73,
+          "fraction": 0.0958904109589041
+        },
+        "repetition_degeneration": {
+          "count": 47,
+          "denominator": 73,
+          "fraction": 0.6438356164383562
+        },
+        "termination_or_extraction_risk": {
+          "count": 11,
+          "denominator": 73,
+          "fraction": 0.1506849315068493
+        },
+        "token_loop": {
+          "count": 15,
+          "denominator": 73,
+          "fraction": 0.2054794520547945
+        }
+      },
+      "total": 250,
+      "triglu_accuracy": 0.468,
+      "triglu_correct": 117,
+      "triglu_only_correct": 7
+    },
+    "en": {
+      "accuracy_delta_pp": 24.8,
+      "baseline_accuracy": 0.844,
+      "baseline_correct": 211,
+      "baseline_only_correct": 66,
+      "failure_flags": {
+        "concise_non_degenerate_wrong": {
+          "count": 12,
+          "denominator": 66,
+          "fraction": 0.18181818181818182
+        },
+        "correct_value_seen_then_lost": {
+          "count": 5,
+          "denominator": 66,
+          "fraction": 0.07575757575757576
+        },
+        "extended_non_degenerate_wrong": {
+          "count": 10,
+          "denominator": 66,
+          "fraction": 0.15151515151515152
+        },
+        "repetition_degeneration": {
+          "count": 44,
+          "denominator": 66,
+          "fraction": 0.6666666666666666
+        },
+        "termination_or_extraction_risk": {
+          "count": 11,
+          "denominator": 66,
+          "fraction": 0.16666666666666666
+        },
+        "token_loop": {
+          "count": 21,
+          "denominator": 66,
+          "fraction": 0.3181818181818182
+        }
+      },
+      "total": 250,
+      "triglu_accuracy": 0.596,
+      "triglu_correct": 149,
+      "triglu_only_correct": 4
+    },
+    "es": {
+      "accuracy_delta_pp": 24.4,
+      "baseline_accuracy": 0.784,
+      "baseline_correct": 196,
+      "baseline_only_correct": 69,
+      "failure_flags": {
+        "concise_non_degenerate_wrong": {
+          "count": 15,
+          "denominator": 69,
+          "fraction": 0.21739130434782608
+        },
+        "correct_value_seen_then_lost": {
+          "count": 5,
+          "denominator": 69,
+          "fraction": 0.07246376811594203
+        },
+        "extended_non_degenerate_wrong": {
+          "count": 8,
+          "denominator": 69,
+          "fraction": 0.11594202898550725
+        },
+        "repetition_degeneration": {
+          "count": 46,
+          "denominator": 69,
+          "fraction": 0.6666666666666666
+        },
+        "termination_or_extraction_risk": {
+          "count": 11,
+          "denominator": 69,
+          "fraction": 0.15942028985507245
+        },
+        "token_loop": {
+          "count": 16,
+          "denominator": 69,
+          "fraction": 0.2318840579710145
+        }
+      },
+      "total": 250,
+      "triglu_accuracy": 0.54,
+      "triglu_correct": 135,
+      "triglu_only_correct": 8
+    },
+    "fr": {
+      "accuracy_delta_pp": 20.4,
+      "baseline_accuracy": 0.712,
+      "baseline_correct": 178,
+      "baseline_only_correct": 63,
+      "failure_flags": {
+        "concise_non_degenerate_wrong": {
+          "count": 8,
+          "denominator": 63,
+          "fraction": 0.12698412698412698
+        },
+        "correct_value_seen_then_lost": {
+          "count": 5,
+          "denominator": 63,
+          "fraction": 0.07936507936507936
+        },
+        "extended_non_degenerate_wrong": {
+          "count": 5,
+          "denominator": 63,
+          "fraction": 0.07936507936507936
+        },
+        "repetition_degeneration": {
+          "count": 50,
+          "denominator": 63,
+          "fraction": 0.7936507936507936
+        },
+        "termination_or_extraction_risk": {
+          "count": 13,
+          "denominator": 63,
+          "fraction": 0.20634920634920634
+        },
+        "token_loop": {
+          "count": 18,
+          "denominator": 63,
+          "fraction": 0.2857142857142857
+        }
+      },
+      "total": 250,
+      "triglu_accuracy": 0.508,
+      "triglu_correct": 127,
+      "triglu_only_correct": 12
+    },
+    "ja": {
+      "accuracy_delta_pp": 3.2,
+      "baseline_accuracy": 0.52,
+      "baseline_correct": 130,
+      "baseline_only_correct": 27,
+      "failure_flags": {
+        "concise_non_degenerate_wrong": {
+          "count": 15,
+          "denominator": 27,
+          "fraction": 0.5555555555555556
+        },
+        "correct_value_seen_then_lost": {
+          "count": 7,
+          "denominator": 27,
+          "fraction": 0.25925925925925924
+        },
+        "extended_non_degenerate_wrong": {
+          "count": 6,
+          "denominator": 27,
+          "fraction": 0.2222222222222222
+        },
+        "repetition_degeneration": {
+          "count": 6,
+          "denominator": 27,
+          "fraction": 0.2222222222222222
+        },
+        "termination_or_extraction_risk": {
+          "count": 3,
+          "denominator": 27,
+          "fraction": 0.1111111111111111
+        },
+        "token_loop": {
+          "count": 2,
+          "denominator": 27,
+          "fraction": 0.07407407407407407
+        }
+      },
+      "total": 250,
+      "triglu_accuracy": 0.488,
+      "triglu_correct": 122,
+      "triglu_only_correct": 19
+    },
+    "ru": {
+      "accuracy_delta_pp": 19.2,
+      "baseline_accuracy": 0.728,
+      "baseline_correct": 182,
+      "baseline_only_correct": 56,
+      "failure_flags": {
+        "concise_non_degenerate_wrong": {
+          "count": 16,
+          "denominator": 56,
+          "fraction": 0.2857142857142857
+        },
+        "correct_value_seen_then_lost": {
+          "count": 12,
+          "denominator": 56,
+          "fraction": 0.21428571428571427
+        },
+        "extended_non_degenerate_wrong": {
+          "count": 9,
+          "denominator": 56,
+          "fraction": 0.16071428571428573
+        },
+        "repetition_degeneration": {
+          "count": 31,
+          "denominator": 56,
+          "fraction": 0.5535714285714286
+        },
+        "termination_or_extraction_risk": {
+          "count": 4,
+          "denominator": 56,
+          "fraction": 0.07142857142857142
+        },
+        "token_loop": {
+          "count": 11,
+          "denominator": 56,
+          "fraction": 0.19642857142857142
+        }
+      },
+      "total": 250,
+      "triglu_accuracy": 0.536,
+      "triglu_correct": 134,
+      "triglu_only_correct": 8
+    },
+    "sw": {
+      "accuracy_delta_pp": -2.8000000000000003,
+      "baseline_accuracy": 0.064,
+      "baseline_correct": 16,
+      "baseline_only_correct": 3,
+      "failure_flags": {
+        "concise_non_degenerate_wrong": {
+          "count": 3,
+          "denominator": 3,
+          "fraction": 1.0
+        },
+        "correct_value_seen_then_lost": {
+          "count": 2,
+          "denominator": 3,
+          "fraction": 0.6666666666666666
+        },
+        "extended_non_degenerate_wrong": {
+          "count": 0,
+          "denominator": 3,
+          "fraction": 0.0
+        },
+        "repetition_degeneration": {
+          "count": 0,
+          "denominator": 3,
+          "fraction": 0.0
+        },
+        "termination_or_extraction_risk": {
+          "count": 0,
+          "denominator": 3,
+          "fraction": 0.0
+        },
+        "token_loop": {
+          "count": 0,
+          "denominator": 3,
+          "fraction": 0.0
+        }
+      },
+      "total": 250,
+      "triglu_accuracy": 0.092,
+      "triglu_correct": 23,
+      "triglu_only_correct": 10
+    },
+    "te": {
+      "accuracy_delta_pp": 0.0,
+      "baseline_accuracy": 0.236,
+      "baseline_correct": 59,
+      "baseline_only_correct": 16,
+      "failure_flags": {
+        "concise_non_degenerate_wrong": {
+          "count": 2,
+          "denominator": 16,
+          "fraction": 0.125
+        },
+        "correct_value_seen_then_lost": {
+          "count": 2,
+          "denominator": 16,
+          "fraction": 0.125
+        },
+        "extended_non_degenerate_wrong": {
+          "count": 0,
+          "denominator": 16,
+          "fraction": 0.0
+        },
+        "repetition_degeneration": {
+          "count": 14,
+          "denominator": 16,
+          "fraction": 0.875
+        },
+        "termination_or_extraction_risk": {
+          "count": 1,
+          "denominator": 16,
+          "fraction": 0.0625
+        },
+        "token_loop": {
+          "count": 0,
+          "denominator": 16,
+          "fraction": 0.0
+        }
+      },
+      "total": 250,
+      "triglu_accuracy": 0.236,
+      "triglu_correct": 59,
+      "triglu_only_correct": 16
+    },
+    "th": {
+      "accuracy_delta_pp": 1.2,
+      "baseline_accuracy": 0.616,
+      "baseline_correct": 154,
+      "baseline_only_correct": 24,
+      "failure_flags": {
+        "concise_non_degenerate_wrong": {
+          "count": 9,
+          "denominator": 24,
+          "fraction": 0.375
+        },
+        "correct_value_seen_then_lost": {
+          "count": 4,
+          "denominator": 24,
+          "fraction": 0.16666666666666666
+        },
+        "extended_non_degenerate_wrong": {
+          "count": 1,
+          "denominator": 24,
+          "fraction": 0.041666666666666664
+        },
+        "repetition_degeneration": {
+          "count": 14,
+          "denominator": 24,
+          "fraction": 0.5833333333333334
+        },
+        "termination_or_extraction_risk": {
+          "count": 0,
+          "denominator": 24,
+          "fraction": 0.0
+        },
+        "token_loop": {
+          "count": 5,
+          "denominator": 24,
+          "fraction": 0.20833333333333334
+        }
+      },
+      "total": 250,
+      "triglu_accuracy": 0.604,
+      "triglu_correct": 151,
+      "triglu_only_correct": 21
+    },
+    "zh": {
+      "accuracy_delta_pp": 20.4,
+      "baseline_accuracy": 0.72,
+      "baseline_correct": 180,
+      "baseline_only_correct": 59,
+      "failure_flags": {
+        "concise_non_degenerate_wrong": {
+          "count": 16,
+          "denominator": 59,
+          "fraction": 0.2711864406779661
+        },
+        "correct_value_seen_then_lost": {
+          "count": 9,
+          "denominator": 59,
+          "fraction": 0.15254237288135594
+        },
+        "extended_non_degenerate_wrong": {
+          "count": 6,
+          "denominator": 59,
+          "fraction": 0.1016949152542373
+        },
+        "repetition_degeneration": {
+          "count": 37,
+          "denominator": 59,
+          "fraction": 0.6271186440677966
+        },
+        "termination_or_extraction_risk": {
+          "count": 2,
+          "denominator": 59,
+          "fraction": 0.03389830508474576
+        },
+        "token_loop": {
+          "count": 16,
+          "denominator": 59,
+          "fraction": 0.2711864406779661
+        }
+      },
+      "total": 250,
+      "triglu_accuracy": 0.516,
+      "triglu_correct": 129,
+      "triglu_only_correct": 8
+    }
+  },
+  "coverage": {
+    "languages": 11,
+    "prompt_target_exact_matches": 2750,
+    "rows": 2750,
+    "rows_per_language": 250
+  },
+  "definitions": {
+    "concise_non_degenerate_wrong": "prediction_characters < 1500 and not repetition_degeneration",
+    "correct_value_seen_then_lost": "exact numeric target occurs in final 500 characters or boxed content, while final score is wrong",
+    "extended_non_degenerate_wrong": "prediction_characters >= 1500 and not repetition_degeneration",
+    "notes": [
+      "The first, fifth, and sixth flags form an exhaustive mutually exclusive partition.",
+      "The other flags overlap with that partition.",
+      "Semantic binding corruption is qualitative and intentionally has no automated prevalence estimate."
+    ],
+    "repetition_degeneration": "repeat4_ratio > 0.35 OR max_same_token_run >= 20",
+    "termination_or_extraction_risk": "empty extracted_prediction OR prediction_characters >= 8000",
+    "token_loop": "max_same_token_run >= 20"
+  },
+  "digests": {
+    "baseline_prediction_sha256": "4154014f2b7e42f7f6600f1109484652d49301adbe85ff97daa40d5f0a022090",
+    "baseline_prompt_target_sha256": "c0e814037c43dbd286a8ac6f9244819a2c42cd5a6c75110760001e6aa88c0db0",
+    "triglu_prediction_sha256": "05a356e2ec128867d0f3a4d651a6df2bb9e908549c2aac1fdbfaca94b9d16189",
+    "triglu_prompt_target_sha256": "c0e814037c43dbd286a8ac6f9244819a2c42cd5a6c75110760001e6aa88c0db0"
+  },
+  "generated_at": "2026-07-17T16:31:23.040357+00:00",
+  "overall": {
+    "baseline_accuracy": 0.5901818181818181,
+    "baseline_correct": 1623,
+    "baseline_only_correct": 482,
+    "failure_flags": {
+      "concise_non_degenerate_wrong": {
+        "count": 133,
+        "denominator": 482,
+        "fraction": 0.27593360995850624
+      },
+      "correct_value_seen_then_lost": {
+        "count": 62,
+        "denominator": 482,
+        "fraction": 0.12863070539419086
+      },
+      "extended_non_degenerate_wrong": {
+        "count": 54,
+        "denominator": 482,
+        "fraction": 0.11203319502074689
+      },
+      "repetition_degeneration": {
+        "count": 295,
+        "denominator": 482,
+        "fraction": 0.6120331950207469
+      },
+      "termination_or_extraction_risk": {
+        "count": 57,
+        "denominator": 482,
+        "fraction": 0.11825726141078838
+      },
+      "token_loop": {
+        "count": 104,
+        "denominator": 482,
+        "fraction": 0.2157676348547718
+      }
+    },
+    "same_outcome": 2144,
+    "triglu_accuracy": 0.46,
+    "triglu_correct": 1265,
+    "triglu_only_correct": 124
+  },
+  "population": "paired MGSM rows where baseline_step196 is correct and triglu_step294 is wrong",
+  "schema_version": 1,
+  "source_roots": {
+    "baseline_step196": "runs/ood_eval/qwen3_1p7b_ood_6x5090_baseline_step196_20260717_v1/language_mgsm_staged6",
+    "triglu_step294": "runs/ood_eval/qwen3_1p7b_ood_6x5090_step294_20260716_v1/triglu/language_ifeval_mgsm"
+  }
+}

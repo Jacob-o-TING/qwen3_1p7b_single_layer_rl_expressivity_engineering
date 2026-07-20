@@ -1,0 +1,2732 @@
+{
+  "checkpoint_trainable_sha256": "ebb4cd92f6e890c17cf0e14a883557358dff927e901b69588f1867e6dd016712",
+  "claims": {
+    "production_candidate": false,
+    "production_ready": false
+  },
+  "environment": {
+    "cuda": "13.0",
+    "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+    "torch": "2.12.1+cu130"
+  },
+  "failures": [
+    "full_context_reproduction:grouped_bf16:logits_cosine_below_gate",
+    "full_context_reproduction:grouped_fp32_accumulate:logits_cosine_below_gate",
+    "flattened_pressure_32:grouped_bf16:logits_cosine_below_gate",
+    "flattened_pressure_32:grouped_fp32_accumulate:logits_cosine_below_gate"
+  ],
+  "input_panels": [
+    "full_context_reproduction",
+    "flattened_pressure_1",
+    "flattened_pressure_32"
+  ],
+  "logits_cosine_min": 0.9999,
+  "modes": [
+    "reference_equivalent",
+    "grouped_bf16",
+    "grouped_fp32_accumulate"
+  ],
+  "panels": {
+    "flattened_pressure_1": {
+      "flattened_tokens": 1,
+      "modes": {
+        "grouped_bf16": {
+          "dispatch": {
+            "actual_projection_backends": [
+              "triton",
+              "triton",
+              "triton"
+            ],
+            "expected_projection_backends": [
+              "triton",
+              "triton",
+              "triton"
+            ],
+            "fallback": false,
+            "requested_backend": "triton",
+            "requested_mode": "grouped_bf16"
+          },
+          "first_amplification_point": null,
+          "points": {
+            "final_logits": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                151936
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer10_down_projection": {
+              "cosine": 1.000000238418579,
+              "max_abs": 5.960464477539063e-08,
+              "mean_abs": 3.2741809263825417e-11,
+              "relative_l2": 1.082794511830798e-07,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer10_gate_projection": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                6144
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer10_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer10_swiglu": {
+              "cosine": 1.000000238418579,
+              "max_abs": 1.4901161193847656e-08,
+              "mean_abs": 2.4253192770079535e-12,
+              "relative_l2": 5.899932631336924e-08,
+              "shape": [
+                1,
+                1,
+                6144
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer10_up_projection": {
+              "cosine": 1.0000009536743164,
+              "max_abs": 2.384185791015625e-07,
+              "mean_abs": 5.820766091346741e-11,
+              "relative_l2": 8.860304490099224e-08,
+              "shape": [
+                1,
+                1,
+                6144
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer11_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer12_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer13_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer14_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer15_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer16_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer17_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer18_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer19_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer20_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer21_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer22_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer23_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer24_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer25_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer26_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer27_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            }
+          }
+        },
+        "grouped_fp32_accumulate": {
+          "dispatch": {
+            "actual_projection_backends": [
+              "triton_fp32",
+              "triton_fp32",
+              "triton_fp32"
+            ],
+            "expected_projection_backends": [
+              "triton_fp32",
+              "triton_fp32",
+              "triton_fp32"
+            ],
+            "fallback": false,
+            "requested_backend": "triton_fp32",
+            "requested_mode": "grouped_fp32_accumulate"
+          },
+          "first_amplification_point": null,
+          "points": {
+            "final_logits": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                151936
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer10_down_projection": {
+              "cosine": 1.000000238418579,
+              "max_abs": 5.960464477539063e-08,
+              "mean_abs": 2.9103830456733704e-11,
+              "relative_l2": 1.0744330580791939e-07,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer10_gate_projection": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                6144
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer10_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer10_swiglu": {
+              "cosine": 1.000000238418579,
+              "max_abs": 7.450580596923828e-09,
+              "mean_abs": 1.2126596385039767e-12,
+              "relative_l2": 2.949966315668462e-08,
+              "shape": [
+                1,
+                1,
+                6144
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer10_up_projection": {
+              "cosine": 1.0000009536743164,
+              "max_abs": 1.1920928955078125e-07,
+              "mean_abs": 1.9402554216063628e-11,
+              "relative_l2": 3.9624485026479306e-08,
+              "shape": [
+                1,
+                1,
+                6144
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer11_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer12_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer13_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer14_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer15_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer16_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer17_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer18_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer19_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer20_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer21_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer22_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer23_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer24_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer25_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer26_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer27_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            }
+          }
+        },
+        "reference_equivalent": {
+          "dispatch": {
+            "actual_projection_backends": [
+              "reference",
+              "reference",
+              "reference"
+            ],
+            "expected_projection_backends": [
+              "reference",
+              "reference",
+              "reference"
+            ],
+            "fallback": false,
+            "requested_backend": "reference",
+            "requested_mode": "reference_equivalent"
+          },
+          "first_amplification_point": null,
+          "points": {
+            "final_logits": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                151936
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer10_down_projection": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer10_gate_projection": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                6144
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer10_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer10_swiglu": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                6144
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer10_up_projection": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                6144
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer11_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer12_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer13_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer14_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer15_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer16_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer17_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer18_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer19_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer20_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer21_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer22_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer23_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer24_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer25_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer26_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer27_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                1,
+                2048
+              ],
+              "top10_overlap": 1.0
+            }
+          }
+        }
+      }
+    },
+    "flattened_pressure_32": {
+      "flattened_tokens": 32,
+      "modes": {
+        "grouped_bf16": {
+          "dispatch": {
+            "actual_projection_backends": [
+              "triton",
+              "triton",
+              "triton"
+            ],
+            "expected_projection_backends": [
+              "triton",
+              "triton",
+              "triton"
+            ],
+            "fallback": false,
+            "requested_backend": "triton",
+            "requested_mode": "grouped_bf16"
+          },
+          "first_amplification_point": "layer11_residual",
+          "points": {
+            "final_logits": {
+              "cosine": 0.9993597269058228,
+              "max_abs": 0.375,
+              "mean_abs": 0.03674400970339775,
+              "relative_l2": 0.004397410899400711,
+              "shape": [
+                1,
+                32,
+                151936
+              ],
+              "top10_overlap": 0.984375
+            },
+            "layer10_down_projection": {
+              "cosine": 1.0000005960464478,
+              "max_abs": 0.03125,
+              "mean_abs": 0.0004804363416042179,
+              "relative_l2": 0.0014127398608252406,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 0.9906250238418579
+            },
+            "layer10_gate_projection": {
+              "cosine": 0.9999844431877136,
+              "max_abs": 0.03125,
+              "mean_abs": 3.3276784961344674e-05,
+              "relative_l2": 0.00033482530852779746,
+              "shape": [
+                1,
+                32,
+                6144
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer10_residual": {
+              "cosine": 1.0000354051589966,
+              "max_abs": 0.0625,
+              "mean_abs": 0.00047534669283777475,
+              "relative_l2": 4.372990224510431e-05,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer10_swiglu": {
+              "cosine": 0.9999919533729553,
+              "max_abs": 0.125,
+              "mean_abs": 1.4957029634388164e-05,
+              "relative_l2": 0.0009022736339829862,
+              "shape": [
+                1,
+                32,
+                6144
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer10_up_projection": {
+              "cosine": 0.9999862909317017,
+              "max_abs": 0.015625,
+              "mean_abs": 2.8691147235804237e-05,
+              "relative_l2": 0.0003792088245972991,
+              "shape": [
+                1,
+                32,
+                6144
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer11_residual": {
+              "cosine": 1.0000308752059937,
+              "max_abs": 0.25,
+              "mean_abs": 0.005402774084359407,
+              "relative_l2": 0.00018544016347732395,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer12_residual": {
+              "cosine": 1.000029444694519,
+              "max_abs": 0.5,
+              "mean_abs": 0.010017743334174156,
+              "relative_l2": 0.0003132713318336755,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 0.9937499761581421
+            },
+            "layer13_residual": {
+              "cosine": 1.0000255107879639,
+              "max_abs": 0.5,
+              "mean_abs": 0.015527655370533466,
+              "relative_l2": 0.0004465636156965047,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer14_residual": {
+              "cosine": 1.000023603439331,
+              "max_abs": 0.5,
+              "mean_abs": 0.02120397426187992,
+              "relative_l2": 0.0005898564704693854,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 0.9937499761581421
+            },
+            "layer15_residual": {
+              "cosine": 1.0000197887420654,
+              "max_abs": 1.0,
+              "mean_abs": 0.02848745323717594,
+              "relative_l2": 0.0007824827334843576,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 0.9906250238418579
+            },
+            "layer16_residual": {
+              "cosine": 1.0000122785568237,
+              "max_abs": 1.0,
+              "mean_abs": 0.04084696248173714,
+              "relative_l2": 0.0011159266578033566,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 0.987500011920929
+            },
+            "layer17_residual": {
+              "cosine": 1.000006914138794,
+              "max_abs": 2.0,
+              "mean_abs": 0.05553663149476051,
+              "relative_l2": 0.0014895552303642035,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 0.996874988079071
+            },
+            "layer18_residual": {
+              "cosine": 1.000001072883606,
+              "max_abs": 3.0,
+              "mean_abs": 0.07530155777931213,
+              "relative_l2": 0.001991200726479292,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 0.996874988079071
+            },
+            "layer19_residual": {
+              "cosine": 0.9999973773956299,
+              "max_abs": 4.0,
+              "mean_abs": 0.09955675899982452,
+              "relative_l2": 0.002603105967864394,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 0.981249988079071
+            },
+            "layer20_residual": {
+              "cosine": 0.9999929666519165,
+              "max_abs": 6.0,
+              "mean_abs": 0.12893730401992798,
+              "relative_l2": 0.0033169977832585573,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 0.984375
+            },
+            "layer21_residual": {
+              "cosine": 0.9999890923500061,
+              "max_abs": 6.0,
+              "mean_abs": 0.16221928596496582,
+              "relative_l2": 0.004008190706372261,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 0.9937499761581421
+            },
+            "layer22_residual": {
+              "cosine": 0.9999858140945435,
+              "max_abs": 8.0,
+              "mean_abs": 0.19548851251602173,
+              "relative_l2": 0.004684403073042631,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 0.987500011920929
+            },
+            "layer23_residual": {
+              "cosine": 0.9999844431877136,
+              "max_abs": 12.0,
+              "mean_abs": 0.23034776747226715,
+              "relative_l2": 0.0052664149552583694,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 0.996874988079071
+            },
+            "layer24_residual": {
+              "cosine": 0.9999799728393555,
+              "max_abs": 16.0,
+              "mean_abs": 0.2713528573513031,
+              "relative_l2": 0.005726168863475323,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 0.996874988079071
+            },
+            "layer25_residual": {
+              "cosine": 0.999976634979248,
+              "max_abs": 24.0,
+              "mean_abs": 0.3136177659034729,
+              "relative_l2": 0.0061316052451729774,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 0.9906250238418579
+            },
+            "layer26_residual": {
+              "cosine": 0.9999783039093018,
+              "max_abs": 24.0,
+              "mean_abs": 0.3485078811645508,
+              "relative_l2": 0.006103548686951399,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 0.987500011920929
+            },
+            "layer27_residual": {
+              "cosine": 0.999954342842102,
+              "max_abs": 24.0,
+              "mean_abs": 0.4286002814769745,
+              "relative_l2": 0.009471584111452103,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 0.9906250238418579
+            }
+          }
+        },
+        "grouped_fp32_accumulate": {
+          "dispatch": {
+            "actual_projection_backends": [
+              "triton_fp32",
+              "triton_fp32",
+              "triton_fp32"
+            ],
+            "expected_projection_backends": [
+              "triton_fp32",
+              "triton_fp32",
+              "triton_fp32"
+            ],
+            "fallback": false,
+            "requested_backend": "triton_fp32",
+            "requested_mode": "grouped_fp32_accumulate"
+          },
+          "first_amplification_point": "layer11_residual",
+          "points": {
+            "final_logits": {
+              "cosine": 0.9993603229522705,
+              "max_abs": 0.3125,
+              "mean_abs": 0.04223934933543205,
+              "relative_l2": 0.004904686473309994,
+              "shape": [
+                1,
+                32,
+                151936
+              ],
+              "top10_overlap": 0.981249988079071
+            },
+            "layer10_down_projection": {
+              "cosine": 1.0000005960464478,
+              "max_abs": 0.03125,
+              "mean_abs": 0.000556306797079742,
+              "relative_l2": 0.0015152415726333857,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 0.9906250238418579
+            },
+            "layer10_gate_projection": {
+              "cosine": 0.9999846816062927,
+              "max_abs": 0.03125,
+              "mean_abs": 3.606874088291079e-05,
+              "relative_l2": 0.0003591961576603353,
+              "shape": [
+                1,
+                32,
+                6144
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer10_residual": {
+              "cosine": 1.0000354051589966,
+              "max_abs": 0.0625,
+              "mean_abs": 0.000548145268112421,
+              "relative_l2": 4.680830170400441e-05,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer10_swiglu": {
+              "cosine": 0.9999918937683105,
+              "max_abs": 0.125,
+              "mean_abs": 1.5865432942518964e-05,
+              "relative_l2": 0.000983352423645556,
+              "shape": [
+                1,
+                32,
+                6144
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer10_up_projection": {
+              "cosine": 0.9999864101409912,
+              "max_abs": 0.015625,
+              "mean_abs": 2.970735658891499e-05,
+              "relative_l2": 0.00039095812826417387,
+              "shape": [
+                1,
+                32,
+                6144
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer11_residual": {
+              "cosine": 1.0000309944152832,
+              "max_abs": 0.5,
+              "mean_abs": 0.005634591914713383,
+              "relative_l2": 0.00020088166638743132,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer12_residual": {
+              "cosine": 1.0000293254852295,
+              "max_abs": 1.0,
+              "mean_abs": 0.010246951133012772,
+              "relative_l2": 0.00033092658850364387,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer13_residual": {
+              "cosine": 1.0000262260437012,
+              "max_abs": 1.0,
+              "mean_abs": 0.015819940716028214,
+              "relative_l2": 0.0004621647240128368,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 0.996874988079071
+            },
+            "layer14_residual": {
+              "cosine": 1.0000241994857788,
+              "max_abs": 1.0,
+              "mean_abs": 0.021542837843298912,
+              "relative_l2": 0.0006119441823102534,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 0.9937499761581421
+            },
+            "layer15_residual": {
+              "cosine": 1.0000200271606445,
+              "max_abs": 1.0,
+              "mean_abs": 0.028837427496910095,
+              "relative_l2": 0.0008032884798012674,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 0.9937499761581421
+            },
+            "layer16_residual": {
+              "cosine": 1.000011920928955,
+              "max_abs": 2.0,
+              "mean_abs": 0.04069834202528,
+              "relative_l2": 0.0011217165738344193,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 0.987500011920929
+            },
+            "layer17_residual": {
+              "cosine": 1.000007152557373,
+              "max_abs": 3.0,
+              "mean_abs": 0.055226728320121765,
+              "relative_l2": 0.0014962381683290005,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 0.9937499761581421
+            },
+            "layer18_residual": {
+              "cosine": 1.0000004768371582,
+              "max_abs": 3.0,
+              "mean_abs": 0.07675984501838684,
+              "relative_l2": 0.0020501192193478346,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 0.9937499761581421
+            },
+            "layer19_residual": {
+              "cosine": 0.9999980926513672,
+              "max_abs": 4.0,
+              "mean_abs": 0.10107474029064178,
+              "relative_l2": 0.0026510432362556458,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 0.984375
+            },
+            "layer20_residual": {
+              "cosine": 0.9999932050704956,
+              "max_abs": 6.0,
+              "mean_abs": 0.13127054274082184,
+              "relative_l2": 0.0033669881522655487,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 0.9937499761581421
+            },
+            "layer21_residual": {
+              "cosine": 0.9999886751174927,
+              "max_abs": 4.0,
+              "mean_abs": 0.16424378752708435,
+              "relative_l2": 0.004095583688467741,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 0.996874988079071
+            },
+            "layer22_residual": {
+              "cosine": 0.9999846816062927,
+              "max_abs": 8.0,
+              "mean_abs": 0.19979092478752136,
+              "relative_l2": 0.004761080257594585,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 0.984375
+            },
+            "layer23_residual": {
+              "cosine": 0.9999833703041077,
+              "max_abs": 8.0,
+              "mean_abs": 0.23497584462165833,
+              "relative_l2": 0.0052818129770457745,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 0.9937499761581421
+            },
+            "layer24_residual": {
+              "cosine": 0.9999800324440002,
+              "max_abs": 8.0,
+              "mean_abs": 0.27754873037338257,
+              "relative_l2": 0.005855197552591562,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 0.996874988079071
+            },
+            "layer25_residual": {
+              "cosine": 0.9999758005142212,
+              "max_abs": 16.0,
+              "mean_abs": 0.32137101888656616,
+              "relative_l2": 0.006253656931221485,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 0.987500011920929
+            },
+            "layer26_residual": {
+              "cosine": 0.999977171421051,
+              "max_abs": 32.0,
+              "mean_abs": 0.3541359305381775,
+              "relative_l2": 0.006265141535550356,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 0.9906250238418579
+            },
+            "layer27_residual": {
+              "cosine": 0.9999457597732544,
+              "max_abs": 32.0,
+              "mean_abs": 0.4413513243198395,
+              "relative_l2": 0.010304385796189308,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 0.9906250238418579
+            }
+          }
+        },
+        "reference_equivalent": {
+          "dispatch": {
+            "actual_projection_backends": [
+              "reference",
+              "reference",
+              "reference"
+            ],
+            "expected_projection_backends": [
+              "reference",
+              "reference",
+              "reference"
+            ],
+            "fallback": false,
+            "requested_backend": "reference",
+            "requested_mode": "reference_equivalent"
+          },
+          "first_amplification_point": null,
+          "points": {
+            "final_logits": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                32,
+                151936
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer10_down_projection": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer10_gate_projection": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                32,
+                6144
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer10_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer10_swiglu": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                32,
+                6144
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer10_up_projection": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                32,
+                6144
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer11_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer12_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer13_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer14_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer15_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer16_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer17_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer18_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer19_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer20_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer21_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer22_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer23_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer24_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer25_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer26_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer27_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                32,
+                2048
+              ],
+              "top10_overlap": 1.0
+            }
+          }
+        }
+      }
+    },
+    "full_context_reproduction": {
+      "flattened_tokens": 18,
+      "modes": {
+        "grouped_bf16": {
+          "dispatch": {
+            "actual_projection_backends": [
+              "triton",
+              "triton",
+              "triton"
+            ],
+            "expected_projection_backends": [
+              "triton",
+              "triton",
+              "triton"
+            ],
+            "fallback": false,
+            "requested_backend": "triton",
+            "requested_mode": "grouped_bf16"
+          },
+          "first_amplification_point": "layer11_residual",
+          "points": {
+            "final_logits": {
+              "cosine": 0.9997474551200867,
+              "max_abs": 0.25,
+              "mean_abs": 0.037999071180820465,
+              "relative_l2": 0.004607310984283686,
+              "shape": [
+                1,
+                18,
+                151936
+              ],
+              "top10_overlap": 0.9722222089767456
+            },
+            "layer10_down_projection": {
+              "cosine": 1.000001072883606,
+              "max_abs": 0.03125,
+              "mean_abs": 0.0005060633411630988,
+              "relative_l2": 0.0014416103949770331,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 0.9888888597488403
+            },
+            "layer10_gate_projection": {
+              "cosine": 1.0000035762786865,
+              "max_abs": 0.03125,
+              "mean_abs": 2.713734284043312e-05,
+              "relative_l2": 0.00029903906397521496,
+              "shape": [
+                1,
+                18,
+                6144
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer10_residual": {
+              "cosine": 1.0000187158584595,
+              "max_abs": 0.0625,
+              "mean_abs": 0.0005031385226175189,
+              "relative_l2": 3.582021963666193e-05,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer10_swiglu": {
+              "cosine": 0.9999950528144836,
+              "max_abs": 0.125,
+              "mean_abs": 1.3295957614900544e-05,
+              "relative_l2": 0.0010035298764705658,
+              "shape": [
+                1,
+                18,
+                6144
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer10_up_projection": {
+              "cosine": 0.9999939203262329,
+              "max_abs": 0.015625,
+              "mean_abs": 2.478704664099496e-05,
+              "relative_l2": 0.0003562550700735301,
+              "shape": [
+                1,
+                18,
+                6144
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer11_residual": {
+              "cosine": 1.0000168085098267,
+              "max_abs": 0.125,
+              "mean_abs": 0.005406688433140516,
+              "relative_l2": 0.00014140745042823255,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer12_residual": {
+              "cosine": 1.000016450881958,
+              "max_abs": 0.5,
+              "mean_abs": 0.009931608103215694,
+              "relative_l2": 0.00023566954769194126,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 0.9944444298744202
+            },
+            "layer13_residual": {
+              "cosine": 1.0000145435333252,
+              "max_abs": 0.5,
+              "mean_abs": 0.014942837879061699,
+              "relative_l2": 0.00032813154393807054,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer14_residual": {
+              "cosine": 1.0000131130218506,
+              "max_abs": 0.5,
+              "mean_abs": 0.020030664280056953,
+              "relative_l2": 0.00043047519284300506,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 0.9944444298744202
+            },
+            "layer15_residual": {
+              "cosine": 1.0000120401382446,
+              "max_abs": 1.0,
+              "mean_abs": 0.026995476335287094,
+              "relative_l2": 0.0005713255959562957,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 0.9888888597488403
+            },
+            "layer16_residual": {
+              "cosine": 1.0000067949295044,
+              "max_abs": 1.0,
+              "mean_abs": 0.038096778094768524,
+              "relative_l2": 0.0008012960315681994,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 0.9944444298744202
+            },
+            "layer17_residual": {
+              "cosine": 1.000003695487976,
+              "max_abs": 2.0,
+              "mean_abs": 0.052489493042230606,
+              "relative_l2": 0.0010883925715461373,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 0.9944444298744202
+            },
+            "layer18_residual": {
+              "cosine": 1.0000008344650269,
+              "max_abs": 3.0,
+              "mean_abs": 0.07246145606040955,
+              "relative_l2": 0.001480061444453895,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer19_residual": {
+              "cosine": 0.9999985098838806,
+              "max_abs": 4.0,
+              "mean_abs": 0.09757795929908752,
+              "relative_l2": 0.0019874752033501863,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 0.9722222089767456
+            },
+            "layer20_residual": {
+              "cosine": 0.9999947547912598,
+              "max_abs": 6.0,
+              "mean_abs": 0.12854963541030884,
+              "relative_l2": 0.00260482681915164,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 0.9833333492279053
+            },
+            "layer21_residual": {
+              "cosine": 0.9999932646751404,
+              "max_abs": 6.0,
+              "mean_abs": 0.16194753348827362,
+              "relative_l2": 0.00319318356923759,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 0.9944444298744202
+            },
+            "layer22_residual": {
+              "cosine": 0.9999897480010986,
+              "max_abs": 8.0,
+              "mean_abs": 0.19754134118556976,
+              "relative_l2": 0.003837542375549674,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 0.9888888597488403
+            },
+            "layer23_residual": {
+              "cosine": 0.9999891519546509,
+              "max_abs": 12.0,
+              "mean_abs": 0.23633772134780884,
+              "relative_l2": 0.0044204178266227245,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 0.9944444298744202
+            },
+            "layer24_residual": {
+              "cosine": 0.999984860420227,
+              "max_abs": 16.0,
+              "mean_abs": 0.2779128849506378,
+              "relative_l2": 0.004979252349585295,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer25_residual": {
+              "cosine": 0.9999806880950928,
+              "max_abs": 24.0,
+              "mean_abs": 0.3183530569076538,
+              "relative_l2": 0.005565050523728132,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 0.9944444298744202
+            },
+            "layer26_residual": {
+              "cosine": 0.9999816417694092,
+              "max_abs": 24.0,
+              "mean_abs": 0.35014140605926514,
+              "relative_l2": 0.005802816711366177,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 0.9833333492279053
+            },
+            "layer27_residual": {
+              "cosine": 0.9999555945396423,
+              "max_abs": 24.0,
+              "mean_abs": 0.4168250262737274,
+              "relative_l2": 0.009699869900941849,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 0.9944444298744202
+            }
+          }
+        },
+        "grouped_fp32_accumulate": {
+          "dispatch": {
+            "actual_projection_backends": [
+              "triton_fp32",
+              "triton_fp32",
+              "triton_fp32"
+            ],
+            "expected_projection_backends": [
+              "triton_fp32",
+              "triton_fp32",
+              "triton_fp32"
+            ],
+            "fallback": false,
+            "requested_backend": "triton_fp32",
+            "requested_mode": "grouped_fp32_accumulate"
+          },
+          "first_amplification_point": "layer11_residual",
+          "points": {
+            "final_logits": {
+              "cosine": 0.9997366666793823,
+              "max_abs": 0.3125,
+              "mean_abs": 0.040307894349098206,
+              "relative_l2": 0.004895883612334728,
+              "shape": [
+                1,
+                18,
+                151936
+              ],
+              "top10_overlap": 0.9833333492279053
+            },
+            "layer10_down_projection": {
+              "cosine": 1.0000009536743164,
+              "max_abs": 0.03125,
+              "mean_abs": 0.0005963229923509061,
+              "relative_l2": 0.001548546482808888,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 0.9888888597488403
+            },
+            "layer10_gate_projection": {
+              "cosine": 1.0000035762786865,
+              "max_abs": 0.03125,
+              "mean_abs": 2.9345792427193373e-05,
+              "relative_l2": 0.00031984131783246994,
+              "shape": [
+                1,
+                18,
+                6144
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer10_residual": {
+              "cosine": 1.000018835067749,
+              "max_abs": 0.0625,
+              "mean_abs": 0.0005864194827154279,
+              "relative_l2": 3.8101959944469854e-05,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer10_swiglu": {
+              "cosine": 0.9999949932098389,
+              "max_abs": 0.125,
+              "mean_abs": 1.4429075235966593e-05,
+              "relative_l2": 0.0011007244465872645,
+              "shape": [
+                1,
+                18,
+                6144
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer10_up_projection": {
+              "cosine": 0.9999940395355225,
+              "max_abs": 0.015625,
+              "mean_abs": 2.6135428925044835e-05,
+              "relative_l2": 0.00037517130840569735,
+              "shape": [
+                1,
+                18,
+                6144
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer11_residual": {
+              "cosine": 1.0000170469284058,
+              "max_abs": 0.5,
+              "mean_abs": 0.005547923967242241,
+              "relative_l2": 0.00015470234211534262,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer12_residual": {
+              "cosine": 1.000016450881958,
+              "max_abs": 1.0,
+              "mean_abs": 0.010253521613776684,
+              "relative_l2": 0.00025789724895730615,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer13_residual": {
+              "cosine": 1.0000147819519043,
+              "max_abs": 1.0,
+              "mean_abs": 0.01534680649638176,
+              "relative_l2": 0.00034917189623229206,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 0.9944444298744202
+            },
+            "layer14_residual": {
+              "cosine": 1.0000137090682983,
+              "max_abs": 1.0,
+              "mean_abs": 0.020647846162319183,
+              "relative_l2": 0.00045039562974125147,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 0.9944444298744202
+            },
+            "layer15_residual": {
+              "cosine": 1.0000121593475342,
+              "max_abs": 1.0,
+              "mean_abs": 0.027664653956890106,
+              "relative_l2": 0.0005870831082575023,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 0.9944444298744202
+            },
+            "layer16_residual": {
+              "cosine": 1.0000064373016357,
+              "max_abs": 2.0,
+              "mean_abs": 0.03845733404159546,
+              "relative_l2": 0.0008131146314553916,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 0.9944444298744202
+            },
+            "layer17_residual": {
+              "cosine": 1.0000035762786865,
+              "max_abs": 3.0,
+              "mean_abs": 0.05331731215119362,
+              "relative_l2": 0.001128238858655095,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 0.9944444298744202
+            },
+            "layer18_residual": {
+              "cosine": 0.9999998211860657,
+              "max_abs": 3.0,
+              "mean_abs": 0.07461187243461609,
+              "relative_l2": 0.0015543866902589798,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 0.9944444298744202
+            },
+            "layer19_residual": {
+              "cosine": 0.9999992251396179,
+              "max_abs": 4.0,
+              "mean_abs": 0.10056603699922562,
+              "relative_l2": 0.0020637682173401117,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 0.9777777791023254
+            },
+            "layer20_residual": {
+              "cosine": 0.9999954700469971,
+              "max_abs": 6.0,
+              "mean_abs": 0.13112753629684448,
+              "relative_l2": 0.0026478832587599754,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 0.9944444298744202
+            },
+            "layer21_residual": {
+              "cosine": 0.9999927282333374,
+              "max_abs": 4.0,
+              "mean_abs": 0.1640007197856903,
+              "relative_l2": 0.003239208832383156,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 0.9944444298744202
+            },
+            "layer22_residual": {
+              "cosine": 0.9999895691871643,
+              "max_abs": 8.0,
+              "mean_abs": 0.20103928446769714,
+              "relative_l2": 0.0038603704888373613,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 0.9833333492279053
+            },
+            "layer23_residual": {
+              "cosine": 0.999988853931427,
+              "max_abs": 8.0,
+              "mean_abs": 0.23950593173503876,
+              "relative_l2": 0.00439826212823391,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 0.9944444298744202
+            },
+            "layer24_residual": {
+              "cosine": 0.9999851584434509,
+              "max_abs": 8.0,
+              "mean_abs": 0.2808438241481781,
+              "relative_l2": 0.004993422422558069,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer25_residual": {
+              "cosine": 0.9999814033508301,
+              "max_abs": 16.0,
+              "mean_abs": 0.3220674693584442,
+              "relative_l2": 0.005559961777180433,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 0.9888888597488403
+            },
+            "layer26_residual": {
+              "cosine": 0.9999820590019226,
+              "max_abs": 32.0,
+              "mean_abs": 0.3525169789791107,
+              "relative_l2": 0.005796181038022041,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 0.9888888597488403
+            },
+            "layer27_residual": {
+              "cosine": 0.9999478459358215,
+              "max_abs": 32.0,
+              "mean_abs": 0.43092048168182373,
+              "relative_l2": 0.010375181213021278,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 0.9944444298744202
+            }
+          }
+        },
+        "reference_equivalent": {
+          "dispatch": {
+            "actual_projection_backends": [
+              "reference",
+              "reference",
+              "reference"
+            ],
+            "expected_projection_backends": [
+              "reference",
+              "reference",
+              "reference"
+            ],
+            "fallback": false,
+            "requested_backend": "reference",
+            "requested_mode": "reference_equivalent"
+          },
+          "first_amplification_point": null,
+          "points": {
+            "final_logits": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                18,
+                151936
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer10_down_projection": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer10_gate_projection": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                18,
+                6144
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer10_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer10_swiglu": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                18,
+                6144
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer10_up_projection": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                18,
+                6144
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer11_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer12_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer13_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer14_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer15_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer16_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer17_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer18_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer19_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer20_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer21_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer22_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer23_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer24_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer25_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer26_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 1.0
+            },
+            "layer27_residual": {
+              "cosine": 1.0,
+              "max_abs": 0.0,
+              "mean_abs": 0.0,
+              "relative_l2": 0.0,
+              "shape": [
+                1,
+                18,
+                2048
+              ],
+              "top10_overlap": 1.0
+            }
+          }
+        }
+      }
+    }
+  },
+  "prompt": "Solve carefully and give only the final answer: 17 + 25 =",
+  "reference_mode": "reference_equivalent",
+  "resolved_topology": {
+    "cuda_visible_devices": null,
+    "launcher_world_size": 1,
+    "rank": 0,
+    "replica_count": 1,
+    "tensor_parallel_size": 1,
+    "visible_gpu_count": 1,
+    "visible_gpu_names": [
+      "NVIDIA RTX PRO 6000 Blackwell Server Edition"
+    ]
+  },
+  "run_id": "shs_triton_drift_localize_20260712_v1",
+  "seed": 20260712,
+  "source_hashes": {
+    "kernel": "6641c7935d4a92cd8212b8f34e41e7f885cf9ed2234c5be76f77fc82ae2edcad",
+    "runner": "a3f2a2ddc8b933ceac5336b00b46e2a6346d157bb93715f819fcabfed7726da8",
+    "variant_module": "bb777e692bd4e52850ca865fd8400117d6c92d5d508927027937298aca6a3b6e"
+  },
+  "status": "failed",
+  "timestamp_utc": "2026-07-11T18:19:18.444248+00:00"
+}

@@ -1,0 +1,11 @@
+{
+  "cap_hits": 6,
+  "generated_tokens": 88251,
+  "global_step": 256,
+  "ledger_sha256": "849d6bcbaad0619c8ade3eb392a59c9203466615da2675bfac02dcaf1c937901",
+  "missing_answer_tags": 83,
+  "responses_sha256": "f73cfb7eda0ee4deb2246d337d6c40fe25b4c8dd0bf2c931db43e25baeec2346",
+  "rows": 126,
+  "status": "GENERATION_CELL_COMPLETE",
+  "variant": "triglu"
+}

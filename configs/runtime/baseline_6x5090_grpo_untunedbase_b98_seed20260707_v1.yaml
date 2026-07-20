@@ -1,0 +1,43 @@
+inherits: ../layer10_whole_layer_baseline.yaml
+
+experiment:
+  name: baseline_6x5090_grpo_untunedbase_b98_seed20260707_v1
+  seed: 20260707
+  init_seed: 20260707
+  rollout_seed: 20260707
+  initialization_contract: untuned_base_exact_noop
+
+dataset:
+  materialized_train: data/numina_math_cot_50k_decontam_v3_verl/train.parquet
+  materialized_val: data/numina_math_cot_50k_decontam_v3_verl/val.parquet
+
+grpo:
+  train_batch_size: 504
+  ppo_mini_batch_size: 126
+  ppo_micro_batch_size: 6
+  group_size: 4
+  total_training_steps: 98
+  save_freq: 5
+  test_freq: 999999
+  val_before_train: false
+
+runtime:
+  nnodes: 1
+  nproc_per_node: 6
+  inference_backend: vllm
+  mixed_precision: bf16
+  dataloader_num_workers: 12
+  rollout:
+    tensor_model_parallel_size: 1
+    replicas_per_node: 6
+    max_num_seqs: 64
+    gpu_memory_utilization: 0.5
+    max_num_batched_tokens: 32768
+
+logging:
+  run_id_template: baseline_6x5090_grpo_untunedbase_b98_seed20260707_v1
+
+pending_obligations_carried_forward:
+  PENDING-01: deferred; this trend eval does not close the Eval Parity Matrix
+  PENDING-02: deferred; pure-BF16 architecture work remains pending
+  PENDING-03: deferred; SHS registered CausalLM remains out of scope

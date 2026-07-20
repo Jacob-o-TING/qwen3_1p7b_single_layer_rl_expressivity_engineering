@@ -1,0 +1,45 @@
+controller: running
+phase: COMPLETE | current cell: all | benchmark: all | stage: 9/9 | elapsed: 6.03 h
+GPQA-Freeform queue: armed; waiting for Other eval WAVE_COMPLETE
+
+PRIMARY corrected-protocol category comparison:
+  step  architecture  CodeAvg    Reasoning  Language   status
+   158  TriGLU        33.514%    30.378%    44.837%    complete
+   158  baseline      33.039%    31.358%    43.572%    complete
+   196  TriGLU        33.664%    30.513%    43.932%    complete
+   196  baseline      32.980%    28.630%    43.918%    complete/import
+   226  TriGLU        34.159%    29.677%    44.773%    complete
+   226  baseline      33.337%    29.638%    43.669%    complete
+   256  TriGLU        33.521%    29.297%    45.152%    complete
+   256  baseline      32.131%    31.122%    44.484%    complete
+   294  TriGLU        33.439%    31.285%    40.483%    complete/import
+   294  baseline      31.869%    31.465%    44.178%    complete
+
+PRIMARY individual benchmark detail:
+  step  architecture  HumanEval+  MBPP       LCB        GPQA-Diamond  GPQA-Freeform  MMLU-Pro   C-Eval     IFEval     MGSM
+   158  TriGLU        59.146%    30.401%    10.995%    26.766%       pending        33.991%    46.582%    28.513%    59.417%
+   158  baseline      59.756%    29.598%    9.764%     28.283%       pending        34.432%    45.392%    26.416%    58.909%
+   196  TriGLU        61.585%    28.601%    10.807%    26.768%       pending        34.259%    47.399%    26.834%    57.564%
+   196  baseline      60.976%    28.202%    9.764%     22.727%       pending        34.533%    45.692%    27.046%    59.017%
+   226  TriGLU        60.976%    30.599%    10.903%    25.254%       pending        34.101%    47.548%    26.624%    60.146%
+   226  baseline      60.366%    29.600%    10.046%    25.250%       pending        34.027%    46.284%    25.998%    58.726%
+   256  TriGLU        61.585%    27.600%    11.376%    24.242%       pending        34.353%    48.218%    27.673%    59.566%
+   256  baseline      57.927%    28.800%    9.667%     27.778%       pending        34.466%    46.731%    27.884%    58.838%
+   294  TriGLU        60.976%    29.200%    10.142%    29.800%       pending        32.770%    47.990%    27.460%    46.000%
+   294  baseline      58.537%    27.401%    9.670%     28.788%       pending        34.143%    46.808%    26.417%    59.309%
+  note: GPQA-Diamond is official 4-choice accuracy; GPQA-Freeform is a separate 126-row protocol and is never averaged into it
+
+HERITAGE chat-protocol code view (preserved, not PRIMARY):
+  step  architecture  HumanEval+  CodeAvg    status
+   158  TriGLU        19.512%     20.303%    complete
+   158  baseline      27.438%     22.267%    complete
+   196  TriGLU        20.732%     20.047%    complete
+   196  baseline      31.097%     23.021%    complete/import
+   226  TriGLU        21.342%     20.948%    complete
+   226  baseline      31.097%     23.581%    complete
+   256  TriGLU        21.951%     20.309%    complete
+   256  baseline      31.098%     23.188%    complete
+   294  TriGLU        21.951%     20.431%    complete/import
+   294  baseline      31.095%     22.722%    complete
+
+ETA: all eight newly evaluated cells complete

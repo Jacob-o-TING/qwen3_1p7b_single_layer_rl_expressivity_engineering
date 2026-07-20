@@ -1,0 +1,22 @@
+{
+  "archive_bytes": 64806065479,
+  "archive_path": "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/archive_ready/qwen3_1p7b_triglu_baseline_grpo_matched10_full_repro_20260719_v1.tar.gz",
+  "archive_sha256": "d673478d66be3dca48a706636a565d7f28332dc1eb938c32c8bc85ca9e8e73ba",
+  "bundle_id": "qwen3_1p7b_triglu_baseline_grpo_matched10_full_repro_20260719_v1",
+  "checkpoint_count": 10,
+  "frozen_reference_export_count": 4,
+  "gzip_test": "pass",
+  "remote_shutdown_requested": false,
+  "schema_version": 1,
+  "source_inventory": {
+    "file_entries": 25333,
+    "free_bytes_before_archive": 131785433088,
+    "minimum_post_source_margin_bytes": 6442450944,
+    "space_gate_pass": true,
+    "unique_inodes": 25333,
+    "unique_source_bytes": 113769578630
+  },
+  "tar_entry_count": 25333,
+  "tar_list_test": "pass",
+  "verification_note": "The original verification screen was interrupted after archive SHA generation. A complete pigz test was rerun with exit code 0, followed by a complete tar entry scan before this receipt was finalized."
+}

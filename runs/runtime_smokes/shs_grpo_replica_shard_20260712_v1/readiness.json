@@ -1,0 +1,31 @@
+{
+  "blockers": [
+    "production_math_verifier_available",
+    "verl_actor_hook_has_checkpoint_overlay",
+    "verl_actor_hook_has_import_time_registration",
+    "configured_rollout_is_vllm",
+    "one_gpu_shard_configured",
+    "actor_to_rollout_shs_weight_sync_implemented"
+  ],
+  "claims": {
+    "production_candidate": false,
+    "production_ready": false
+  },
+  "gates": {
+    "actor_to_rollout_shs_weight_sync_implemented": false,
+    "completed_trainable_state_present": true,
+    "configured_rollout_is_vllm": false,
+    "one_gpu_shard_configured": false,
+    "production_math_verifier_available": false,
+    "train_parquet_present": true,
+    "val_parquet_present": true,
+    "verl_actor_hook_has_checkpoint_overlay": false,
+    "verl_actor_hook_has_import_time_registration": false,
+    "verl_main_ppo_importable": true
+  },
+  "launch_attempted": false,
+  "reason_not_launched": "A launch would currently use the wrong actor state and placeholder reward semantics.",
+  "run_id": "shs_grpo_replica_shard_20260712_v1",
+  "scope": "real veRL one-GPU shard: 128 prompts, group size 4",
+  "status": "blocked_before_launch"
+}

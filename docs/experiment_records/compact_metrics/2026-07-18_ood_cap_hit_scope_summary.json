@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "date": "2026-07-18",
+  "status": "existing_evidence_summarized_repair_not_launched",
+  "source_cap_tokens": 3072,
+  "scope": {
+    "architectures": [
+      "triglu",
+      "baseline"
+    ],
+    "global_steps": [
+      158,
+      196,
+      226,
+      256,
+      294
+    ],
+    "ood_only": true,
+    "paper_locked_math_excluded": [
+      "AMC Avg@32",
+      "AMC greedy pass@1",
+      "GSM8K",
+      "MATH-500",
+      "OlympiadBench"
+    ]
+  },
+  "cap_hit_rows": {
+    "HumanEval+ corrected raw no-chat": 41,
+    "MBPP heritage": 4696,
+    "LiveCodeBench corrected": 1027,
+    "GPQA-Diamond MCQ": 195,
+    "MMLU-Pro": 5686,
+    "C-Eval": 9195,
+    "IFEval": 2115,
+    "MGSM": 2369,
+    "OOD subtotal excluding GPQA-Freeform": 25324,
+    "GPQA-Diamond-Freeform": 96,
+    "targeted total": 25420
+  },
+  "denominators": {
+    "OOD subtotal excluding GPQA-Freeform": 185860,
+    "GPQA-Diamond-Freeform": 1260,
+    "all included rows": 187120
+  },
+  "planned_actions": {
+    "targeted_prefill_continuation": [
+      "HumanEval+ corrected raw no-chat",
+      "LiveCodeBench corrected",
+      "GPQA-Diamond MCQ",
+      "MMLU-Pro",
+      "IFEval",
+      "MGSM",
+      "GPQA-Diamond-Freeform"
+    ],
+    "protocol_matrix_then_full_rerun": {
+      "MBPP": 5000,
+      "C-Eval": 13460
+    },
+    "protocol_aware_generation_workload": 29989,
+    "adaptive_total_token_ceilings": [
+      8192,
+      16384,
+      32768
+    ],
+    "32768_requires_manual_exception": true,
+    "gpqa_freeform_replacements_require_targeted_manual_reaudit": true
+  },
+  "ceiling_semantics": {
+    "8192_is_per_response_maximum_not_minimum": true,
+    "eos_stops_generation_early": true,
+    "min_tokens_8192": false,
+    "repetition_penalty_changes_policy_and_is_not_planned": true
+  },
+  "pullback": {
+    "archive_sha256": "9738835f4ff95ebcd68a9617f902f9aa1f46cf378da486275ce90d30447e933f",
+    "payload_files": 70,
+    "local_directory": "docs/experiment_records/compact_metrics/2026-07-18_qwen3_1p7b_existing_ood_cap_evidence",
+    "payload_sha256_verified": true
+  }
+}

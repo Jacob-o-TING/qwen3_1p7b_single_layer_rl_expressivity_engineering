@@ -1,0 +1,6 @@
+{
+  "export_path": "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/grpo_priority/triglu_priority_6x5090_grpo_step128_to294_then_baseline128_to196_20260715_v1/exports/baseline_step_158",
+  "global_step": 158,
+  "status": "REUSED_EXISTING_EXPORT",
+  "variant": "baseline"
+}

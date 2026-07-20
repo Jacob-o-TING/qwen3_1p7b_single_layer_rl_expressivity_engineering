@@ -1,0 +1,15 @@
+{"audit_row_id":"amc23_shs_g00_i0004","evalscope_accuracy":0.0,"mathematical_correctness":"correct","evalscope_extracted_prediction":"FinalAnswer:","independent_final_answer":"27"}
+{"audit_row_id":"amc23_shs_g00_i0018","evalscope_accuracy":0.0,"mathematical_correctness":"correct","evalscope_extracted_prediction":"27miles","independent_final_answer":"27 miles"}
+{"audit_row_id":"amc23_shs_g00_i0030","evalscope_accuracy":0.0,"mathematical_correctness":"correct","evalscope_extracted_prediction":"\\color{blackblueblue}{","independent_final_answer":"27"}
+{"audit_row_id":"amc23_shs_g14_i0472","evalscope_accuracy":0.0,"mathematical_correctness":"correct","evalscope_extracted_prediction":"5EndInitThisiswhattheproblemrequires","independent_final_answer":"5"}
+{"audit_row_id":"amc23_shs_g02_i0069","evalscope_accuracy":0.0,"mathematical_correctness":"correct","evalscope_extracted_prediction":"","independent_final_answer":"45 degrees"}
+{"audit_row_id":"amc23_shs_g02_i0070","evalscope_accuracy":0.0,"mathematical_correctness":"correct","evalscope_extracted_prediction":"\\frac{\\pi}{4}","independent_final_answer":"pi/4 radians"}
+{"audit_row_id":"amc23_shs_g02_i0079","evalscope_accuracy":0.0,"mathematical_correctness":"correct","evalscope_extracted_prediction":"\\angle\\theta=45","independent_final_answer":"angle theta = 45 degrees"}
+{"audit_row_id":"amc23_shs_g08_i0260","evalscope_accuracy":0.0,"mathematical_correctness":"correct","evalscope_extracted_prediction":"3","independent_final_answer":"1"}
+{"audit_row_id":"amc23_shs_g08_i0277","evalscope_accuracy":0.0,"mathematical_correctness":"correct","evalscope_extracted_prediction":"4065","independent_final_answer":"1"}
+{"audit_row_id":"amc23_shs_g23_i0743","evalscope_accuracy":0.0,"mathematical_correctness":"correct","evalscope_extracted_prediction":"46.904","independent_final_answer":"7"}
+{"audit_row_id":"amc23_shs_g24_i0785","evalscope_accuracy":0.0,"mathematical_correctness":"correct","evalscope_extracted_prediction":"{13}0污染防治污","independent_final_answer":"13"}
+{"audit_row_id":"amc23_shs_g26_i0848","evalscope_accuracy":0.0,"mathematical_correctness":"correct","evalscope_extracted_prediction":"16","independent_final_answer":"13"}
+{"audit_row_id":"amc23_shs_g33_i1082","evalscope_accuracy":0.0,"mathematical_correctness":"correct","evalscope_extracted_prediction":"m+n=25+169=194","independent_final_answer":"194"}
+{"audit_row_id":"amc23_shs_g34_i1102","evalscope_accuracy":1.0,"mathematical_correctness":"incorrect","evalscope_extracted_prediction":"16.25","independent_final_answer":"16.25"}
+{"audit_row_id":"amc23_shs_g38_i1240","evalscope_accuracy":0.0,"mathematical_correctness":"correct","evalscope_extracted_prediction":"12","independent_final_answer":"144"}

@@ -1,0 +1,168 @@
+{
+  "benchmarks": {
+    "ceval": {
+      "reports": 6,
+      "samples": 1346,
+      "score": 0.46582176820208027,
+      "score_source": "raw_report"
+    },
+    "gpqa_diamond": {
+      "reports": 6,
+      "samples": 198,
+      "score": 0.267660101010101,
+      "score_source": "raw_report"
+    },
+    "humaneval_plus": {
+      "raw_report_score": 0.19512012195121953,
+      "reports": 6,
+      "samples": 164,
+      "score": 0.19512012195121953,
+      "score_source": "raw_report"
+    },
+    "ifeval": {
+      "reports": 6,
+      "samples": 477,
+      "score": 0.2851303983228512,
+      "score_source": "raw_report"
+    },
+    "live_code_bench": {
+      "raw_report_score": 0.10994843601895735,
+      "reports": 6,
+      "samples": 1055,
+      "score": 0.10994843601895735,
+      "score_source": "raw_report"
+    },
+    "mbpp": {
+      "reports": 6,
+      "samples": 500,
+      "score": 0.3040134,
+      "score_source": "raw_report"
+    },
+    "mgsm": {
+      "reports": 6,
+      "samples": 2750,
+      "score": 0.5941660363636364,
+      "score_source": "raw_report"
+    },
+    "mmlu_pro": {
+      "reports": 6,
+      "samples": 12032,
+      "score": 0.33990516123670217,
+      "score_source": "raw_report"
+    }
+  },
+  "category_scores": {
+    "code": 0.20302731932339227,
+    "language": 0.44837273429618935,
+    "reasoning": 0.3037826311234016
+  },
+  "ood_benchmark_mean": 0.3202206778881935,
+  "ood_category_mean": 0.31839422824766106,
+  "parser_sensitive_code_comparison": {
+    "code_avg_post_parser": 0.20302731932339227,
+    "code_avg_pre_parser": 0.20302731932339227,
+    "code_avg_prompt_corrected": 0.3351417502177012,
+    "definition": "equal-weight HumanEval+ + MBPP + corrected LiveCodeBench; only HumanEval+ changes between pre and post",
+    "humaneval_plus_post_parser": 0.19512012195121953,
+    "humaneval_plus_pre_parser": 0.19512012195121953,
+    "humaneval_plus_prompt_corrected": 0.5914634146341463,
+    "humaneval_prompt_protocol_summary": "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/primary_humanevalplus/summary.json",
+    "humaneval_recovery_summary": null,
+    "live_code_bench_corrected": 0.10994843601895735,
+    "livecodebench_recovery_summary": null
+  },
+  "protocol": "vllm_greedy_pass_at_1_max_tokens_3072",
+  "raw_report_benchmarks": {
+    "ceval": {
+      "reports": 6,
+      "samples": 1346,
+      "score": 0.46582176820208027
+    },
+    "gpqa_diamond": {
+      "reports": 6,
+      "samples": 198,
+      "score": 0.267660101010101
+    },
+    "humaneval_plus": {
+      "reports": 6,
+      "samples": 164,
+      "score": 0.19512012195121953
+    },
+    "ifeval": {
+      "reports": 6,
+      "samples": 477,
+      "score": 0.2851303983228512
+    },
+    "live_code_bench": {
+      "reports": 6,
+      "samples": 1055,
+      "score": 0.10994843601895735
+    },
+    "mbpp": {
+      "reports": 6,
+      "samples": 500,
+      "score": 0.3040134
+    },
+    "mgsm": {
+      "reports": 6,
+      "samples": 2750,
+      "score": 0.5941660363636364
+    },
+    "mmlu_pro": {
+      "reports": 6,
+      "samples": 12032,
+      "score": 0.33990516123670217
+    }
+  },
+  "report_files": [
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/code_humanevalplus_staged6/shards/shard_00/main/20260718_183550/reports/qwen3-1p7b-single-layer-sft/humaneval_plus.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/code_humanevalplus_staged6/shards/shard_01/main/20260718_183548/reports/qwen3-1p7b-single-layer-sft/humaneval_plus.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/code_humanevalplus_staged6/shards/shard_02/main/20260718_183550/reports/qwen3-1p7b-single-layer-sft/humaneval_plus.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/code_humanevalplus_staged6/shards/shard_03/main/20260718_183550/reports/qwen3-1p7b-single-layer-sft/humaneval_plus.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/code_humanevalplus_staged6/shards/shard_04/main/20260718_183550/reports/qwen3-1p7b-single-layer-sft/humaneval_plus.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/code_humanevalplus_staged6/shards/shard_05/main/20260718_183550/reports/qwen3-1p7b-single-layer-sft/humaneval_plus.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/code_lcb_parallel6_release_latest_20260717_v1/shards/shard_00/main/20260718_185018/reports/qwen3-1p7b-single-layer-sft/live_code_bench.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/code_lcb_parallel6_release_latest_20260717_v1/shards/shard_01/main/20260718_185019/reports/qwen3-1p7b-single-layer-sft/live_code_bench.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/code_lcb_parallel6_release_latest_20260717_v1/shards/shard_02/main/20260718_185019/reports/qwen3-1p7b-single-layer-sft/live_code_bench.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/code_lcb_parallel6_release_latest_20260717_v1/shards/shard_03/main/20260718_185018/reports/qwen3-1p7b-single-layer-sft/live_code_bench.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/code_lcb_parallel6_release_latest_20260717_v1/shards/shard_04/main/20260718_185019/reports/qwen3-1p7b-single-layer-sft/live_code_bench.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/code_lcb_parallel6_release_latest_20260717_v1/shards/shard_05/main/20260718_185019/reports/qwen3-1p7b-single-layer-sft/live_code_bench.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/code_mbpp_staged6/shards/shard_00/main/20260718_183719/reports/qwen3-1p7b-single-layer-sft/mbpp.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/code_mbpp_staged6/shards/shard_01/main/20260718_183719/reports/qwen3-1p7b-single-layer-sft/mbpp.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/code_mbpp_staged6/shards/shard_02/main/20260718_183718/reports/qwen3-1p7b-single-layer-sft/mbpp.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/code_mbpp_staged6/shards/shard_03/main/20260718_183719/reports/qwen3-1p7b-single-layer-sft/mbpp.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/code_mbpp_staged6/shards/shard_04/main/20260718_183718/reports/qwen3-1p7b-single-layer-sft/mbpp.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/code_mbpp_staged6/shards/shard_05/main/20260718_183719/reports/qwen3-1p7b-single-layer-sft/mbpp.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/language_ceval_staged6/shards/shard_00/main/20260718_183930/reports/qwen3-1p7b-single-layer-sft/ceval.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/language_ceval_staged6/shards/shard_01/main/20260718_183929/reports/qwen3-1p7b-single-layer-sft/ceval.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/language_ceval_staged6/shards/shard_02/main/20260718_183930/reports/qwen3-1p7b-single-layer-sft/ceval.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/language_ceval_staged6/shards/shard_03/main/20260718_183929/reports/qwen3-1p7b-single-layer-sft/ceval.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/language_ceval_staged6/shards/shard_04/main/20260718_183931/reports/qwen3-1p7b-single-layer-sft/ceval.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/language_ceval_staged6/shards/shard_05/main/20260718_183930/reports/qwen3-1p7b-single-layer-sft/ceval.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/language_ifeval_staged6/shards/shard_00/main/20260718_184313/reports/qwen3-1p7b-single-layer-sft/ifeval.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/language_ifeval_staged6/shards/shard_01/main/20260718_184313/reports/qwen3-1p7b-single-layer-sft/ifeval.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/language_ifeval_staged6/shards/shard_02/main/20260718_184313/reports/qwen3-1p7b-single-layer-sft/ifeval.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/language_ifeval_staged6/shards/shard_03/main/20260718_184313/reports/qwen3-1p7b-single-layer-sft/ifeval.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/language_ifeval_staged6/shards/shard_04/main/20260718_184314/reports/qwen3-1p7b-single-layer-sft/ifeval.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/language_ifeval_staged6/shards/shard_05/main/20260718_184313/reports/qwen3-1p7b-single-layer-sft/ifeval.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/language_mgsm_staged6/shards/shard_00/main/20260718_184447/reports/qwen3-1p7b-single-layer-sft/mgsm.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/language_mgsm_staged6/shards/shard_01/main/20260718_184447/reports/qwen3-1p7b-single-layer-sft/mgsm.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/language_mgsm_staged6/shards/shard_02/main/20260718_184449/reports/qwen3-1p7b-single-layer-sft/mgsm.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/language_mgsm_staged6/shards/shard_03/main/20260718_184446/reports/qwen3-1p7b-single-layer-sft/mgsm.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/language_mgsm_staged6/shards/shard_04/main/20260718_184447/reports/qwen3-1p7b-single-layer-sft/mgsm.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/language_mgsm_staged6/shards/shard_05/main/20260718_184445/reports/qwen3-1p7b-single-layer-sft/mgsm.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/reasoning_gpqa_staged6/shards/shard_00/main/20260718_181526/reports/qwen3-1p7b-single-layer-sft/gpqa_diamond.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/reasoning_gpqa_staged6/shards/shard_01/main/20260718_181525/reports/qwen3-1p7b-single-layer-sft/gpqa_diamond.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/reasoning_gpqa_staged6/shards/shard_02/main/20260718_181526/reports/qwen3-1p7b-single-layer-sft/gpqa_diamond.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/reasoning_gpqa_staged6/shards/shard_03/main/20260718_181526/reports/qwen3-1p7b-single-layer-sft/gpqa_diamond.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/reasoning_gpqa_staged6/shards/shard_04/main/20260718_181526/reports/qwen3-1p7b-single-layer-sft/gpqa_diamond.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/reasoning_gpqa_staged6/shards/shard_05/main/20260718_181524/reports/qwen3-1p7b-single-layer-sft/gpqa_diamond.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/reasoning_mmlupro_staged6/shards/shard_00/main/20260718_181657/reports/qwen3-1p7b-single-layer-sft/mmlu_pro.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/reasoning_mmlupro_staged6/shards/shard_01/main/20260718_181655/reports/qwen3-1p7b-single-layer-sft/mmlu_pro.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/reasoning_mmlupro_staged6/shards/shard_02/main/20260718_181652/reports/qwen3-1p7b-single-layer-sft/mmlu_pro.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/reasoning_mmlupro_staged6/shards/shard_03/main/20260718_181655/reports/qwen3-1p7b-single-layer-sft/mmlu_pro.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/reasoning_mmlupro_staged6/shards/shard_04/main/20260718_181654/reports/qwen3-1p7b-single-layer-sft/mmlu_pro.json",
+    "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/cells/triglu_step_158/reasoning_mmlupro_staged6/shards/shard_05/main/20260718_181654/reports/qwen3-1p7b-single-layer-sft/mmlu_pro.json"
+  ],
+  "status": "complete"
+}

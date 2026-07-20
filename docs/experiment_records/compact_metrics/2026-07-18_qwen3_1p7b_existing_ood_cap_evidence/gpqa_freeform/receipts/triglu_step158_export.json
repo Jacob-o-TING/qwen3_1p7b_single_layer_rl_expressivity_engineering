@@ -1,0 +1,10 @@
+{
+  "export_path": "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/freeform_eval/qwen3_1p7b_gpqa_diamond_freeform126_greedy3072_manual_agent_audit_6x5090_steps158_196_226_256_294_20260718_v1/exports/triglu_step158",
+  "global_step": 158,
+  "source_checkpoint": "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/grpo_interleaved/triglu_baseline_6x5090_grpo_retro30_60_then_98to196_interleaved_20260714_v1/triglu_6x5090_grpo_untunedbase_resume98_to196_seed20260707_v1/checkpoints/global_step_158",
+  "status": "EXPORT_COMPLETE",
+  "variant": "triglu",
+  "weight_files": [
+    "model.safetensors"
+  ]
+}

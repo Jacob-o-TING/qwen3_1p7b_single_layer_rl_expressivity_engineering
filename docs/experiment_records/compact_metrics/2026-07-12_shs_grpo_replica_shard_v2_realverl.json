@@ -1,0 +1,77 @@
+{
+  "attempts": [
+    {
+      "result": "failed_actor_to_rollout_sync_unknown_deterministic_buffer",
+      "shell_wall_seconds": 70
+    },
+    {
+      "result": "failed_actor_backward_oom_micro_batch_8",
+      "shell_wall_seconds": 532
+    },
+    {
+      "result": "complete",
+      "shell_wall_seconds": 826
+    }
+  ],
+  "claims": {
+    "production_candidate": false,
+    "production_ready": false
+  },
+  "checkpoint": {
+    "changed_element_count": 72889627,
+    "changed_tensor_count": 29,
+    "initial_trainable_tensor_count": 29,
+    "max_abs_delta": 7.62939453125e-06,
+    "missing_initial_keys": 0,
+    "saved_step": 1,
+    "unchanged_tensor_count": 0
+  },
+  "construction": {
+    "actor_actual_trainable_tensor_count": 29,
+    "actor_checkpoint_overlay_count": 1,
+    "actor_construction_mode": "preconstructed",
+    "excluded_deterministic_sync_buffer_count": 12,
+    "overlay_key_count": 29,
+    "reference_actual_trainable_tensor_count": 0,
+    "reference_checkpoint_overlay_count": 1
+  },
+  "metrics": {
+    "actor_grad_norm": 0.10968270897865295,
+    "actor_pg_loss": 7.866697444569581e-07,
+    "mean_reward": 0.138671875,
+    "mean_response_tokens": 897.595703125,
+    "response_cap": 3072,
+    "response_clip_ratio": 0.087890625,
+    "throughput_tokens_per_second": 692.3991817102655,
+    "total_tokens": 516253
+  },
+  "resume": {
+    "completed_step": 1,
+    "new_optimizer_steps": 0,
+    "project_preflight_status": "complete",
+    "raw_verl_completed_run_reexecution_detected_and_aborted": true,
+    "target_steps": 1
+  },
+  "run_id": "shs_grpo_replica_shard_20260712_v2_realverl",
+  "runtime": {
+    "backend": "vllm_transformers_reference_shs",
+    "fallback_count": 0,
+    "group_size": 4,
+    "logical_rollouts": 512,
+    "physical_gpus": 1,
+    "ppo_micro_batch_size_per_gpu": 2,
+    "prompts": 128,
+    "successful_attempt_reference_dispatch_receipts": 9,
+    "tensor_parallel_size": 1
+  },
+  "status": "executed_not_production_candidate",
+  "timing_seconds": {
+    "actor_update": 284.66798872314394,
+    "generation": 266.54459827020764,
+    "old_log_prob": 90.66838436760008,
+    "reference_log_prob": 93.71300866827369,
+    "reward": 9.843963529914618,
+    "save_checkpoint": 10.404502376914024,
+    "step": 745.6002456918359
+  }
+}

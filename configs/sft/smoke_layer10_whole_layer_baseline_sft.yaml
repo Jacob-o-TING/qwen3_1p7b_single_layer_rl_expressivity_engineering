@@ -1,0 +1,14 @@
+inherits: layer10_whole_layer_baseline_sft.yaml
+experiment:
+  name: qwen3_1p7b_layer10_wholelayer_baseline_smoke
+sft:
+  epochs: 1
+  max_seq_length: 512
+  max_packed_sequences: 16
+  gradient_accumulation_steps: 8
+  compile_mode: eager
+  checkpoint_fractions: [0.50, 1.00]
+  validation_max_micro_batches: 2
+  keep_last_checkpoints: 2
+logging:
+  run_id_template: "{experiment_name}_{variant_name}_seed{seed}"

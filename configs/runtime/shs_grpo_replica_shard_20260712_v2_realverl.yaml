@@ -1,0 +1,28 @@
+inherits: ../layer10_whole_layer_shs.yaml
+experiment:
+  name: shs_grpo_replica_shard_20260712_v2_realverl
+grpo:
+  train_batch_size: 128
+  ppo_mini_batch_size: 128
+  # Paper micro-batch 8 across four replicas is two sequences per GPU.
+  ppo_micro_batch_size: 2
+  group_size: 4
+  max_prompt_length: 1024
+  max_response_length: 3072
+  epochs: 1
+  total_training_steps: 1
+  save_freq: 1
+  test_freq: 0
+  val_before_train: false
+runtime:
+  nnodes: 1
+  nproc_per_node: 1
+  inference_backend: vllm
+  rollout:
+    tensor_model_parallel_size: 1
+    replicas_per_node: 1
+    max_num_seqs: 64
+    gpu_memory_utilization: 0.85
+    max_num_batched_tokens: 131072
+logging:
+  run_id_template: shs_grpo_replica_shard_20260712_v2_realverl

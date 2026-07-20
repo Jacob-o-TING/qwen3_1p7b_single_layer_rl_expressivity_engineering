@@ -1,0 +1,69 @@
+{
+  "export_path": "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_other_eval_6x5090_triglu_baseline_steps158_196_226_256_294_20260718_v1/exports/triglu_step158",
+  "files": [
+    {
+      "bytes": 0,
+      "name": "EXPORT_COMPLETE"
+    },
+    {
+      "bytes": 707,
+      "name": "added_tokens.json"
+    },
+    {
+      "bytes": 4116,
+      "name": "chat_template.jinja"
+    },
+    {
+      "bytes": 2142,
+      "name": "config.json"
+    },
+    {
+      "bytes": 72,
+      "name": "configuration_qwen3_triglu.py"
+    },
+    {
+      "bytes": 2696,
+      "name": "custom_ffn_contract.py"
+    },
+    {
+      "bytes": 117,
+      "name": "generation_config.json"
+    },
+    {
+      "bytes": 1671853,
+      "name": "merges.txt"
+    },
+    {
+      "bytes": 4105489824,
+      "name": "model.safetensors"
+    },
+    {
+      "bytes": 95,
+      "name": "modeling_qwen3_triglu.py"
+    },
+    {
+      "bytes": 616,
+      "name": "special_tokens_map.json"
+    },
+    {
+      "bytes": 11422654,
+      "name": "tokenizer.json"
+    },
+    {
+      "bytes": 5407,
+      "name": "tokenizer_config.json"
+    },
+    {
+      "bytes": 3338,
+      "name": "triglu_hf_model.py"
+    },
+    {
+      "bytes": 2776833,
+      "name": "vocab.json"
+    }
+  ],
+  "global_step": 158,
+  "source_checkpoint": "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/grpo_interleaved/triglu_baseline_6x5090_grpo_retro30_60_then_98to196_interleaved_20260714_v1/triglu_6x5090_grpo_untunedbase_resume98_to196_seed20260707_v1/checkpoints/global_step_158",
+  "status": "EXPORT_COMPLETE",
+  "variant": "triglu"
+}

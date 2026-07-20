@@ -1,0 +1,59 @@
+{
+  "artifact_archive": {
+    "file_count": 48,
+    "sha256": "e855573565bcd6bcc9b704706f94286fc679517c7d3469b2a04caf557d7988b6"
+  },
+  "gate_a": {
+    "bf16_optimizer_smoke": "passed",
+    "checkpoint_sha256_match": true,
+    "nccl_64mib_median_seconds": 0.00233,
+    "status": "passed"
+  },
+  "gate_b": {
+    "eager_training_resume": "passed",
+    "fullmodel_triton_logits_cosine": 0.9997552633285522,
+    "fullmodel_triton_required_cosine": 0.9999,
+    "fullmodel_triton_status": "failed",
+    "initial_vllm_pressure16_generated_tokens_per_second": 293.6631157419464,
+    "initial_vllm_pressure16_memory_mib": 23142,
+    "isolated_triton_projection": "passed",
+    "vllm_pressure_1_8_16": "passed"
+  },
+  "gate_c": {
+    "cast_normalized_changed_trainable_tensors": 23,
+    "continuous_sync_steps": 10,
+    "deterministic_buffers_leaked": 0,
+    "expected_trainable_tensors": 29,
+    "fresh_reload_hf_vllm_greedy_equal": true,
+    "fresh_reload_pressure16_generated_tokens_per_second": 297.0943814613519,
+    "fresh_reload_pressure16_memory_mib": 21742,
+    "initial_shell_wall_seconds": 152,
+    "peak_actor_allocated_gb": 29.729106426239014,
+    "peak_actor_reserved_gb": 31.96484375,
+    "restart_resync_step": 11,
+    "status": "partial",
+    "teardown_cleanup_warning": "DataLoader worker killed after final checkpoint",
+    "tracker_final_step": 11,
+    "unchanged_trainable_tensors": [
+      "model.layers.10.input_layernorm.weight",
+      "model.layers.10.mlp.shs.down.add_scale",
+      "model.layers.10.mlp.shs.gate.add_scale",
+      "model.layers.10.mlp.shs.up.add_scale",
+      "model.layers.10.mlp.shs.up.mul_scale",
+      "model.layers.10.self_attn.q_norm.weight"
+    ]
+  },
+  "hardware": {
+    "compute_capability": "12.0",
+    "count": 2,
+    "driver": "580.76.05",
+    "interconnect": "NODE PCIe, no NVLink",
+    "model": "NVIDIA GeForce RTX 5090",
+    "vram_mib_each": 32607
+  },
+  "production_grpo_authorized": false,
+  "run_ids": [
+    "rtx5090_pair_bringup_20260712_v1",
+    "shs_2x5090_actor_rollout_weight_sync_20260712_v1"
+  ]
+}

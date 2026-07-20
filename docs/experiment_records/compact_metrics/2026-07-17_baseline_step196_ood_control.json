@@ -1,0 +1,34 @@
+{
+  "date": "2026-07-17",
+  "model": "baseline_step196",
+  "protocol": "vllm_greedy_pass_at_1_max_tokens_3072",
+  "run_id": "qwen3_1p7b_ood_6x5090_baseline_step196_20260717_v1",
+  "status": "complete",
+  "benchmarks": {
+    "gpqa_diamond": {"correct": 45, "total": 198, "score": 0.22727272727272727},
+    "mmlu_pro": {"total": 12032, "score": 0.34533},
+    "humaneval_plus": {"correct": 51, "total": 164, "score": 0.31097560975609756},
+    "mbpp": {"total": 500, "score": 0.28202},
+    "ceval": {"total": 1346, "score": 0.45692},
+    "ifeval": {"reviewed": 477, "dataset_total": 541, "score": 0.27046},
+    "mgsm": {"total": 2750, "score": 0.59017},
+    "live_code_bench": {"total": 1055, "score": 0.09764}
+  },
+  "category_means": {
+    "code": 0.23021,
+    "reasoning": 0.28630,
+    "language": 0.43918
+  },
+  "ood_benchmark_mean": 0.32260,
+  "ood_category_mean": 0.31856,
+  "coverage": {
+    "stages_complete": 8,
+    "stages_total": 8,
+    "six_gpu_staged_execution": true
+  },
+  "scientific_boundary": {
+    "paper_protocol_parity_claimed": false,
+    "internal_all_model_protocol": true,
+    "checkpoint_mutated": false
+  }
+}

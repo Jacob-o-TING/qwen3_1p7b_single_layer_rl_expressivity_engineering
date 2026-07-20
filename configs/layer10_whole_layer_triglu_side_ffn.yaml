@@ -1,0 +1,29 @@
+inherits: base_qwen3_1p7b.yaml
+experiment:
+  name: qwen3_1p7b_layer10_whole_layer_triglu_side_ffn_grpo
+freeze_policy:
+  mode: single_layer
+  backbone_train_mode: selected
+  train_layers:
+    - 10
+  freeze_embeddings: true
+  freeze_lm_head: true
+  train_adapter_modules: true
+architecture_variant:
+  name: qwen_swiglu_triglu_side
+  params:
+    target_layers:
+      - 10
+    hidden_size: 2048
+    intermediate_size: 6144
+    side_dim: 512
+    side_hidden: 2048
+    side_scale: 0.1
+    side_semantics: residual_delta
+    initial_effect: exact_identity_multiplier
+    zero_init_components:
+      - triglu_side.up.weight
+      - triglu_side.up.bias
+    notes: Residual-delta TriGLU side FFN multiplier over the original Qwen SwiGLU hidden; active high-capacity configuration restored for the first comparison wave.
+logging:
+  run_id_template: "qwen3_1p7b_layer10_triglu_sideffn_d512_h2048_numina50k_grpo_seed{seed}"

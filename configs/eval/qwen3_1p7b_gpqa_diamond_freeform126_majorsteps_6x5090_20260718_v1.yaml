@@ -1,0 +1,57 @@
+run_id: qwen3_1p7b_gpqa_diamond_freeform126_greedy3072_qwen3_4b_match_6x5090_steps158_196_226_256_294_20260718_v1
+screen_name: qwen_gpqa_free126_majorsteps6_20260718_v1
+seed: 20260707
+variants: [triglu, baseline]
+global_steps: [158, 196, 226, 256, 294]
+cells:
+  - {label: triglu_step158, variant: triglu, global_step: 158}
+  - {label: baseline_step158, variant: baseline, global_step: 158}
+  - {label: triglu_step196, variant: triglu, global_step: 196}
+  - {label: baseline_step196, variant: baseline, global_step: 196}
+  - {label: triglu_step226, variant: triglu, global_step: 226}
+  - {label: baseline_step226, variant: baseline, global_step: 226}
+  - {label: triglu_step256, variant: triglu, global_step: 256}
+  - {label: baseline_step256, variant: baseline, global_step: 256}
+  - {label: triglu_step294, variant: triglu, global_step: 294}
+  - {label: baseline_step294, variant: baseline, global_step: 294}
+dataset:
+  repo_id: nikhilchandak/freeform-datasets
+  revision: main
+  config: null
+  split: gpqa_diamond
+  public_fallback_repo_id: nikhilchandak/GPQA-diamond-free
+  public_fallback_revision: main
+  public_fallback_filename: gpqa-diamond-freeform-filtered.csv
+  expected_rows: 126
+  asset_root: data/eval/gpqa_diamond_freeform126
+  ledger: data/eval/gpqa_diamond_freeform126/gpqa_diamond_freeform126.ledger.jsonl
+  manifest: data/eval/gpqa_diamond_freeform126/dataset_manifest.json
+generation:
+  backend: vllm_v1
+  replicas: 6
+  tensor_parallel_size: 1
+  rows_per_replica: 21
+  temperature: 0.0
+  max_tokens: 3072
+  dtype: bfloat16
+  require_answer_tags: true
+matcher:
+  repo_id: Qwen/Qwen3-4B
+  revision: main
+  model_path: /root/autodl-tmp/qwen3_single_layer_rl/models/Qwen3-4B
+  receipt: data/eval/gpqa_diamond_freeform126/qwen3_4b_matcher_receipt.json
+  enable_thinking: false
+  temperature: 0.0
+  max_tokens: 16
+  dtype: bfloat16
+  replicas: 6
+  rows_per_replica: 210
+vllm:
+  gpu_memory_utilization: 0.85
+  max_num_seqs: 128
+  max_num_batched_tokens: 32768
+  enforce_eager: false
+output_root: runs/freeform_eval/qwen3_1p7b_gpqa_diamond_freeform126_greedy3072_qwen3_4b_match_6x5090_steps158_196_226_256_294_20260718_v1
+safety:
+  active_wave_screen: qwen_other_majorsteps6_20260718_v1
+  minimum_free_gb: 60

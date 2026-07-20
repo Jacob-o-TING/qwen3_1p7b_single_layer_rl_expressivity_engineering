@@ -1,0 +1,418 @@
+{
+  "amc_per_item_correct_count": [
+    {
+      "item_id": 0,
+      "new_correct_count_32": 9,
+      "old_correct_count_32": 17
+    },
+    {
+      "item_id": 1,
+      "new_correct_count_32": 3,
+      "old_correct_count_32": 5
+    },
+    {
+      "item_id": 2,
+      "new_correct_count_32": 13,
+      "old_correct_count_32": 21
+    },
+    {
+      "item_id": 3,
+      "new_correct_count_32": 0,
+      "old_correct_count_32": 1
+    },
+    {
+      "item_id": 4,
+      "new_correct_count_32": 0,
+      "old_correct_count_32": 0
+    },
+    {
+      "item_id": 5,
+      "new_correct_count_32": 1,
+      "old_correct_count_32": 0
+    },
+    {
+      "item_id": 6,
+      "new_correct_count_32": 0,
+      "old_correct_count_32": 1
+    },
+    {
+      "item_id": 7,
+      "new_correct_count_32": 1,
+      "old_correct_count_32": 1
+    },
+    {
+      "item_id": 8,
+      "new_correct_count_32": 5,
+      "old_correct_count_32": 5
+    },
+    {
+      "item_id": 9,
+      "new_correct_count_32": 2,
+      "old_correct_count_32": 5
+    },
+    {
+      "item_id": 10,
+      "new_correct_count_32": 2,
+      "old_correct_count_32": 3
+    },
+    {
+      "item_id": 11,
+      "new_correct_count_32": 0,
+      "old_correct_count_32": 0
+    },
+    {
+      "item_id": 12,
+      "new_correct_count_32": 0,
+      "old_correct_count_32": 0
+    },
+    {
+      "item_id": 13,
+      "new_correct_count_32": 3,
+      "old_correct_count_32": 7
+    },
+    {
+      "item_id": 14,
+      "new_correct_count_32": 0,
+      "old_correct_count_32": 6
+    },
+    {
+      "item_id": 15,
+      "new_correct_count_32": 2,
+      "old_correct_count_32": 1
+    },
+    {
+      "item_id": 16,
+      "new_correct_count_32": 2,
+      "old_correct_count_32": 7
+    },
+    {
+      "item_id": 17,
+      "new_correct_count_32": 1,
+      "old_correct_count_32": 8
+    },
+    {
+      "item_id": 18,
+      "new_correct_count_32": 0,
+      "old_correct_count_32": 0
+    },
+    {
+      "item_id": 19,
+      "new_correct_count_32": 8,
+      "old_correct_count_32": 8
+    },
+    {
+      "item_id": 20,
+      "new_correct_count_32": 1,
+      "old_correct_count_32": 0
+    },
+    {
+      "item_id": 21,
+      "new_correct_count_32": 1,
+      "old_correct_count_32": 3
+    },
+    {
+      "item_id": 22,
+      "new_correct_count_32": 0,
+      "old_correct_count_32": 0
+    },
+    {
+      "item_id": 23,
+      "new_correct_count_32": 3,
+      "old_correct_count_32": 5
+    },
+    {
+      "item_id": 24,
+      "new_correct_count_32": 2,
+      "old_correct_count_32": 5
+    },
+    {
+      "item_id": 25,
+      "new_correct_count_32": 0,
+      "old_correct_count_32": 1
+    },
+    {
+      "item_id": 26,
+      "new_correct_count_32": 3,
+      "old_correct_count_32": 7
+    },
+    {
+      "item_id": 27,
+      "new_correct_count_32": 2,
+      "old_correct_count_32": 0
+    },
+    {
+      "item_id": 28,
+      "new_correct_count_32": 4,
+      "old_correct_count_32": 2
+    },
+    {
+      "item_id": 29,
+      "new_correct_count_32": 3,
+      "old_correct_count_32": 2
+    },
+    {
+      "item_id": 30,
+      "new_correct_count_32": 4,
+      "old_correct_count_32": 9
+    },
+    {
+      "item_id": 31,
+      "new_correct_count_32": 1,
+      "old_correct_count_32": 1
+    },
+    {
+      "item_id": 32,
+      "new_correct_count_32": 0,
+      "old_correct_count_32": 1
+    },
+    {
+      "item_id": 33,
+      "new_correct_count_32": 14,
+      "old_correct_count_32": 15
+    },
+    {
+      "item_id": 34,
+      "new_correct_count_32": 9,
+      "old_correct_count_32": 18
+    },
+    {
+      "item_id": 35,
+      "new_correct_count_32": 4,
+      "old_correct_count_32": 3
+    },
+    {
+      "item_id": 36,
+      "new_correct_count_32": 3,
+      "old_correct_count_32": 1
+    },
+    {
+      "item_id": 37,
+      "new_correct_count_32": 1,
+      "old_correct_count_32": 0
+    },
+    {
+      "item_id": 38,
+      "new_correct_count_32": 0,
+      "old_correct_count_32": 0
+    },
+    {
+      "item_id": 39,
+      "new_correct_count_32": 0,
+      "old_correct_count_32": 3
+    }
+  ],
+  "comparisons": {
+    "amc_average_at_32": {
+      "correct_to_wrong": 137,
+      "count": 1280,
+      "delta_points": -5.078125,
+      "extracted_answer_exact_agreement": 0.0640625,
+      "new_accuracy_percent": 8.359375,
+      "new_cap_hits_3072": 40,
+      "new_correct": 107.0,
+      "new_missing_extraction": 194,
+      "new_response_tokens": {
+        "mean": 866.89921875,
+        "p50": 597,
+        "p90": 2293
+      },
+      "old_accuracy_percent": 13.4375,
+      "old_cap_hits_3072": 56,
+      "old_correct": 172.0,
+      "old_missing_extraction": 82,
+      "old_response_tokens": {
+        "mean": 802.1046875,
+        "p50": 629,
+        "p90": 1556
+      },
+      "wrong_to_correct": 72
+    },
+    "amc_greedy_pass_at_1": {
+      "correct_to_wrong": 2,
+      "count": 40,
+      "delta_points": 2.5,
+      "extracted_answer_exact_agreement": 0.4,
+      "new_accuracy_percent": 30.0,
+      "new_cap_hits_3072": 3,
+      "new_correct": 12.0,
+      "new_missing_extraction": 1,
+      "new_response_tokens": {
+        "mean": 952.9,
+        "p50": 676,
+        "p90": 2076
+      },
+      "old_accuracy_percent": 27.5,
+      "old_cap_hits_3072": 4,
+      "old_correct": 11.0,
+      "old_missing_extraction": 1,
+      "old_response_tokens": {
+        "mean": 1020.25,
+        "p50": 758,
+        "p90": 2150
+      },
+      "wrong_to_correct": 3
+    },
+    "gsm8k": {
+      "correct_to_wrong": 36,
+      "count": 1319,
+      "delta_points": 1.1372251705837755,
+      "extracted_answer_exact_agreement": 0.8673237300985596,
+      "new_accuracy_percent": 78.08946171341925,
+      "new_cap_hits_3072": 10,
+      "new_correct": 1030.0,
+      "new_missing_extraction": 3,
+      "new_response_tokens": {
+        "mean": 280.8953752843063,
+        "p50": 249,
+        "p90": 385
+      },
+      "old_accuracy_percent": 76.95223654283548,
+      "old_cap_hits_3072": 11,
+      "old_correct": 1015.0,
+      "old_missing_extraction": 3,
+      "old_response_tokens": {
+        "mean": 281.5496588324488,
+        "p50": 247,
+        "p90": 375
+      },
+      "wrong_to_correct": 51
+    },
+    "math500": {
+      "correct_to_wrong": 29,
+      "count": 500,
+      "delta_points": -0.8,
+      "extracted_answer_exact_agreement": 0.674,
+      "new_accuracy_percent": 58.2,
+      "new_cap_hits_3072": 36,
+      "new_correct": 291.0,
+      "new_missing_extraction": 0,
+      "new_response_tokens": {
+        "mean": 680.934,
+        "p50": 443,
+        "p90": 1179
+      },
+      "old_accuracy_percent": 59.0,
+      "old_cap_hits_3072": 34,
+      "old_correct": 295.0,
+      "old_missing_extraction": 0,
+      "old_response_tokens": {
+        "mean": 663.118,
+        "p50": 435,
+        "p90": 1089
+      },
+      "wrong_to_correct": 25
+    },
+    "olympiadbench": {
+      "correct_to_wrong": 33,
+      "count": 675,
+      "delta_points": -0.7407407407407407,
+      "extracted_answer_exact_agreement": 0.397037037037037,
+      "new_accuracy_percent": 22.22222222222222,
+      "new_cap_hits_3072": 100,
+      "new_correct": 150.0,
+      "new_missing_extraction": 0,
+      "new_response_tokens": {
+        "mean": 1035.7051851851852,
+        "p50": 663,
+        "p90": 3072
+      },
+      "old_accuracy_percent": 22.962962962962962,
+      "old_cap_hits_3072": 81,
+      "old_correct": 155.0,
+      "old_missing_extraction": 0,
+      "old_response_tokens": {
+        "mean": 980.3244444444445,
+        "p50": 650,
+        "p90": 3072
+      },
+      "wrong_to_correct": 28
+    }
+  },
+  "compatibility_boundary_points": 0.5,
+  "four_task_average": {
+    "delta_points": -1.3704101425392423,
+    "new_percent": 41.71776473391037,
+    "old_percent": 43.088174876449614
+  },
+  "preflight": {
+    "checkpoint": "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/sft_ordered_20260711_sft50k_v1/layer10_whole_layer_shs/checkpoints/step_00003916",
+    "decode": {
+      "amc_greedy_repeats": 1,
+      "amc_repeats": 32,
+      "amc_temperature": 1.0,
+      "amc_top_p": 1.0,
+      "main_temperature": 0.0,
+      "max_tokens": 3072,
+      "seed": 20260707
+    },
+    "engine": {
+      "enforce_eager": true,
+      "gpu_memory_utilization": 0.85,
+      "max_num_batched_tokens": 131072,
+      "max_num_seqs": 128,
+      "model_impl": "transformers",
+      "shs_backend": "reference",
+      "tp": 1
+    },
+    "export": "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/runtime_smokes/shs_fullmodel_kernel_parity_20260712_v1/deployment_export",
+    "hashes": {
+      "checkpoint_trainable": "ebb4cd92f6e890c17cf0e14a883557358dff927e901b69588f1867e6dd016712",
+      "export_model": "6266ca7fdba2f8e117d0560897562468163e9ddf997a4a15ec10944b3d22c583"
+    },
+    "protocol_label": "SHADOW/NEW BACKEND",
+    "python": "3.12.3",
+    "run_id": "shs_vllm_full_eval_shadow_20260712_v1",
+    "source_manifest": "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/runtime_smokes/shs_fullmodel_kernel_parity_20260712_v1/manifest.json",
+    "strict_compatible_claim": false
+  },
+  "protocol_label": "SHADOW/NEW BACKEND",
+  "repair": {
+    "final_amc_review_rows": 1280,
+    "malformed_original_rows_preserved": true,
+    "missing_ids_regenerated": [
+      [
+        11,
+        13
+      ],
+      [
+        25,
+        2
+      ],
+      [
+        32,
+        28
+      ]
+    ],
+    "single_writer_final_repair_id": [
+      25,
+      2
+    ]
+  },
+  "run_id": "shs_vllm_full_eval_shadow_20260712_v1",
+  "source_hashes": {
+    "scripts/run_shs_vllm_full_eval_shadow_20260712_v1.sh": "3547ad0c658db0f122fc5b6e9248f6defd06bfdb709727f51388c9e4f2c2a825",
+    "scripts/summarize_shs_vllm_full_eval_shadow.py": "9f4ac8fc3a3968e19ca8529a19b9b32cb26f20ab89b0e1dff06f41d7f5643f20",
+    "src/qwen_single_layer_rl/eval/evalscope_custom_model.py": "496b10f5e19cc030049320d705be6493bcdd16fb75c6d8ffb46d9f5ac5993784",
+    "src/qwen_single_layer_rl/eval/generator_backend.py": "01bb86ee91d75fd38a373ca9d9fbb5dbdc706fee928ef5f18141e7a2a4f6ebbf",
+    "src/qwen_single_layer_rl/eval/live_status.py": "bb7afb2408109eac023ea8eba4ff802358755c8c061ccef7a84f2b8911c54a21",
+    "src/qwen_single_layer_rl/eval/run_evalscope.py": "b51e102cb788bd98505eb6ca8dc0ddec97d388d4bb70934e7b5d2f396b2f0a99"
+  },
+  "strict_compatible": false,
+  "timing": {
+    "artifact_complete_shell_wall_seconds": 4497.72801566124,
+    "artifact_complete_speedup_vs_old_hf": 6.536633584251474,
+    "first_full_attempt_shell_wall_seconds": 3202,
+    "generated_rows_including_repair": 3818,
+    "generated_token_throughput_artifact_complete": 571.8600571319481,
+    "generated_tokens_including_repair": 2572071,
+    "generation_call_wall_by_phase_seconds": {
+      "amc_average_at_32": 1044.857930701226,
+      "amc_greedy": 78.04132829979062,
+      "main": 1934.8758615944535
+    },
+    "generation_call_wall_seconds": 3057.77512059547,
+    "long_decode_anchor_tokens_per_second": 2262.8,
+    "old_hf_serial_shell_wall_seconds": 29400,
+    "throughput_fraction_of_long_decode_anchor": 0.2527223162152855
+  }
+}

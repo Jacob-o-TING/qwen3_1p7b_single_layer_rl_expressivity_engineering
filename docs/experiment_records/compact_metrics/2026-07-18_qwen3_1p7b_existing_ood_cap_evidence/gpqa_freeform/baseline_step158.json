@@ -1,0 +1,11 @@
+{
+  "cap_hits": 14,
+  "generated_tokens": 100006,
+  "global_step": 158,
+  "ledger_sha256": "849d6bcbaad0619c8ade3eb392a59c9203466615da2675bfac02dcaf1c937901",
+  "missing_answer_tags": 89,
+  "responses_sha256": "b7f948c1bcc6fe71093c767489d9475e4acf6f122435abfb5e82808c15175b26",
+  "rows": 126,
+  "status": "GENERATION_CELL_COMPLETE",
+  "variant": "baseline"
+}

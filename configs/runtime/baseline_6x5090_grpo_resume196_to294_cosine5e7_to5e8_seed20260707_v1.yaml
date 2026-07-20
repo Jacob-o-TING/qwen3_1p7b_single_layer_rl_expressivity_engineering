@@ -1,0 +1,46 @@
+inherits: baseline_6x5090_grpo_untunedbase_resume98_to196_seed20260707_v1.yaml
+
+experiment:
+  name: baseline_6x5090_grpo_resume196_to294_cosine5e7_to5e8_seed20260707_v1
+  seed: 20260707
+  init_seed: 20260707
+  rollout_seed: 20260707
+  initialization_contract: untuned_base_exact_noop
+  continuation_contract: exact_full_state_resume_global_step_196_scheduler_rebased
+  reference_policy_contract: frozen_own_global_step_196
+
+grpo:
+  learning_rate: 5.0e-7
+  train_batch_size: 504
+  ppo_mini_batch_size: 126
+  ppo_micro_batch_size: 6
+  group_size: 4
+  total_training_steps: 294
+  save_freq: 10
+  test_freq: 999999
+  val_before_train: false
+
+logging:
+  run_id_template: baseline_6x5090_grpo_resume196_to294_cosine5e7_to5e8_seed20260707_v1
+
+continuation:
+  source_wave: triglu_priority_6x5090_grpo_step128_to294_then_baseline128_to196_20260715_v1
+  source_run_id: baseline_6x5090_grpo_untunedbase_resume98_to196_seed20260707_v1
+  source_global_step: 196
+  reference_policy_source_global_step: 196
+  reference_policy_scope: per_variant_frozen
+  milestones: [226, 256, 294]
+  retained_checkpoint_steps: [210, 220, 226, 240, 250, 256, 270, 280, 290, 294]
+  redundant_regular_checkpoint_steps: [200, 230, 260]
+  force_segment_endpoint_checkpoints: [226, 256, 294]
+  lr_decay:
+    enabled: true
+    scheduler: cosine
+    start_global_step: 196
+    end_global_step: 294
+    min_lr_ratio: 0.1
+
+pending_obligations_carried_forward:
+  PENDING-01: deferred; this trend eval does not close the Eval Parity Matrix
+  PENDING-02: deferred; historical mixed-precision TriGLU remains in use
+  PENDING-03: deferred; SHS registered CausalLM remains out of scope

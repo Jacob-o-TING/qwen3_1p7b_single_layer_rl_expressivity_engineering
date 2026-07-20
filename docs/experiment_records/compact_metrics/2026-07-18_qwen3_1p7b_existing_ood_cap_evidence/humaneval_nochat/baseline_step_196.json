@@ -1,0 +1,148 @@
+{
+  "cells": {
+    "evalscope_raw_instruction_nochat": {
+      "cap_hits": 3,
+      "collapse_loops": 0,
+      "contains_hebrew": 0,
+      "english_fragment_loops": 0,
+      "execution_statuses": {
+        "error": 64,
+        "success": 100
+      },
+      "execution_timeouts": 3,
+      "finish_reasons": {
+        "length": 3,
+        "stop": 161
+      },
+      "generated_tokens": {
+        "max": 3072,
+        "mean": 421.4939024390244,
+        "p50": 439.5,
+        "p90": 651.1
+      },
+      "hebrew_loops": 0,
+      "parser_strategies": {
+        "first_fenced_code_block": 109,
+        "unchanged": 55
+      },
+      "passed": 100,
+      "rows": 164,
+      "score": 0.6097560975609756,
+      "syntax_valid_completions": 164
+    }
+  },
+  "decision": null,
+  "full_validation": {
+    "cell": "evalscope_raw_instruction_nochat",
+    "materially_recovered": true,
+    "maximum_collapse_loops": 16,
+    "minimum_passes": 49,
+    "observed_collapse_loops": 0,
+    "observed_passes": 100
+  },
+  "model_label": "baseline_step196",
+  "protocol": "humanevalplus_evalscope_raw_instruction_nochat_full164",
+  "run_id": "qwen3_1p7b_heplus_nochat_baseline196_full164_20260717_v1",
+  "sample_count": 164,
+  "scientific_boundary": {
+    "checkpoint_mutated": false,
+    "model_mutated": false,
+    "paper_protocol_parity_claimed": false,
+    "parser": "humanevalplus_parser_v2_fixed",
+    "sandbox": "uid65534+no_new_privs+rlimits+seccomp_no_network_no_exec"
+  },
+  "status": "complete",
+  "task_ledger_sha256": "7bb4ed06a3a4c725a9893f38e76087c9d6bf2c3caa8d0c880e061ffecc0a1baa",
+  "worker_summaries": [
+    {
+      "cell": "evalscope_raw_instruction_nochat",
+      "dispatch_receipt_sha256": null,
+      "engine_load_seconds": 17.448996867984533,
+      "generated_tokens": 11083,
+      "generation_seconds": 6.691954588517547,
+      "receipts_sha256": "ccaac75d90fbf8bf0dd8fe98582b77819c9f01ceb8f1777fdfb0a75df7f41b8c",
+      "review_seconds": 305.29189602285624,
+      "rows": 28,
+      "shard_count": 6,
+      "shard_index": 0,
+      "task_ids_sha256": "2132dc962c42c0d503aa71436330ab9cc0127ce1688161492d521b41afb074bb",
+      "vllm_plugin": null,
+      "worker_id": "evalscope_raw_instruction_nochat.shard00-of-06"
+    },
+    {
+      "cell": "evalscope_raw_instruction_nochat",
+      "dispatch_receipt_sha256": null,
+      "engine_load_seconds": 18.23914548382163,
+      "generated_tokens": 12931,
+      "generation_seconds": 26.730809880420566,
+      "receipts_sha256": "dbab6388e7abef73d11f282be8542fc607c4e9768c5ad05130b86663dce9bc57",
+      "review_seconds": 4.98020894266665,
+      "rows": 28,
+      "shard_count": 6,
+      "shard_index": 1,
+      "task_ids_sha256": "869e442b2fcfacc1e8d2f6edd97fc0373ffe6f947d0d9d9be38088a368deae97",
+      "vllm_plugin": null,
+      "worker_id": "evalscope_raw_instruction_nochat.shard01-of-06"
+    },
+    {
+      "cell": "evalscope_raw_instruction_nochat",
+      "dispatch_receipt_sha256": null,
+      "engine_load_seconds": 18.324511671438813,
+      "generated_tokens": 13525,
+      "generation_seconds": 24.838321067392826,
+      "receipts_sha256": "b0d21cc28061f43334c125749199cb2e6c8a801fe32f06a6be5adb861b345ffa",
+      "review_seconds": 310.1863099858165,
+      "rows": 27,
+      "shard_count": 6,
+      "shard_index": 2,
+      "task_ids_sha256": "b84e0c24d8d66fd87347ba04dd982a7ddec5a0afb0962f713554eae0439ae8f2",
+      "vllm_plugin": null,
+      "worker_id": "evalscope_raw_instruction_nochat.shard02-of-06"
+    },
+    {
+      "cell": "evalscope_raw_instruction_nochat",
+      "dispatch_receipt_sha256": null,
+      "engine_load_seconds": 21.29531755670905,
+      "generated_tokens": 9256,
+      "generation_seconds": 6.12336571328342,
+      "receipts_sha256": "f8b5c252ffb98baf155f5d31902aa02d53e15f63f608077947a01f483a998176",
+      "review_seconds": 3.6249720491468906,
+      "rows": 27,
+      "shard_count": 6,
+      "shard_index": 3,
+      "task_ids_sha256": "8ded9e4086d7b733f5c0932375d9691b6c66806578acc3da877272698769ec2c",
+      "vllm_plugin": null,
+      "worker_id": "evalscope_raw_instruction_nochat.shard03-of-06"
+    },
+    {
+      "cell": "evalscope_raw_instruction_nochat",
+      "dispatch_receipt_sha256": null,
+      "engine_load_seconds": 18.22427038475871,
+      "generated_tokens": 9346,
+      "generation_seconds": 8.745623964816332,
+      "receipts_sha256": "a3c2171275e1ba39979b75dddce97fcb740126228b6f2e5b0252d8d9c0bdde53",
+      "review_seconds": 306.44845767505467,
+      "rows": 27,
+      "shard_count": 6,
+      "shard_index": 4,
+      "task_ids_sha256": "ffee05f49ec0daf311827350c05956da02024b45f7cc29716c5b526a44b46cb3",
+      "vllm_plugin": null,
+      "worker_id": "evalscope_raw_instruction_nochat.shard04-of-06"
+    },
+    {
+      "cell": "evalscope_raw_instruction_nochat",
+      "dispatch_receipt_sha256": null,
+      "engine_load_seconds": 17.897062489762902,
+      "generated_tokens": 12984,
+      "generation_seconds": 25.133272774517536,
+      "receipts_sha256": "79a044aaa1272f3c82a296834d3f2f01243cb4565fa61f7f76fb588b0be076eb",
+      "review_seconds": 4.681664386764169,
+      "rows": 27,
+      "shard_count": 6,
+      "shard_index": 5,
+      "task_ids_sha256": "357685c6bf5af204c7360b3c6396191ace265b048e627d5855af80030e8e87d0",
+      "vllm_plugin": null,
+      "worker_id": "evalscope_raw_instruction_nochat.shard05-of-06"
+    }
+  ]
+}

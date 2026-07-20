@@ -1,0 +1,66 @@
+run:
+  id: triglu_vllm_onboarding_smoke_20260712_v1
+  methodology_id: custom_ffn_vllm_onboarding_methodology_20260712_v1
+  screen: qwen_triglu_vllm_smoke_20260712_v1
+  output_root: runs/runtime_smokes/triglu_vllm_onboarding_smoke_20260712_v1
+  log: logs/triglu_vllm_onboarding_smoke_20260712_v1.log
+  report_label: 2026-07-12_triglu-vllm-generality-transplantation-record
+  seed: 20260712
+
+paths:
+  project_root: /root/autodl-tmp/qwen3_1p7b_single_layer_rl
+  python: /root/autodl-tmp/qwen3_1p7b_single_layer_rl/envs/vllm0102_verl061/bin/python
+  base_model: /root/autodl-tmp/qwen3_single_layer_rl/models/Qwen3-1.7B-Base
+  architecture_config: configs/sft/layer10_whole_layer_triglu_side_ffn_sft.yaml
+  checkpoint: runs/sft_ordered_20260711_sft50k_v1/layer10_whole_layer_triglu_side_ffn/checkpoints/step_00003916/trainable_state.pt
+  validation_jsonl: data/numina_math_cot_50k_decontam_v3/val.jsonl
+
+architecture:
+  variant: qwen_swiglu_triglu_side
+  target_layers: [10]
+  side_dim: 512
+  side_hidden: 2048
+  side_scale: 0.1
+  initial_effect: exact_identity_multiplier
+  inference_backend: reference_pytorch_cublas
+  side_precision: float32
+
+engine:
+  gpu_indices: [0, 1]
+  tensor_parallel_size: 1
+  model_impl:
+    triglu: auto_registered_custom_transformers_wrapper
+    vanilla: auto
+  enforce_eager: true
+  max_model_len: 2048
+  max_num_seqs: 64
+  max_num_batched_tokens: 32768
+  gpu_memory_utilization: 0.85
+  enable_prefix_caching: false
+  enable_chunked_prefill: true
+
+workload:
+  short_pressures: [1, 8, 16]
+  short_max_tokens: 8
+  matched_pressures: [16, 32, 64]
+  matched_temperature: 0.8
+  matched_top_p: 0.95
+  matched_min_tokens: 800
+  matched_max_tokens: 1024
+  cells: [triglu, vanilla]
+
+gates:
+  expected_triglu_dispatches: 1
+  greedy_tokens_equal_required: true
+  logits_top1_equal_required: true
+  logits_cosine_min: 0.9999
+  logits_relative_l2_max: 0.01
+  pressure64_required: true
+  silent_fallback_allowed: false
+  oom_allowed: false
+  historical_shs_matched_p64_tokens_per_second_per_gpu: 1892.1
+
+scope:
+  eval_parity_matrix: false
+  production_grpo: false
+  shutdown: false

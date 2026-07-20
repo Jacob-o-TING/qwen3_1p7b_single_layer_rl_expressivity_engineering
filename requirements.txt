@@ -1,0 +1,11 @@
+# Minimal local inspection and smoke tests do not need external packages.
+# Install these for config ergonomics and full GPU work:
+pyyaml>=6.0
+transformers>=4.51.0
+datasets
+accelerate
+pandas
+pyarrow
+
+# Full GRPO training should install veRL from its upstream instructions.
+# Keep it out of the lightweight local requirements to avoid surprise installs.

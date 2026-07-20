@@ -1,0 +1,258 @@
+[
+  {
+    "prompt": "Let  $x, y$  be real numbers such that  $1\\le x^2-xy+y^2\\le2$ . Show that:\na)  $\\dfrac{2}{9}\\le x^4+y^4\\le 8$ ;\nb)  $x^{2n}+y^{2n}\\ge\\dfrac{2}{3^n}$ , for all  $n\\ge3$ .\n\n*Lauren\u021biu Panaitopol* and *Ioan Tomescu*\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0000"
+  },
+  {
+    "prompt": "Given the function $f(x)=|x+1|-|x-2|$.\n$(1)$ Find the solution set of the inequality $f(x)\\geqslant 1$;\n$(2)$ If the solution set of the inequality $f(x)\\geqslant x^{2}-x+m$ is non-empty, find the range of values for $m$.\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0001"
+  },
+  {
+    "prompt": "two cars start from the opposite places of a main road , 150 km apart . first car runs for 25 km and takes a right turn and then runs 15 km . it then turns left and then runs for another 25 km and then takes the direction back to reach the main road . in the mean time , due to minor break down the other car has run only 35 km along the main road . what would be the distance between two cars at this point ?\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0002"
+  },
+  {
+    "prompt": "How many of the numbers from the set \\(\\{1, 2, 3, \\ldots, 100\\}\\) have a perfect square factor other than one?\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0003"
+  },
+  {
+    "prompt": "A pet store had eighty-five gerbils. If they sold sixty-nine of them, how many would they have left?\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0004"
+  },
+  {
+    "prompt": "In Mary's class, there are 35 students. Their teacher told them they could pay $50 each to finance a big science project that they and their society would benefit greatly from. However, the school offered various discounts based on students' merit and needs. 20 students paid the full amount of $50, while 5 students with high merit got a 25% discount and paid $37.50 each. Additionally, 7 students with demonstrated financial needs paid half the amount at $25 each, and the remaining 3 students got a special 10% discount and paid $45 each. The school also charged a $100 administrative fee. How much was the class able to gather together, accounting for discounts and fees?\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0005"
+  },
+  {
+    "prompt": "Lily got a new puppy for her birthday.  She was responsible for feeding the puppy 1/4 cup of food three times a day for two weeks starting tomorrow.  For the following 2 weeks, Lily will feed him 1/2 cup of food twice a day.  She has fed him 1/2 cup of food today.  Including today, how much food will the puppy eat over the next 4 weeks?\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0006"
+  },
+  {
+    "prompt": "4 pints of a 5% antifreeze solution and 8 pints of a 20% antifreeze solution must be mixed to obtain 12 pints of a solution with what percentage of antifreeze?\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0007"
+  },
+  {
+    "prompt": "Let $\\mathbf{a}, \\mathbf{b}, \\mathbf{c}, \\mathbf{d}$ be four distinct vectors in space, with magnitudes such that $|\\mathbf{a}| = 1$, $|\\mathbf{b}| = 2$, $|\\mathbf{c}| = 3$, $|\\mathbf{d}| = 2$. These vectors satisfy the following conditions:\n\\[\n\\mathbf{a} \\cdot \\mathbf{b} = 1, \\quad \\mathbf{a} \\cdot \\mathbf{c} = -1, \\quad \\mathbf{b} \\cdot \\mathbf{c} = 0, \\quad \\mathbf{b} \\cdot \\mathbf{d} = -1, \\quad \\mathbf{c} \\cdot \\mathbf{d} = 3.\n\\]\nFind $\\mathbf{a} \\cdot \\mathbf{d}$.\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0008"
+  },
+  {
+    "prompt": "A circular cake with diameter $16\\text{ cm}$ is cut into four equal-sized sector-shaped pieces. Let $m$ be the number of centimeters in the length of the longest line segment that can be drawn in one of these pieces. What is $m^2$?\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0009"
+  },
+  {
+    "prompt": "The distance from the center of the circle \\\\({{x}^{2}}+{{y}^{2}}-2x-8y+13=0\\\\) to the line \\\\(ax+y-1=0\\\\) is \\\\(1\\\\), then \\\\(a=(\\\\)\u00a0\u00a0\u00a0\\\\()\\\\)\nA: \\\\(-\\dfrac{4}{3}\\\\)\nB: \\\\(-\\dfrac{3}{4}\\\\)\nC: \\\\(\\sqrt{3}\\\\)\nD: \\\\(2\\\\)\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0010"
+  },
+  {
+    "prompt": "Define $x \\heartsuit y$ to be $|x-y|$ for all real numbers $x$ and $y$. Which of the following statements is not true? \n$\\mathrm{(A) \\ } x \\heartsuit y = y \\heartsuit x$ for all $x$ and $y$\n$\\mathrm{(B) \\ } 2(x \\heartsuit y) = (2x) \\heartsuit (2y)$ for all $x$ and $y$\n$\\mathrm{(C) \\ } x \\heartsuit 0 = x$ for all $x$\n$\\mathrm{(D) \\ } x \\heartsuit x = 0$ for all $x$\n$\\mathrm{(E) \\ } x \\heartsuit y > 0$ if $x \\neq y$\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0011"
+  },
+  {
+    "prompt": "Given the universal set $U=\\{1,2,3,4,5,6,7\\}$, set $A=\\{3,4,5\\}$, and set $B=\\{1,3,6\\}$, then $A\\cap(\\complement_{U}B)=$ ( )\n\nA: $\\{4,5\\}$  \nB: $\\{2,4,5,7\\}$  \nC: $\\{1,6\\}$  \nD: $\\{3\\}$\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0012"
+  },
+  {
+    "prompt": "A train is travelling at a certain speed and crosses a pole in 5 seconds. The length of the train is 125.01 meters. What is the speed of the train in kmph?\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0013"
+  },
+  {
+    "prompt": "What is the largest multiple of 10 for which the average (arithmetic mean) of all multiples of 10 from 10 to that number inclusive is 205?\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0014"
+  },
+  {
+    "prompt": "The numbers \\( p \\), \\( q \\), and \\( pq + 1 \\) are prime. Prove that \\( (2p + q)(p + 2q) \\) is divisible by four.\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0015"
+  },
+  {
+    "prompt": "Given that the sequence $\\{a_n\\}$ is an arithmetic sequence, if $a_3 + a_{11} = 24$ and $a_4 = 3$, then the common difference of the sequence $\\{a_n\\}$ is ______.\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0016"
+  },
+  {
+    "prompt": "$(1)$ Calculate: $\\sqrt{9}-\\sqrt[3]{8}+\\sqrt{0.01}$.  \n$(2)$ Solve the system of equations: $\\left\\{\\begin{array}{l}{2x-3y=7\u2460}\\\\{x+2y=0\u2461}\\end{array}\\right.$.\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0017"
+  },
+  {
+    "prompt": "Consider a sequence $\\{a_n\\}$ defined as follows: 1, -2, -2, 3, 3, 3, -4, -4, -4, -4,\u2026, k terms of $(-1)^{k-1}k$,\u2026, where for a positive integer $n$ and $k \\in \\mathbb{N^+}$, $a_n = (-1)^{k-1}k$ if $\\frac{(k-1)k}{2} < n \\leq \\frac{k(k+1)}{2}$. Let $S_n = a_1 + a_2 + \\dots + a_n$ ($n \\in \\mathbb{N^+}$). For $l \\in \\mathbb{N^+}$, we define the set $P_l = \\{ n \\,\\mid\\, S_n \\text{ is an integer multiple of } a_n, 1 \\leq n \\leq l\\}$.  \n(1) Find the number of elements in $P_{11}$.  \n(2) Find the number of elements in $P_{2000}$.\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0018"
+  },
+  {
+    "prompt": "The average math scores of classes A and B are $87$ and $82$ points, respectively. If Xiaoming moves from class A to class B, and after the move, the average math scores of both classes increase, then Xiaoming's math score after the move could be:\n\nA: $72$ points\n\nB: $85$ points\n\nC: $87$ points\n\nD: $90$ points\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0019"
+  },
+  {
+    "prompt": "Prove that among 502 natural numbers, there are always two numbers such that their difference or sum is divisible by one thousand.\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0020"
+  },
+  {
+    "prompt": "The angles \\( A \\) and \\( C \\) of quadrilateral \\( A B C D \\) are equal, and diagonal \\( AC \\) is bisected by the other diagonal. Prove that the quadrilateral is either a kite or a parallelogram.\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0021"
+  },
+  {
+    "prompt": "Ten identical crates each of dimensions $3\\mathrm{ft}\\times 4\\mathrm{ft}\\times 6\\mathrm{ft}$. The first crate is placed flat on the floor. Each of the remaining nine crates is placed, in turn, flat on top of the previous crate, and the orientation of each crate is chosen at random. Let $\\frac {m}{n}$ be the probability that the stack of crates is exactly $41\\mathrm{ft}$ tall, where $m$ and $n$ are relatively prime positive integers. Find $m$.\n\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0022"
+  },
+  {
+    "prompt": "The number \\( s \\) can be expressed as a four-place decimal \\( 0.efgh \\), where \\( e, f, g, \\) and \\( h \\) represent digits, any of which could be zero. It is desired to approximate \\( s \\) by a fraction whose numerator is 1 or 2 and whose denominator is an integer. The closest such fraction to \\( s \\) is \\(\\frac{2}{9}\\). What is the number of possible values for \\( s \\)?\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0023"
+  },
+  {
+    "prompt": "Liam has a pine tree in his yard that is $13\\frac{1}{4}$ feet tall and a maple tree that is $20\\frac{1}{2}$ feet tall. How much taller is the maple tree than the pine tree? Express your answer as a simplified mixed number.\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0024"
+  },
+  {
+    "prompt": "Suppose $P$ and $P'$ are natural numbers such that $P > P'$ and they are divided by a natural number $D$. Let the remainders be $R$ and $R'$, respectively. Consider a new number $Q$ which is added to $P$ before taking the product with $P'$. When the new product $(P+Q)P'$ and the product of remainders $RR'$ are divided by $D$, the remainders are $r$ and $r'$, respectively. Compare $r$ and $r'$.\n(A) $r > r'$ always\n(B) $r < r'$ always\n(C) $r > r'$ sometimes and $r < r'$ sometimes\n(D) $r > r'$ sometimes and $r = r'$ sometimes\n(E) $r = r'$ always\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0025"
+  },
+  {
+    "prompt": "If $\\cos\\left(\\frac{\\pi}{8}-\\alpha\\right) = \\frac{1}{6}$, then the value of $\\cos\\left(\\frac{3\\pi}{4}+2\\alpha\\right)$ is $\\boxed{(\\quad)}$\n\nA: $\\frac{17}{18}$\nB: $-\\frac{17}{18}$\nC: $\\frac{18}{19}$\nD: $-\\frac{18}{19}$\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0026"
+  },
+  {
+    "prompt": "If $m$ is a root of the equation $x^{2}-6x-5=0$, then the value of the algebraic expression $11+6m-m^{2}$ is ____.\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0027"
+  },
+  {
+    "prompt": "Given the planar vectors $\\vec{a}=(2,4)$, $\\vec{b}=(-1,k)$, and $\\vec{a} \\parallel \\vec{b}$, find $2\\vec{a}+\\vec{b}=\\_\\_\\_\\_\\_$.\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0028"
+  },
+  {
+    "prompt": "In a cooking competition, two chefs have to use a certain amount of flour. The first chef uses $\\frac{5}{6}$ of a bag of flour, and the second chef uses $\\frac{7}{8}$ of a bag of flour. How much more flour did the second chef use than the first chef? Express your answer as a fraction of one bag, reduced to simplest form.\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0029"
+  },
+  {
+    "prompt": "Let $c$ and $d$ be constants. Suppose that the equation \\[\\frac{(x+c)(x+d)(x+8)}{(x+2)^2} = 0\\] has exactly $3$ distinct roots, while the equation \\[\\frac{(x+3c)(x+2)(x+4)}{(x+d)(x+8)} = 0\\] has exactly $1$ distinct root. Compute $100c + d.$\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0030"
+  },
+  {
+    "prompt": "Given that $F\\_1$ and $F\\_2$ are the left and right foci of the hyperbola $\\frac{x^2}{a^2} - \\frac{y^2}{b^2} = 1 (a > 0, b > 0)$, a circle centered at the origin $O$ with radius $|OF\\_1|$ intersects the hyperbola at point $P$ in the first quadrant. When the area of triangle $PF\\_1F\\_2$ is equal to $a^2$, the eccentricity of the hyperbola is:\nA: $\\sqrt{2}$\nB: $\\sqrt{3}$\nC: $\\frac{\\sqrt{6}}{2}$\nD: $2$\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0031"
+  },
+  {
+    "prompt": "Determine the binomial term with the largest coefficient in the expansion of the polynomial $\\left(1-x\\right)^{10}$.\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0032"
+  },
+  {
+    "prompt": "A sequence has 101 terms, each of which is a positive integer. If a term, \\( n \\), is even, the next term is equal to \\(\\frac{1}{2} n + 1\\). If a term, \\( n \\), is odd, the next term is equal to \\(\\frac{1}{2}(n + 1)\\). For example, if the first term is 7, then the second term is 4 and the third term is 3. If the first term is 16, the 101st term is:\n\n(A) 1  \n(B) 2  \n(C) 3  \n(D) 4  \n(E) 5\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0033"
+  },
+  {
+    "prompt": "What day of the week will it be 100 days from Friday?\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0034"
+  },
+  {
+    "prompt": "A train that is 510 meters long is running at a certain speed. It takes 52 seconds to pass a bridge of 140 meters in length. What is the speed of the train in km/hour?\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0035"
+  },
+  {
+    "prompt": "Prove that the product of the first two thousand and thirteen terms of the sequence\n\n$$\na_{n}=1+\\frac{1}{n^{3}}\n$$\n\ndoes not reach a value of 3.\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0036"
+  },
+  {
+    "prompt": "I have four identical black beads and four identical white beads. Carefully explain how many different bracelets I can make using all the beads.\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0037"
+  },
+  {
+    "prompt": "Calculate:<br/>$(1) a^{6} \\div a^{2}$;<br/>$(2) m^{2} \\cdot m^{4} - (2m^{3})^{2}$.\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0038"
+  },
+  {
+    "prompt": "Given the function $f(x)=|2x-1|$.\n(I) If the solution set of the inequality $f(x+ \\frac {1}{2})\\leqslant 2m-1 (m > 0)$ is $[-2,2]$, find the value of the real number $m$;\n(II) If the inequality $f(x)\\leqslant 2^{y}+ \\frac {a}{2^{y}}+|2x+3|$ holds for any real number $x$ and $y\\in R$, find the minimum value of the real number $a$.\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0039"
+  },
+  {
+    "prompt": "Given the universal set $U=\\{0, 1, 2, 3, 4\\}$, $M=\\{0, 1, 2\\}$, and $N=\\{2, 3\\}$, find the intersection of the complement of $M$ in $U$ and $N$, which is $(C_U M) \\cap N = \\boxed{ \\quad }$\nA: $\\{2\\}$\nB: $\\{3\\}$\nC: $\\{2,3,4\\}$\nD: $\\{0,1,2,3,4\\}$\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0040"
+  },
+  {
+    "prompt": "The seventh term of an arithmetic sequence is $20$. If the difference between two consecutive terms is $2$, what is the sum of the first two terms?\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0041"
+  },
+  {
+    "prompt": "What is the product of real numbers  $a$  which make  $x^2+ax+1$  a negative integer for only one real number  $x$ ? $ \n\\textbf{(A)}\\ -1\n\\qquad\\textbf{(B)}\\ -2\n\\qquad\\textbf{(C)}\\ -4\n\\qquad\\textbf{(D)}\\ -6\n\\qquad\\textbf{(E)}\\ -8\n$ \n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0042"
+  },
+  {
+    "prompt": "The deployment of China's Beidou satellite navigation system has been completed. The height of one of the medium-high orbit satellites is approximately $21500000$ meters. Express $21500000$ in scientific notation as ______.\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0043"
+  },
+  {
+    "prompt": "Given the set $M={x|y=\\sqrt{-x^2+2x+8}}$ and the set $N={x|y=|x|+1}$, determine the intersection of sets $M$ and $N$, denoted as $M \\cap N$.\n\nA: ${x|-2 \\leqslant x \\leqslant 4}$\nB: ${x|x \\geqslant 1}$\nC: ${x|1 \\leqslant x \\leqslant 4}$\nD: ${x|x \\geqslant -2}$\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0044"
+  },
+  {
+    "prompt": "What is the area of the region enclosed by the graph of the equation $x^2+y^2=(x^2+y^2)^{1/2}?$\nA) $1$\nB) $\\pi$\nC) $2\\pi$\nD) $\\frac{\\pi}{2}$\nE) $2$\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0045"
+  },
+  {
+    "prompt": "There are 2022 hamsters, some of which always tell the truth and the others always lie. One day, these 2022 hamsters form a circle, and each hamster says: \"Both hamsters adjacent to me are lying!\" What is the maximum number of hamsters that could be telling the truth?\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0046"
+  },
+  {
+    "prompt": "In the Cartesian coordinate system, there is a point $P$ in the second quadrant. The distance from point $P$ to the $x$-axis is $4$, and the distance to the $y$-axis is $5$. The coordinates of point $P$ are ( ).\n\nA: $(-5,4)$\n\nB: $(-4,5)$\n\nC: $(4,5)$\n\nD: $(5,-4)$\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0047"
+  },
+  {
+    "prompt": "Given the sets $M=\\{x|x= \\frac {k}{2}+ \\frac {1}{4},k\\in\\mathbb{Z}\\}$ and $N=\\{x|x= \\frac {k}{4}+ \\frac {1}{2},k\\in\\mathbb{Z}\\}$, determine the relationship between $M$ and $N$.\n\nA: $M=N$\nB: $M\\subset N$\nC: $N\\subset M$\nD: The relationship between $M$ and $N$ is undefined\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0048"
+  },
+  {
+    "prompt": "A badminton racket is marked up by 40% based on its cost price and then sold at 80% of the marked price, still making a profit of 15 yuan. What is the cost price of the badminton racket?\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0049"
+  },
+  {
+    "prompt": "Given a sequence ${a_n}$ with the sum of its first $n$ terms denoted as $S_n$, if $a_1 = 1$ and $a_{n+1} = 3S_n$ for all positive integers $n$, find the value of $a_6$.\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0050"
+  },
+  {
+    "prompt": "Given that $\u03b1$ is an angle in the third quadrant, $f(\u03b1)= \\frac{\\sin (\u03c0-\u03b1)\u00b7\\cos (2\u03c0-\u03b1)\u00b7\\tan (-\u03b1-\u03c0)}{\\tan (-\u03b1)\u00b7\\sin (-\u03c0-\u03b1) }$.\n\n(1) Simplify $f(\u03b1)$;\n\n(2) If $\\cos (\u03b1- \\frac{3}{2}\u03c0) = \\frac{1}{5}$, find the value of $f(\u03b1)$;\n\n(3) If $\u03b1=-1860^{\\circ}$, find the value of $f(\u03b1)$.\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0051"
+  },
+  {
+    "prompt": "\nGiven a finite set \\( K_{0} \\) on a plane (or in space), let \\( K_{1} \\) be the set obtained by performing symmetric reflections of the points in \\( K_{0} \\) with respect to each other and adding all resulting points to \\( K_{0} \\). Similar operations yield sets \\( K_{2} \\) from \\( K_{1} \\), \\( K_{3} \\) from \\( K_{2} \\), and so on.\n\n1. If \\( K_{0} \\) consists of two points \\( A \\) and \\( B \\) that are 1 unit apart, what is the minimum value of \\( n \\) such that \\( K_{n} \\) contains a point that is 1000 units away from \\( A \\)?\n\n2. If \\( K_{0} \\) consists of the three vertices of an equilateral triangle with an area of 1, what is the area of the convex hull containing \\( K_{n} \\), for \\( n = 1, 2, \\ldots \\)?\n\nIn the following sub-problems, let \\( K_{0} \\) consist of the four vertices of a regular tetrahedron with unit volume.\n\n3. How many faces does the convex hull of \\( K_{1} \\) have, and what are their shapes?\n\n4. What is the volume of the convex hull of \\( K_{1} \\)?\n\n5. What is the volume of the convex hull of \\( K_{n} \\), for \\( n = 1, 2, \\ldots \\)?\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0052"
+  },
+  {
+    "prompt": "A bullet train 240 m long is running with a speed of 100 kmph. In what time will it pass a man who is running at 8 kmph in the direction opposite to that in which the bullet train is going?\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0053"
+  },
+  {
+    "prompt": "Two trains are moving in the same direction at 144 kmph and 72 kmph. The faster train crosses a man in the slower train in 19 seconds. What is the length of the faster train?\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0054"
+  },
+  {
+    "prompt": "A and B participate in a shooting game. According to the rules, hitting the target scores 2 points, and missing scores 0 points. It is known that the hit rates of A and B are $\\frac{3}{5}$ and $p$ respectively, and the probability that the sum of the scores of A and B from one shot each is 2 is $\\frac{9}{20}$. Assuming that the shots by A and B are independent of each other, the value of $p$ is (\u3000\u3000)\n\nA:  $\\frac{1}{4}$\n\nB:  $\\frac{1}{3}$\n\nC:  $\\frac{2}{3}$\n\nD:  $\\frac{3}{4}$\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0055"
+  },
+  {
+    "prompt": "what is the sum of 100 consecutive integers from - 49 inclusive , in a increasing order ?\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0056"
+  },
+  {
+    "prompt": "Consider a checkered \\(3m \\times 3m\\) square, where \\(m\\) is an integer greater than 1. A frog sits on the lower left corner cell \\(S\\) and wants to get to the upper right corner cell \\(F\\). The frog can hop from any cell to either the next cell to the right or the next cell upwards.\n\nSome cells can be sticky, and the frog gets trapped once it hops on such a cell. A set \\(X\\) of cells is called blocking if the frog cannot reach \\(F\\) from \\(S\\) when all the cells of \\(X\\) are sticky. A blocking set is minimal if it does not contain a smaller blocking set.\n(a) Prove that there exists a minimal blocking set containing at least \\(3m^{2}-3m\\) cells.\n(b) Prove that every minimal blocking set contains at most \\(3m^{2}\\) cells.\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0057"
+  },
+  {
+    "prompt": "Given the inequality $|x-a|+|x+b| \\geqslant 3$, the solution set is $\\mathbb{R}$. Find the range of values for $a+b$.\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0058"
+  },
+  {
+    "prompt": "If $x$ is a real number and $x^2 - 3x = 12$, what is the sum of all possible values of $x$?\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0059"
+  },
+  {
+    "prompt": "If four coins are tossed at the same time, what is the probability of getting exactly two heads and two tails?\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0060"
+  },
+  {
+    "prompt": "The point corresponding to the complex number $\\dfrac{i^{2014}}{1 + i}(i)$ in the complex plane is located in ( ), where $i$ is the imaginary unit.\nA: The first quadrant\nB: The second quadrant\nC: The third quadrant\nD: The fourth quadrant\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0061"
+  },
+  {
+    "prompt": "Let \\[\\mathcal{S} = \\sum_{i=1}^{\\infty}\\left(\\prod_{j=1}^i \\dfrac{3j - 2}{12j}\\right).\\] Then  $(\\mathcal{S} + 1)^3 = \\tfrac mn$  with  $m$  and  $n$  coprime positive integers. Find  $10m + n$ .\n\n*Proposed by Justin Lee and Evan Chang*\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0062"
+  },
+  {
+    "prompt": "A line passing through the focus $F$ of the parabola $C: y^2 = 2px (p > 0)$, with a slope of $\\sqrt{3}$, intersects $C$ at point $M$ in the first quadrant. Let $l$ be the directrix of $C$, and point $N$ lies on $l$ with $MN \\perp l$. If the perimeter of $\\triangle MNF$ is $12$, then the area of $\\triangle MNF$ is\n\nA: $8$\n\nB: $4$\n\nC: $4\\sqrt{3}$\n\nD: $8\\sqrt{3}$\n\nSolve carefully and give the final answer.",
+    "prompt_id": "numina_val_0063"
+  }
+]

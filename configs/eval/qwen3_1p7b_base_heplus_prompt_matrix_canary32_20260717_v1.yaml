@@ -1,0 +1,14 @@
+run_id: qwen3_1p7b_base_heplus_prompt_matrix_canary32_20260717_v1
+model_path: /root/autodl-tmp/qwen3_single_layer_rl/models/Qwen3-1.7B-Base
+source_prediction_jsonl: runs/ood_eval/qwen3_1p7b_ood_6x5090_step294_20260716_v1/untuned_base/code_heplus_mbpp/main/20260717_191648/predictions/qwen3-1p7b-single-layer-sft/humaneval_plus_default.jsonl
+output_root: runs/eval_protocol/qwen3_1p7b_base_heplus_prompt_matrix_canary32_20260717_v1
+seed: 20260707
+sample_count: 32
+max_tokens: 3072
+sandbox_timeout_seconds: 300
+sandbox_scratch_root: /tmp/qwen_heplus_prompt_matrix
+vllm:
+  gpu_memory_utilization: 0.85
+  enforce_eager: true
+  max_num_seqs: 64
+  max_num_batched_tokens: 32768

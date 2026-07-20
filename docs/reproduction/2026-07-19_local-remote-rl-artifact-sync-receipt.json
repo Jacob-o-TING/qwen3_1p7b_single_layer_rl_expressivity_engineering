@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "sync_date": "2026-07-19",
+  "local_manifest_files": 1201,
+  "rl_filtered_files_checked_after_sync": 879,
+  "missing_after_sync": 0,
+  "different_after_sync": 0,
+  "excluded_prefixes": [
+    "runs/sft_ordered_20260711_sft50k_v1/"
+  ],
+  "exclusion_reason": "The matched-10 archive is an RL reproduction bundle. Historical SFT weight archives are unrelated large artifacts and are not required to reproduce the selected RL checkpoints.",
+  "private_chat_backups_included": false,
+  "sync_delta_archive_sha256": "8c69711125218cfa462b074adc9bd6b6fe117a3fbf8a1f1a771ad1d7ee2d8b1d",
+  "sync_delta_archive_bytes": 23477070,
+  "tracked_head_archive_sha256": "73a504907dac5d8f119bca0dde8f337f3d1f6a8dec9e79a97007472fd195581b"
+}

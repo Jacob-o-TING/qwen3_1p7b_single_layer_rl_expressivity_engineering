@@ -1,0 +1,36 @@
+inherits: ../layer10_whole_layer_shs.yaml
+
+experiment:
+  name: shs_2x5090_actor_rollout_weight_sync_20260712_v1
+
+grpo:
+  # This is a bounded systems gate, not a quality or production GRPO run.
+  train_batch_size: 2
+  ppo_mini_batch_size: 2
+  # Two sequences per actor rank across two colocated GPUs.
+  ppo_micro_batch_size: 4
+  group_size: 4
+  max_prompt_length: 128
+  max_response_length: 16
+  epochs: 1
+  # Ten uninterrupted syncs plus one checkpoint restart/resync step.
+  total_training_steps: 11
+  save_freq: 11
+  test_freq: 0
+  val_before_train: false
+
+runtime:
+  nnodes: 1
+  nproc_per_node: 2
+  # Must match the stateful dataloader schema stored by the first 10 cycles.
+  dataloader_num_workers: 8
+  inference_backend: vllm
+  rollout:
+    tensor_model_parallel_size: 1
+    replicas_per_node: 2
+    max_num_seqs: 16
+    gpu_memory_utilization: 0.65
+    max_num_batched_tokens: 2048
+
+logging:
+  run_id_template: shs_2x5090_actor_rollout_weight_sync_20260712_v1

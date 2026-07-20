@@ -1,0 +1,29 @@
+{
+  "checkpoint_trainable_sha256": "ebb4cd92f6e890c17cf0e14a883557358dff927e901b69588f1867e6dd016712",
+  "claims": {
+    "production_candidate": false,
+    "production_ready": false
+  },
+  "input_panels": [
+    "full_context_reproduction",
+    "flattened_pressure_1",
+    "flattened_pressure_32"
+  ],
+  "logits_cosine_min": 0.9999,
+  "modes": [
+    "reference_equivalent",
+    "grouped_bf16",
+    "grouped_fp32_accumulate"
+  ],
+  "prompt": "Solve carefully and give only the final answer: 17 + 25 =",
+  "reference_mode": "reference_equivalent",
+  "run_id": "shs_triton_drift_localize_20260712_v1",
+  "seed": 20260712,
+  "source_hashes": {
+    "kernel": "6641c7935d4a92cd8212b8f34e41e7f885cf9ed2234c5be76f77fc82ae2edcad",
+    "runner": "a3f2a2ddc8b933ceac5336b00b46e2a6346d157bb93715f819fcabfed7726da8",
+    "variant_module": "bb777e692bd4e52850ca865fd8400117d6c92d5d508927027937298aca6a3b6e"
+  },
+  "status": "preregistered",
+  "timestamp_utc": "2026-07-11T18:19:18.444248+00:00"
+}

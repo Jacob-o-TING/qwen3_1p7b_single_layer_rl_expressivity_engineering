@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "run_id": "sft_ordered_20260711_sft50k_v1",
+  "paused_at": "2026-07-11T23:31:35+08:00",
+  "resume_command": "bash scripts/launch_sft_ordered_resume.sh",
+  "expected_session": "qwen_sft_ordered_20260711_sft50k_v1",
+  "authoritative_main_cache": "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/sft_ordered_20260711_sft50k_v1/evaluations/layer10_whole_layer_triglu_side_ffn/main/20260711_213137",
+  "completed": {
+    "shs_training_and_primary_eval": true,
+    "baseline_training_and_primary_eval": true,
+    "triglu_training": true,
+    "triglu_math500": true,
+    "triglu_gsm8k": false,
+    "triglu_olympiadbench": false,
+    "triglu_amc_average_at_32": false,
+    "oft_training": false
+  },
+  "cache_artifacts": [
+    {
+      "name": "paper_math500_predictions",
+      "rows": 500,
+      "unique_indices": 500,
+      "sha256": "5864aacce0882ecf41df60d828b1e31649cdf11a2bc3ed5a189becbae6ca9804"
+    },
+    {
+      "name": "paper_math500_reviews",
+      "rows": 500,
+      "unique_indices": 500,
+      "sha256": "41ff4145ec17962ab56eecaa39a3aa5c09ea687b5b9b2c36327575ed25c0721f"
+    },
+    {
+      "name": "paper_gsm8k_predictions",
+      "rows": 982,
+      "unique_indices": 982,
+      "sha256": "35fb7015e7abaee59143ee576b6bbc189edf7920d2d09706a27233d7665f3b57"
+    },
+    {
+      "name": "paper_gsm8k_reviews",
+      "rows": 982,
+      "unique_indices": 982,
+      "sha256": "a67d4be46eabe2b4c832d49275bffdd85bf1b4b12ea403bfb679f122926f0290"
+    }
+  ],
+  "expected_resume": {
+    "math500_cached": 500,
+    "gsm8k_cached": 982,
+    "gsm8k_remaining": 337,
+    "next_pending_benchmarks": [
+      "paper_gsm8k",
+      "paper_olympiadbench",
+      "paper_amc23"
+    ]
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "archive_sha256": "f5b3148c4e8389d2f352c80a9d5e54cc66e80fb733890a51c9a4f10aa3c79810",
+  "base_model_config_sha256": "1bb33a92c3548fbc68b889b490e810440435253598835bd71dff0396060c12db",
+  "failures": [],
+  "production_98_batches_authorized": false,
+  "prompt_group_ledger_sha256": "e687e18037f654b5c16cfa243f0d572753d4a7a6c3380a0778d9fbeb1f748ff2",
+  "ready_for_later_8gpu_production_shaped_canary": true,
+  "run_id": "baseline_triglu_2x5090_grpo_prelaunch_gate_20260712_v1",
+  "selection_ledger_sha256": "1097fdde429daf60eca6cbfb9b4e9f2f49ca5386133bd6618155087069a3968d",
+  "status": "passed",
+  "triglu_exact_noop": {
+    "exact": true,
+    "max_abs_logit_delta": 0.0
+  },
+  "variants": {
+    "baseline": {
+      "actor_vs_reference_max_abs_logprob_delta": 0.0,
+      "failures": [],
+      "on_policy": {
+        "count": 3999,
+        "finite_count": 3999,
+        "max_abs_logprob_delta": 0.31178927421569824,
+        "mean_abs_logprob_delta": 0.01989579528528388
+      },
+      "peak_actor_allocated_gib": 20.326456546783447,
+      "peak_actor_reserved_gib": 30.3671875,
+      "post_update_approx_kl": 0.0009038108558599249,
+      "post_update_clip_fraction": 0.009752438109527382,
+      "resume_max_abs_delta": 0.0,
+      "resume_repeat_count": 0,
+      "reward_categories": {
+        "correct": 1,
+        "extraction_or_format": 1,
+        "token_cap": 28,
+        "valid_but_wrong": 2
+      },
+      "reward_verifier_wiring_failures": 0,
+      "status": "passed",
+      "trainable_count": 11
+    },
+    "triglu": {
+      "actor_vs_reference_max_abs_logprob_delta": 0.0,
+      "direct_sync_vs_fresh_reload": {
+        "greedy_tokens_equal": true,
+        "max_abs_logprob_delta": 0.0
+      },
+      "failures": [],
+      "live_weight_sync": {
+        "changed_receiver_tensor_count": 21,
+        "loaded_count": 23,
+        "receiver_version": 2,
+        "sender_receiver_hash_match": true,
+        "sender_version": 2,
+        "wall_seconds": 0.7830368913710117,
+        "worker_load_seconds": 0.0285703856498003
+      },
+      "on_policy": {
+        "count": 4029,
+        "finite_count": 4029,
+        "max_abs_logprob_delta": 0.4765489101409912,
+        "mean_abs_logprob_delta": 0.01856929635780207
+      },
+      "peak_actor_allocated_gib": 21.36198902130127,
+      "peak_actor_reserved_gib": 26.15625,
+      "post_update_approx_kl": 0.0008876991556510995,
+      "post_update_clip_fraction": 0.010176222387689253,
+      "resume_max_abs_delta": 0.0,
+      "resume_repeat_count": 0,
+      "reward_categories": {
+        "correct": 1,
+        "token_cap": 28,
+        "valid_but_wrong": 3
+      },
+      "reward_verifier_wiring_failures": 0,
+      "side_trainable_count": 12,
+      "status": "passed",
+      "trainable_count": 23
+    }
+  }
+}

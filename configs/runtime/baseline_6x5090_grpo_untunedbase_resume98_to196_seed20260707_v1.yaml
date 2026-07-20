@@ -1,0 +1,46 @@
+inherits: baseline_6x5090_grpo_untunedbase_b98_seed20260707_v1.yaml
+
+experiment:
+  name: baseline_6x5090_grpo_untunedbase_resume98_to196_seed20260707_v1
+  seed: 20260707
+  init_seed: 20260707
+  rollout_seed: 20260707
+  initialization_contract: untuned_base_exact_noop
+  continuation_contract: exact_full_state_resume_global_step_98
+  reference_policy_contract: frozen_own_global_step_98
+
+grpo:
+  train_batch_size: 504
+  ppo_mini_batch_size: 126
+  ppo_micro_batch_size: 6
+  group_size: 4
+  total_training_steps: 196
+  save_freq: 10
+  test_freq: 999999
+  val_before_train: false
+
+logging:
+  run_id_template: baseline_6x5090_grpo_untunedbase_resume98_to196_seed20260707_v1
+
+continuation:
+  source_wave: triglu_baseline_6x5090_grpo_20to98_serial_20260712_v1
+  source_run_id: baseline_6x5090_grpo_untunedbase_b98_seed20260707_v1
+  source_global_step: 98
+  reference_policy_source_global_step: 98
+  reference_policy_scope: per_variant_frozen
+  milestones: [128, 158, 196]
+  interleaved_order: ["triglu", "baseline"]
+  retained_checkpoint_steps: [110, 120, 128, 140, 150, 158, 170, 180, 190, 196]
+  redundant_regular_checkpoint_steps: [100, 130, 160]
+  force_segment_endpoint_checkpoints: [128, 158, 196]
+  lr_decay:
+    enabled: true
+    scheduler: cosine
+    start_global_step: 128
+    end_global_step: 196
+    min_lr_ratio: 0.1
+
+pending_obligations_carried_forward:
+  PENDING-01: deferred; this trend eval does not close the Eval Parity Matrix
+  PENDING-02: deferred; pure-BF16 architecture work remains pending
+  PENDING-03: deferred; SHS registered CausalLM remains out of scope

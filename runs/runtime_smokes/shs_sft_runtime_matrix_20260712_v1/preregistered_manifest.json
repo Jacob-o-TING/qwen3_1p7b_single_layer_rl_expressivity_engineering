@@ -1,0 +1,27 @@
+{
+  "cells": [
+    "reference_eager",
+    "reference_compile",
+    "triton_recompute_eager",
+    "triton_recompute_compile"
+  ],
+  "checkpoint_trainable_sha256": "ebb4cd92f6e890c17cf0e14a883557358dff927e901b69588f1867e6dd016712",
+  "claims": {
+    "production_candidate": false,
+    "production_ready": false
+  },
+  "gradient_accumulation_steps": 8,
+  "max_seq_length": 2048,
+  "micro_batch_size": 1,
+  "resolved_topology": {
+    "effective_packed_batch_size": 8,
+    "nproc_per_node": 1,
+    "tensor_parallel_size": null,
+    "visible_gpu_count": 1
+  },
+  "run_id": "shs_sft_runtime_matrix_20260712_v1",
+  "status": "preregistered",
+  "timed_steps": 50,
+  "timestamp_utc": "2026-07-11T18:32:24.676167+00:00",
+  "warmup_steps": 5
+}

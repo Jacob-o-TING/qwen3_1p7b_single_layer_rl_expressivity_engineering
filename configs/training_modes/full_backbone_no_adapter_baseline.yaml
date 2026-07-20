@@ -1,0 +1,12 @@
+inherits: ../base_qwen3_1p7b.yaml
+experiment:
+  name: qwen3_1p7b_full_backbone_no_adapter_baseline_grpo
+freeze_policy:
+  mode: full
+  backbone_train_mode: full
+  freeze_embeddings: false
+  freeze_lm_head: false
+  train_adapter_modules: false
+architecture_variant:
+  name: identity
+  params: {}

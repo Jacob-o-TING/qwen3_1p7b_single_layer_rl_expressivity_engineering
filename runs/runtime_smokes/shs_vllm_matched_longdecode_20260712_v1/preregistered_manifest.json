@@ -1,0 +1,36 @@
+{
+  "cells": [
+    "naive_qwen",
+    "shs_reference",
+    "shs_triton_fast"
+  ],
+  "claims": {
+    "production_candidate": false,
+    "production_ready": false
+  },
+  "decoding": {
+    "max_tokens": 1024,
+    "min_tokens": 800,
+    "temperature": 0.8,
+    "top_p": 0.95
+  },
+  "engine": {
+    "max_num_batched_tokens": 131072,
+    "max_num_seqs": 64,
+    "prefix_caching": false,
+    "tp": 1
+  },
+  "pressures": [
+    1,
+    8,
+    16,
+    32,
+    64
+  ],
+  "prompt_manifest_sha256": "6995ae5c846e2013d26b97036cf6c2d7fdf87214eee587b0dd8953650d9b8cb1",
+  "run_id": "shs_vllm_matched_longdecode_20260712_v1",
+  "seed": 20260712,
+  "status": "preregistered",
+  "strict_triton_cell": "unavailable: grouped fast kernel failed fixed A1 cosine gate",
+  "timestamp_utc": "2026-07-11T19:02:20.252155+00:00"
+}

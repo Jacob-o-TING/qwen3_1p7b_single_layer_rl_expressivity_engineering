@@ -1,0 +1,82 @@
+{
+  "artifact_archive_sha256": "b4ac5da78eb41658de403dfbdaa53bd2ae752cbe0cedf81dbda4f16eb79ae902",
+  "conditional": {
+    "action": "accept_primary",
+    "profile_16384_executed": false,
+    "reasons": []
+  },
+  "control": {
+    "immutable_manifest_sha256": "929b3d56790438255d410c695f0a0459d1cbd1fb1bccaab04a78441ef3b23db8",
+    "max_num_batched_tokens": 131072
+  },
+  "decision": {
+    "hypothesis_confirmed": true,
+    "production_grpo_authorized": false,
+    "status": "degraded"
+  },
+  "engine_profile": {
+    "available_kv_cache_gib": 18.24,
+    "full_4096_token_concurrency": 41.68,
+    "gpu_memory_utilization": 0.85,
+    "kv_cache_tokens": 170720,
+    "max_num_batched_tokens": 32768,
+    "peak_activation_gib": 5.16
+  },
+  "identity": {
+    "base_source_commit": "bd7bd1e797d6e9424aed6950a003a5253b0e6a3e",
+    "balanced_config_sha256": "a91bff51b364b0f7cbcca74c90f6cffcf85e80c728dc59b639f8bab2c67681d9",
+    "balanced_runner_sha256": "93e6425ebb0fa7549090e3d8df9df8f51aa9b27a42cd2b4075e45efa3d6de78e",
+    "checkpoint_sha256": "ebb4cd92f6e890c17cf0e14a883557358dff927e901b69588f1867e6dd016712",
+    "export_model_sha256": "6266ca7fdba2f8e117d0560897562468163e9ddf997a4a15ec10944b3d22c583",
+    "prompt_manifest_sha256": "512f2e2c2720aa48dc7678d597e5954c19a7a53e05257f7b622f3d066820e278"
+  },
+  "matched_pressure64": {
+    "balanced_mean_tokens_per_second_per_gpu": 1892.129197981441,
+    "balanced_over_control": 3.902246629631175,
+    "balanced_over_rtx_pro6000": 0.8361893220706385,
+    "balanced_pair_tokens_per_second": 3742.1217845778833,
+    "control_pair_tokens_per_second": 958.9659854306989,
+    "rtx_pro6000_anchor_tokens_per_second_per_gpu": 2262.8
+  },
+  "production_pressure64": {
+    "balanced_over_control": 2.012474761052619,
+    "balanced_pair_tokens_per_second": 899.0736865829136,
+    "cap_hit_fraction": 0.0625,
+    "control_pair_tokens_per_second": 446.7502917217485,
+    "output_length_mean": 668.7421875,
+    "output_length_p50": 391.0,
+    "output_length_p90": 1710.0,
+    "pair_overlap_fraction": 0.9758642980685657,
+    "pair_start_skew_seconds": 0.5451464653015137,
+    "peak_memory_mib_by_gpu": {
+      "gpu0": 23873.0,
+      "gpu1": 24701.0
+    },
+    "request_latency_p50_seconds": null,
+    "request_latency_p90_seconds": null
+  },
+  "projection_8x5090": {
+    "ideal_aggregate_tokens_per_second": 3596.2947463316546,
+    "pure_rollout_hours": {
+      "20_batches": 3.19,
+      "50_batches": 7.98,
+      "98_batches": 15.63,
+      "196_batches": 31.26,
+      "391_batches": 62.36
+    },
+    "pure_rollout_seconds_per_global_batch": 574.2054380015386
+  },
+  "pressure_scaling": {
+    "ideal_p64_over_p16": 4.0,
+    "matched_p64_over_p16": 3.727509197594349,
+    "production_p64_over_p16": 3.5534093269574973
+  },
+  "run_id": "shs_2x5090_kv_balanced_throughput_20260712_v1",
+  "sampling_stability": {
+    "pressure16_equal_traces": 32,
+    "pressure32_equal_traces": 10,
+    "pressure64_equal_traces": 34,
+    "pressure64_request_count": 128,
+    "pressure64_seed_equal_count": 128
+  }
+}

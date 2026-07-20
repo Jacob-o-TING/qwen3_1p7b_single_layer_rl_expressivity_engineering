@@ -1,0 +1,3 @@
+{"backend": "reference", "buffer_devices": ["cuda:0"], "fallback": false, "in_features": 2048, "out_features": 6144, "pid": 25120}
+{"backend": "reference", "buffer_devices": ["cuda:0"], "fallback": false, "in_features": 2048, "out_features": 6144, "pid": 25120}
+{"backend": "reference", "buffer_devices": ["cuda:0"], "fallback": false, "in_features": 6144, "out_features": 2048, "pid": 25120}

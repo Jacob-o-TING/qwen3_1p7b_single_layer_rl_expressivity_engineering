@@ -1,0 +1,152 @@
+schema_version: 1
+experiment:
+  name: qwen3_1p7b_single_layer_grpo
+  description: Paper-aligned base config for Qwen3-1.7B single-layer RL.
+  seed: 20260707
+  init_seed: 20260707
+  rollout_seed: 20260707
+  output_root: runs
+  artifact_policy:
+    save_logs: true
+    save_metrics: true
+    save_best: true
+    save_latest: true
+    save_intermediate_checkpoints: false
+
+model:
+  name_or_path: Qwen/Qwen3-1.7B-Base
+  family: qwen3
+  num_layers: 28
+  hidden_size: 2048
+  intermediate_size: 6144
+  context_length: 32768
+  q_heads: 16
+  kv_heads: 8
+  dtype: bfloat16
+  trust_remote_code: false
+
+dataset:
+  name: NuminaMath-CoT
+  source: AI-MO/NuminaMath-CoT
+  split: train
+  target_size_after_decontam: 50000
+  sampling_seed: 20260707
+  shuffle: true
+  dataloader_seed: 20260707
+  materialized_train: data/numina_math_cot_50k_decontam_v3/train.parquet
+  materialized_val: data/numina_math_cot_50k_decontam_v3/val.parquet
+  materialization_manifest: data/numina_math_cot_50k_decontam_v3/prep_manifest.json
+  integrity_report: data/numina_math_cot_50k_decontam_v3/data_integrity_report.json
+  online_source_contract: configs/data/numina_math_cot_e8b6aad.json
+  selection_provenance_manifest: data_manifests/numina_math_cot_50k_decontam_v3/manifest.json
+  selection_provenance_ledger: data_manifests/numina_math_cot_50k_decontam_v3/selected_rows.tsv
+  selection_provenance_ledger_sha256: 1097fdde429daf60eca6cbfb9b4e9f2f49ca5386133bd6618155087069a3968d
+  identical_order_contract: all variants must use the same materialized parquet files, train_batch_size, shuffle flag, and dataloader_seed
+  decontam:
+    enabled: true
+    benchmark_names:
+      - MATH500
+      - GSM8K
+      - OlympiadBench
+      - AMC
+    method: normalized_exact_or_token_8gram
+    normalization_version: nfkc_lower_latexspace_punct_ws_v2
+    token_ngram_size: 8
+    jaccard_threshold: 0.5
+    containment_threshold: 0.8
+    benchmark_contract: data/decontam/qwen_math_eval_a45202bd16f1ec06f433442dc1152d0074773465/benchmark_problems.jsonl
+    benchmark_contract_sha256: b6ccec96b4fe0f78de6bdf37e63fc15da73ec6590024a4b759963916709c913e
+    require_zero_source_duplicates: true
+    require_zero_train_val_overlap: true
+
+reward:
+  name: math_answer_match
+  verifier: verl_math_verify
+  binary: true
+  normalize_group_rewards: true
+
+freeze_policy:
+  # Explicit training contract:
+  # - backbone_train_mode: frozen | selected | full
+  # - train_adapter_modules: false | true
+  mode: single_layer
+  backbone_train_mode: selected
+  train_layers:
+    - 10
+  freeze_embeddings: true
+  freeze_lm_head: true
+  train_adapter_modules: false
+  adapter_name_markers:
+    - .adapters.
+    - .adapter.
+    - .oft_like.
+    - .oft_like
+    - .shs.
+    - .triglu_side.
+  audit_trainable_names: true
+
+architecture_variant:
+  name: identity
+  params: {}
+
+grpo:
+  framework: verl
+  algorithm: GRPO
+  optimizer: AdamW
+  learning_rate: 5.0e-6
+  full_baseline_lr_sweep:
+    - 1.0e-6
+    - 3.0e-6
+    - 5.0e-6
+    - 1.0e-5
+  adaptive_lr:
+    enabled: false
+    base_lr: 5.0e-6
+    boosted_lr: 1.0e-5
+  train_batch_size: 512
+  ppo_mini_batch_size: 128
+  ppo_micro_batch_size: 8
+  group_size: 4
+  max_prompt_length: 1024
+  max_response_length: 3072
+  kl_coefficient: 0.001
+  clip_range: 0.2
+  epochs: 4
+
+runtime:
+  launcher: torchrun
+  nnodes: 1
+  # Default to the 4-GPU AutoDL target discussed for first reproduction runs.
+  # Override to 8 on an 8-GPU H800/H100/H200 node.
+  nproc_per_node: 4
+  backend: fsdp
+  inference_backend: hf
+  rollout:
+    # For the architecture-variant wave, use patched synchronous HF rollout so
+    # rollout generation executes the same model surgery as actor training.
+    # vLLM is still appropriate for a later plain-baseline speed run.
+    tensor_model_parallel_size: 1
+    replicas_per_node: 4
+    max_num_seqs: 64
+    gpu_memory_utilization: 0.85
+    max_num_batched_tokens: 131072
+  dry_run: false
+  mixed_precision: bf16
+  determinism:
+    python_hash_seed: 20260707
+    data_seed: 20260707
+    actor_data_loader_seed: 20260707
+    same_init_seed_across_variants: true
+    same_data_order_across_variants: true
+
+logging:
+  run_id_template: "{experiment_name}_{variant_name}_seed{seed}"
+  trackers:
+    - jsonl
+  metrics:
+    - reward_mean
+    - reward_std
+    - response_length
+    - kl
+    - clipfrac
+    - trainable_parameter_count

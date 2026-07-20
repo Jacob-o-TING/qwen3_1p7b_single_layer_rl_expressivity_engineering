@@ -1,0 +1,21 @@
+inherits: layer10_whole_layer_oft.yaml
+
+experiment:
+  name: qwen3_1p7b_layer10_whole_layer_oft_fp32_swigluonly_grpo
+
+architecture_variant:
+  name: qwen_swiglu_oft
+  params:
+    target_layers:
+      - 10
+    target_modules:
+      - mlp.gate_proj
+      - mlp.up_proj
+      - mlp.down_proj
+    block_size: 64
+    fp32_compute: true
+    init: identity
+    notes: FP32 Cayley solve and rotation application on Layer-10 SwiGLU only; no attention OFT. Base SwiGLU stays frozen while the remaining selected-layer attention and norms follow the matched whole-layer trainable policy.
+
+logging:
+  run_id_template: "qwen3_1p7b_layer10_oft_fp32_swigluonly_numina50k_grpo_seed{seed}"

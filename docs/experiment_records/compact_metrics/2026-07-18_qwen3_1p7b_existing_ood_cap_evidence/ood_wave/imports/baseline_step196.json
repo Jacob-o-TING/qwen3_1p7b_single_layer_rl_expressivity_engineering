@@ -1,0 +1,9 @@
+{
+  "corrected_humanevalplus_root": "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/eval_protocol/qwen3_1p7b_heplus_prompt_matrix_full164_20260717_v1/models/baseline_step196",
+  "corrected_humanevalplus_summary_sha256": "fc81a2d8e02bcea07ef3e58429754fd3a03a3228ea8b03238dcdff4aa0159c55",
+  "label": "baseline_step196",
+  "predictions_regenerated": false,
+  "source_root": "/root/autodl-tmp/qwen3_1p7b_single_layer_rl/runs/ood_eval/qwen3_1p7b_ood_6x5090_baseline_step196_20260717_v1",
+  "source_summary_sha256": "e53f9c60137530cddb66f0427d1650b58ba4ccdea4031b3f8c383d98a418e226",
+  "status": "IMPORTED_COMPLETE"
+}

@@ -1,0 +1,271 @@
+{
+  "cases": {
+    "reference_compile": {
+      "benchmark": true,
+      "cold_step_seconds": 105.71371208131313,
+      "compile_mode": "default",
+      "correctness_loss": 0.5444959332654191,
+      "dispatch_receipt": {
+        "actual": [
+          "reference",
+          "reference",
+          "reference"
+        ],
+        "custom_backward": null,
+        "fallback": false,
+        "requested": "reference"
+      },
+      "dynamo_counters": {
+        "aot_autograd": {
+          "autograd_cache_bypass": 1,
+          "ok": 1,
+          "total": 1
+        },
+        "aten_mm_info": {
+          "aten.addmm_2048_2048_2048": 2,
+          "aten.addmm_2048_6144_2048": 2,
+          "aten.addmm_6144_2048_2048": 2,
+          "aten.mm_1024_2048_2048": 2,
+          "aten.mm_2048_1024_2048": 56,
+          "aten.mm_2048_151936_2048": 1,
+          "aten.mm_2048_192_2048": 64,
+          "aten.mm_2048_192_64": 32,
+          "aten.mm_2048_2048_1024": 36,
+          "aten.mm_2048_2048_151936": 1,
+          "aten.mm_2048_2048_192": 32,
+          "aten.mm_2048_2048_2048": 98,
+          "aten.mm_2048_2048_6144": 65,
+          "aten.mm_2048_2048_64": 32,
+          "aten.mm_2048_6144_2048": 74,
+          "aten.mm_2048_6144_64": 128,
+          "aten.mm_2048_64_192": 32,
+          "aten.mm_2048_64_2048": 64,
+          "aten.mm_2048_64_6144": 128,
+          "aten.mm_2048_64_64": 128,
+          "aten.mm_6144_2048_2048": 1,
+          "aten.mm_6144_64_2048": 128,
+          "aten.mm_64_192_2048": 32,
+          "aten.mm_64_64_2048": 64
+        },
+        "frames": {
+          "ok": 1,
+          "total": 1
+        },
+        "inductor": {
+          "async_compile_cache_hit": 111,
+          "async_compile_cache_miss": 222,
+          "benchmarking.InductorBenchmarker.benchmark": 152,
+          "benchmarking.InductorBenchmarker.benchmark_gpu": 152,
+          "extern_calls": 2538,
+          "fxgraph_cache_miss": 2,
+          "pad_rewritten_as_cat": 1,
+          "pattern_matcher_count": 2603,
+          "pattern_matcher_nodes": 3286,
+          "removed_pointless_view_pair": 192,
+          "triton_bundler_save_kernel": 1648,
+          "triton_bundler_save_static_autotuner": 2
+        },
+        "stats": {
+          "calls_captured": 3915,
+          "unique_graphs": 1
+        }
+      },
+      "global_step": 56,
+      "max_memory_allocated_gb": 11.382823467254639,
+      "max_memory_reserved_gb": 12.083984375,
+      "run_id": "reference_compile",
+      "step_seconds_mean": 1.4702079162746668,
+      "step_seconds_median": 1.4698426388204098,
+      "step_seconds_p10": 1.4685782194137573,
+      "step_seconds_p90": 1.4721854431554675,
+      "step_seconds_stdev": 0.0017799390116243815,
+      "timed_assistant_tokens": 561498,
+      "timed_assistant_tokens_per_second": 7638.348206188001,
+      "timed_non_padding_tokens": 684144,
+      "timed_non_padding_tokens_per_second": 9306.765287096809,
+      "timed_steps": 50,
+      "wall_seconds": 186.68632423412055,
+      "warmup_steps": 5
+    },
+    "reference_eager": {
+      "benchmark": true,
+      "cold_step_seconds": 2.3294429583474994,
+      "compile_mode": "eager",
+      "correctness_loss": 0.5441509855095872,
+      "dispatch_receipt": {
+        "actual": [
+          "reference",
+          "reference",
+          "reference"
+        ],
+        "custom_backward": null,
+        "fallback": false,
+        "requested": "reference"
+      },
+      "dynamo_counters": {},
+      "global_step": 56,
+      "max_memory_allocated_gb": 18.43775749206543,
+      "max_memory_reserved_gb": 19.537109375,
+      "run_id": "reference_eager",
+      "step_seconds_mean": 1.4527783306874336,
+      "step_seconds_median": 1.4526015841402113,
+      "step_seconds_p10": 1.4446725100278854,
+      "step_seconds_p90": 1.4570594290271401,
+      "step_seconds_stdev": 0.029811985482899442,
+      "timed_assistant_tokens": 561498,
+      "timed_assistant_tokens_per_second": 7729.988645057878,
+      "timed_non_padding_tokens": 684144,
+      "timed_non_padding_tokens_per_second": 9418.422419286404,
+      "timed_steps": 50,
+      "wall_seconds": 82.46959373075515,
+      "warmup_steps": 5
+    },
+    "triton_recompute_compile": {
+      "benchmark": true,
+      "cold_step_seconds": 49.252836775034666,
+      "compile_mode": "default",
+      "correctness_loss": 0.5442828749328082,
+      "dispatch_receipt": {
+        "actual": [
+          "triton_forward_reference_recompute_backward",
+          "triton_forward_reference_recompute_backward",
+          "triton_forward_reference_recompute_backward"
+        ],
+        "custom_backward": false,
+        "fallback": false,
+        "requested": "triton_reference_recompute"
+      },
+      "dynamo_counters": {
+        "aot_autograd": {
+          "autograd_cache_bypass": 1,
+          "autograd_cache_miss": 16,
+          "autograd_cache_saved": 15,
+          "ok": 17,
+          "total": 17
+        },
+        "aten_mm_info": {
+          "aten.addmm_2048_2048_2048": 2,
+          "aten.addmm_2048_6144_2048": 1,
+          "aten.mm_1024_2048_2048": 2,
+          "aten.mm_2048_1024_2048": 6,
+          "aten.mm_2048_151936_2048": 1,
+          "aten.mm_2048_192_64": 32,
+          "aten.mm_2048_2048_1024": 4,
+          "aten.mm_2048_2048_151936": 1,
+          "aten.mm_2048_2048_2048": 16,
+          "aten.mm_2048_2048_6144": 7,
+          "aten.mm_2048_2048_64": 32,
+          "aten.mm_2048_6144_2048": 8,
+          "aten.mm_2048_6144_64": 32,
+          "aten.mm_2048_64_192": 32,
+          "aten.mm_2048_64_2048": 64,
+          "aten.mm_2048_64_6144": 32,
+          "aten.mm_2048_64_64": 64,
+          "aten.mm_6144_2048_2048": 2,
+          "aten.mm_6144_64_2048": 32,
+          "aten.mm_64_192_2048": 32,
+          "aten.mm_64_64_2048": 32
+        },
+        "frames": {
+          "ok": 41,
+          "total": 44
+        },
+        "graph_break": {
+          "Unsupported Tensor.item() call with capture_scalar_outputs=False\n  Explanation: Dynamo does not support tracing `Tensor.item()` with config.capture_scalar_outputs=False.\n  Hint: Set `torch._dynamo.config.capture_scalar_outputs = True` or `export TORCHDYNAMO_CAPTURE_SCALAR_OUTPUTS=1` to include these operations in the captured graph.\n\n  Developer debug context: call_method TensorVariable() item () {}\n\n For more details about this graph break, please visit: https://meta-pytorch.github.io/compile-graph-break-site/gb/gb0124.html": 12
+        },
+        "inductor": {
+          "async_compile_cache_hit": 115,
+          "async_compile_cache_miss": 232,
+          "benchmarking.InductorBenchmarker.benchmark": 148,
+          "benchmarking.InductorBenchmarker.benchmark_gpu": 148,
+          "extern_calls": 849,
+          "fxgraph_cache_hit": 1,
+          "fxgraph_cache_miss": 26,
+          "pad_rewritten_as_cat": 1,
+          "pattern_matcher_count": 835,
+          "pattern_matcher_nodes": 1129,
+          "removed_pointless_view_pair": 128,
+          "triton_bundler_load_static_autotuner": 5,
+          "triton_bundler_save_kernel": 1504,
+          "triton_bundler_save_static_autotuner": 24
+        },
+        "resumes": {
+          "torch_dynamo_resume_in_forward_at_219": 2,
+          "torch_dynamo_resume_in_forward_at_275": 1,
+          "torch_dynamo_resume_in_forward_at_344": 1,
+          "torch_dynamo_resume_in_forward_at_345": 1,
+          "torch_dynamo_resume_in_forward_at_480": 1,
+          "torch_dynamo_resume_in_wrapper_at_918": 1,
+          "torch_dynamo_resume_in_wrapper_at_977": 1
+        },
+        "stats": {
+          "calls_captured": 1063,
+          "unique_graphs": 17
+        },
+        "unimplemented": {
+          "Attempt to trace generator\n  Explanation: Generators cannot be compiled directly with `torch.compile`.\n  Hint: Call a generator from inside of a non-generator Python function and compile that function instead.\n  Hint: This graph break is fundamental - it is unlikely that Dynamo will ever be able to trace through your code. Consider finding a workaround.\n\n  Developer debug context: \n\n For more details about this graph break, please visit: https://meta-pytorch.github.io/compile-graph-break-site/gb/gb0003.html": 1,
+          "Unsupported Tensor.item() call with capture_scalar_outputs=False\n  Explanation: Dynamo does not support tracing `Tensor.item()` with config.capture_scalar_outputs=False.\n  Hint: Set `torch._dynamo.config.capture_scalar_outputs = True` or `export TORCHDYNAMO_CAPTURE_SCALAR_OUTPUTS=1` to include these operations in the captured graph.\n\n  Developer debug context: call_method TensorVariable() item () {}\n\n For more details about this graph break, please visit: https://meta-pytorch.github.io/compile-graph-break-site/gb/gb0124.html": 3,
+          "Unsupported Tensor.item() call with capture_scalar_outputs=False\n  Explanation: Dynamo does not support tracing `Tensor.item()` with config.capture_scalar_outputs=False.\n  Hint: Set `torch._dynamo.config.capture_scalar_outputs = True` or `export TORCHDYNAMO_CAPTURE_SCALAR_OUTPUTS=1` to include these operations in the captured graph.\n\n  Developer debug context: call_method TensorVariable() item () {}\n\n For more details about this graph break, please visit: https://meta-pytorch.github.io/compile-graph-break-site/gb/gb0124.html\n\n*** While handling this graph break, another graph break occurred: ***\n\ngraph break in loop\n  Explanation: torch.compile detected a graph break in a for/while loop. Skipping the frame and falling back to eager, as graph breaks in loops are not supported.\n  Hint: This graph break may have been caused by an earlier graph break. Resolving the earlier graph break may resolve this one.\n\n  Developer debug context: frame skipped: forward (/root/miniconda3/lib/python3.12/site-packages/transformers/models/qwen3/modeling_qwen3.py line 354)\n\n For more details about this graph break, please visit: https://meta-pytorch.github.io/compile-graph-break-site/gb/gb7000.html": 1
+        }
+      },
+      "global_step": 56,
+      "max_memory_allocated_gb": 9.77833890914917,
+      "max_memory_reserved_gb": 10.181640625,
+      "run_id": "triton_recompute_compile",
+      "step_seconds_mean": 3.3037625183537602,
+      "step_seconds_median": 3.3034413382411003,
+      "step_seconds_p10": 3.298342240974307,
+      "step_seconds_p90": 3.3081490071490407,
+      "step_seconds_stdev": 0.005448229926982382,
+      "timed_assistant_tokens": 561498,
+      "timed_assistant_tokens_per_second": 3399.1426252985652,
+      "timed_non_padding_tokens": 684144,
+      "timed_non_padding_tokens_per_second": 4141.605192257607,
+      "timed_steps": 50,
+      "wall_seconds": 231.0052539901808,
+      "warmup_steps": 5
+    },
+    "triton_recompute_eager": {
+      "benchmark": true,
+      "cold_step_seconds": 4.90143583342433,
+      "compile_mode": "eager",
+      "correctness_loss": 0.5439060087229,
+      "dispatch_receipt": {
+        "actual": [
+          "triton_forward_reference_recompute_backward",
+          "triton_forward_reference_recompute_backward",
+          "triton_forward_reference_recompute_backward"
+        ],
+        "custom_backward": false,
+        "fallback": false,
+        "requested": "triton_reference_recompute"
+      },
+      "dynamo_counters": {},
+      "global_step": 56,
+      "max_memory_allocated_gb": 14.85230827331543,
+      "max_memory_reserved_gb": 15.916015625,
+      "run_id": "triton_recompute_eager",
+      "step_seconds_mean": 3.5964751890674234,
+      "step_seconds_median": 3.5947740795090795,
+      "step_seconds_p10": 3.5897240675985813,
+      "step_seconds_p90": 3.6093775555491447,
+      "step_seconds_stdev": 0.015984194279918623,
+      "timed_assistant_tokens": 561498,
+      "timed_assistant_tokens_per_second": 3122.490608064493,
+      "timed_non_padding_tokens": 684144,
+      "timed_non_padding_tokens_per_second": 3804.525064316657,
+      "timed_steps": 50,
+      "wall_seconds": 202.74888369813561,
+      "warmup_steps": 5
+    }
+  },
+  "dispatch_failures": [],
+  "projected_3916_step_seconds": {
+    "reference_compile": 5755.903773620725,
+    "reference_eager": 5688.387803493068,
+    "triton_recompute_compile": 12936.276280552149,
+    "triton_recompute_eager": 14077.135295357555
+  },
+  "run_id": "shs_sft_runtime_matrix_20260712_v1",
+  "status": "passed"
+}

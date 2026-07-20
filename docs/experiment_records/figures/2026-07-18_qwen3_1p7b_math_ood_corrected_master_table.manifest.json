@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-07-18T19:29:24.395174+00:00",
+  "source": "docs\\experiment_records\\compact_metrics\\2026-07-18_qwen3_1p7b_math_ood_corrected_master_table.json",
+  "source_sha256": "bac664863c367f130599ee33e59ae783594eb1635d04b3ba4180736a172029ad",
+  "output": "docs\\experiment_records\\figures\\2026-07-18_qwen3_1p7b_math_ood_corrected_master_table.png",
+  "output_sha256": "afa296e0ba7260f33de9cb55d1cd143a9d2c912f8d7e0b9b1b3fae0ad43b49f6",
+  "dimensions_px": {
+    "width": 4670,
+    "height": 1461
+  },
+  "row_count": 12,
+  "checkpoint_rows": 10,
+  "summary_rows": 2,
+  "display_steps": [
+    158,
+    196,
+    226,
+    256,
+    294
+  ],
+  "early_steps_excluded_because_they_lack_ood_coverage": [
+    20,
+    30,
+    60,
+    98,
+    128
+  ],
+  "visual_inspection": "setting header, grouped columns, values, footnotes, and axes-free table framing checked"
+}

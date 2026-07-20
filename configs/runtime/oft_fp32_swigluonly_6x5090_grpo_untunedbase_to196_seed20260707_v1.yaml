@@ -1,0 +1,68 @@
+inherits: ../layer10_whole_layer_oft_fp32.yaml
+
+experiment:
+  name: oft_fp32_swigluonly_6x5090_grpo_untunedbase_to196_seed20260707_v1
+  seed: 20260707
+  init_seed: 20260707
+  rollout_seed: 20260707
+  initialization_contract: untuned_base_exact_noop
+  reference_policy_contract: frozen_own_global_step_98_after_initial_base_reference
+
+dataset:
+  materialized_train: data/numina_math_cot_50k_decontam_v3_verl/train.parquet
+  materialized_val: data/numina_math_cot_50k_decontam_v3_verl/val.parquet
+
+grpo:
+  train_batch_size: 504
+  ppo_mini_batch_size: 126
+  ppo_micro_batch_size: 6
+  group_size: 4
+  total_training_steps: 196
+  save_freq: 10
+  test_freq: 999999
+  val_before_train: false
+
+runtime:
+  nnodes: 1
+  nproc_per_node: 6
+  inference_backend: vllm
+  mixed_precision: bf16
+  dataloader_num_workers: 12
+  rollout:
+    tensor_model_parallel_size: 1
+    replicas_per_node: 6
+    max_num_seqs: 64
+    gpu_memory_utilization: 0.5
+    max_num_batched_tokens: 32768
+
+logging:
+  run_id_template: oft_fp32_swigluonly_6x5090_grpo_untunedbase_to196_seed20260707_v1
+
+continuation:
+  source_model: Qwen3-1.7B-Base
+  initial_reference_policy: exact_identity_oft_over_untuned_base
+  reference_reset_global_step: 98
+  reference_policy_scope: per_variant_frozen
+  milestones: [1, 20, 98, 128, 158, 196]
+  retained_checkpoint_steps: [1, 10, 20, 30, 40, 50, 60, 70, 80, 90, 98, 110, 120, 128, 140, 150, 158, 170, 180, 190, 196]
+  redundant_regular_checkpoint_steps: [100, 130, 160]
+  force_segment_endpoint_checkpoints: [1, 20, 98, 128, 158, 196]
+  lr_decay:
+    enabled: true
+    scheduler: cosine
+    start_global_step: 128
+    end_global_step: 196
+    min_lr_ratio: 0.1
+
+scientific_controls:
+  attention_oft: false
+  swiglu_oft: true
+  oft_parameter_dtype: float32
+  oft_rotation_compute_dtype: float32
+  base_model_runtime_dtype: bfloat16
+  purpose: Separate added constrained FFN expressivity from the FP32 custom-path precision hypothesis.
+
+pending_obligations_carried_forward:
+  PENDING-01: deferred; this trend evaluation does not close the Eval Parity Matrix
+  PENDING-02: deferred; pure-BF16 SHS and TriGLU remain pending and this OFT control intentionally uses FP32
+  PENDING-03: deferred; SHS registered CausalLM remains out of scope

@@ -1,0 +1,33 @@
+{
+  "benchmark": true,
+  "cold_step_seconds": 4.90143583342433,
+  "compile_mode": "eager",
+  "correctness_loss": 0.5439060087229,
+  "dispatch_receipt": {
+    "actual": [
+      "triton_forward_reference_recompute_backward",
+      "triton_forward_reference_recompute_backward",
+      "triton_forward_reference_recompute_backward"
+    ],
+    "custom_backward": false,
+    "fallback": false,
+    "requested": "triton_reference_recompute"
+  },
+  "dynamo_counters": {},
+  "global_step": 56,
+  "max_memory_allocated_gb": 14.85230827331543,
+  "max_memory_reserved_gb": 15.916015625,
+  "run_id": "triton_recompute_eager",
+  "step_seconds_mean": 3.5964751890674234,
+  "step_seconds_median": 3.5947740795090795,
+  "step_seconds_p10": 3.5897240675985813,
+  "step_seconds_p90": 3.6093775555491447,
+  "step_seconds_stdev": 0.015984194279918623,
+  "timed_assistant_tokens": 561498,
+  "timed_assistant_tokens_per_second": 3122.490608064493,
+  "timed_non_padding_tokens": 684144,
+  "timed_non_padding_tokens_per_second": 3804.525064316657,
+  "timed_steps": 50,
+  "wall_seconds": 202.74888369813561,
+  "warmup_steps": 5
+}
