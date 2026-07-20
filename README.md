@@ -26,8 +26,13 @@ excluded.
 
 ## Technical report
 
+The canonical technical report is maintained under `docs/technical_report/`,
+with the publication-ready PDF at
+`docs/technical_report/expressivity_engineering_qwen3_1p7b.pdf`.
+
 - [Technical report (PDF)](docs/technical_report/expressivity_engineering_qwen3_1p7b.pdf)
-- [LaTeX source and build notes](docs/technical_report/README.md)
+- [LaTeX source](docs/technical_report/expressivity_engineering_qwen3_1p7b.tex)
+- [Source layout and build notes](docs/technical_report/README.md)
 - [Corrected consolidated result table](docs/experiment_records/2026-07-18_qwen3-1p7b-math-ood-corrected-consolidated-master-table.md)
 
 The report defines the EE taxonomy, documents the exact TriGLU/ToTGLU
