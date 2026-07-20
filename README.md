@@ -1,16 +1,39 @@
 # Qwen3-1.7B Expressivity Engineering
 
-Research code for Qwen3-1.7B-Base single-layer reinforcement learning and
-feed-forward-network expressivity experiments. The repository contains GRPO /
-veRL-style training infrastructure, SHS, TriGLU and OFT variants, registered
-vLLM integration points, reproducible evaluation utilities, and compact
-experiment records.
+Expressivity Engineering (EE) is a design perspective for studying neural
+computation whose effective transform depends more richly on its current input
+than ordinary linear channel mixing. This repository tests that perspective by
+adding an exact-no-op, multiplicative TriGLU side network to one feed-forward
+layer of Qwen3-1.7B-Base and comparing it with a matched whole-layer GRPO
+baseline.
+
+The experiment uses the layer-localization and single-layer reinforcement
+learning workflow of *Is One Layer Enough?* as practical guide rails: Layer 10,
+the freezing boundary, GRPO data flow, and the Math/OOD evaluation structure.
+The EE hypothesis and TriGLU intervention are separate contributions. This
+bounded setup makes a higher-capacity architecture test possible without
+pretraining a new model from scratch.
+
+The repository contains GRPO / veRL-style training infrastructure, SHS,
+TriGLU and OFT variants, registered vLLM integration points, reproducible
+evaluation utilities, and compact experiment records.
 
 The lightweight local test path does not load Qwen weights or require veRL.
 Full training requires a separate GPU environment, Qwen3 weights, veRL, and
 the selected datasets. Model weights, datasets, checkpoints, uncurated
 generations, private operational logs, and chat transcripts are intentionally
 excluded.
+
+## Technical report
+
+- [Technical report (PDF)](docs/technical_report/expressivity_engineering_qwen3_1p7b.pdf)
+- [LaTeX source and build notes](docs/technical_report/README.md)
+- [Corrected consolidated result table](docs/experiment_records/2026-07-18_qwen3-1p7b-math-ood-corrected-consolidated-master-table.md)
+
+The report defines the EE taxonomy, documents the exact TriGLU/ToTGLU
+implementation and six-GPU training contract, presents corrected matched-step
+Math and OOD results, records protocol and response-cap boundaries, and
+separates supported findings from proposed scaling directions.
 
 ## Repository status
 

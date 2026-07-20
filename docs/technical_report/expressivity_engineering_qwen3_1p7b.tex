@@ -1,0 +1,760 @@
+\documentclass[10pt]{article}
+
+\usepackage[margin=0.78in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{siunitx}
+\usepackage{enumitem}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{pdflscape}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,fit}
+
+\definecolor{ink}{HTML}{172B3A}
+\definecolor{accent}{HTML}{176B87}
+\definecolor{softblue}{HTML}{EAF3F7}
+\definecolor{softgray}{HTML}{F3F5F6}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=accent,
+  citecolor=accent,
+  urlcolor=accent,
+  pdftitle={Expressivity Engineering for Single-Layer Reinforcement Learning},
+  pdfauthor={Hanting Wu}
+}
+\setlist{nosep,leftmargin=1.4em}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.42em}
+\sisetup{detect-all,round-mode=places,round-precision=3}
+
+\newcommand{\EE}{\textit{Expressivity Engineering}}
+\newcommand{\TriGLU}{\textsc{TriGLU}}
+\newcommand{\ToTGLU}{\textsc{ToTGLU}}
+\newcommand{\GRPO}{\textsc{GRPO}}
+\newcommand{\ourmodel}{Layer-10 \TriGLU{}}
+\newcommand{\baseline}{Layer-10 baseline}
+\newcommand{\caveat}[1]{\textcolor{ink}{\textbf{Boundary.} #1}}
+
+\title{\vspace{-1.5em}\textbf{Expressivity Engineering for Single-Layer Reinforcement Learning}\\
+\large A Controlled TriGLU Study on Qwen3-1.7B-Base}
+\author{Hanting Wu\\\small Independent Research}
+\date{July 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We introduce \EE{} (EE), a design perspective that studies how higher-order,
+multiplicative, and input-conditioned interactions can be added to neural
+network computation beyond pure linear channel mixing.  To test this proposal
+under a bounded compute budget, we use the layer-selective reinforcement
+learning workflow of \citet{zhang2026onelayer} as experimental guide rails:
+Qwen3-1.7B-Base is trained with Group Relative Policy Optimization while only
+decoder Layer 10 is updated.  The EE intervention retains the original SwiGLU
+path and adds an exact-no-op-initialized, FP32 side network that multiplicatively
+modulates the Layer-10 SwiGLU hidden state.  The implementation, called
+\TriGLU{} in code and more descriptively \ToTGLU{} in this report, adds
+20,986,368 parameters, or 41.69\% of one Qwen3-1.7B decoder layer.
+
+We compare the intervention with a matched naive whole-Layer-10 baseline.  Both
+runs start from the same untuned Qwen3-1.7B-Base revision and share data order,
+initialization and rollout seeds, reward, response cap, and a six-GPU
+\texttt{504/126/6} train/mini/micro-batch contract.  Corrected evaluations are
+reported at matched global steps 158, 196, 226, 256, and 294.  Averaged across
+these correlated checkpoints, \TriGLU{} improves MathAvg from 52.224 to 52.997
+(+0.773 points) and the provisional CodeAvg from 32.671 to 33.659 (+0.988),
+while Reasoning and Language category averages are approximately tied
+(-0.213 and -0.128).  The clearest gains occur on harder generative tasks:
+OlympiadBench (+2.548), corrected LiveCodeBench (+1.063), and a manually
+audited GPQA-Diamond-Freeform diagnostic (+1.746).  These results are promising
+but not definitive: they come from one training seed, checkpoint variation is
+not independent-seed uncertainty, several evaluation protocols required
+correction, and response-length caps remain in both training and evaluation.
+The study therefore establishes an artifact-backed positive pilot for EE-PEFT, not
+a general scaling-law claim.
+\end{abstract}
+
+\section{Introduction}
+
+Modern Transformer blocks alternate token mixing with channel mixing.  Within
+the feed-forward network (FFN), a linear map can mix channels but cannot by
+itself express multiplicative interactions among features.  Gated linear units
+already weaken this limitation by multiplying two learned streams; SwiGLU is a
+particularly successful example \citep{shazeer2020glu}.  Hypernetworks generate
+or modulate parameters from context \citep{ha2016hypernetworks}; mixtures of
+experts route inputs through specialized computation; polynomial activations
+explicitly introduce higher-order terms.  These methods are usually discussed
+in separate literatures despite sharing a practical objective: making the
+model's effective computation depend more richly on its current state.
+
+We propose \EE{} as a unifying engineering lens for that objective.  In this
+report, an EE operation is one that introduces a learned multiplicative,
+higher-order, routed, or dynamically parameterized interaction, as opposed to
+only applying another static linear channel-mixing map.  This is a working
+taxonomy rather than a theorem that totally orders neural architectures by
+expressive power.  It is useful because it separates two questions:
+
+\begin{enumerate}
+  \item How much additional input-dependent interaction is introduced?
+  \item Where can that interaction be inserted and trained economically?
+\end{enumerate}
+
+The present study addresses the second question through layer-selective RL.
+\citet{zhang2026onelayer} show that RL gains in Qwen3 and related models are
+concentrated in a small set of middle layers; on Qwen3-1.7B-Base, Layer 10 is
+their strongest single-layer math result.  That finding is not the conceptual
+origin of EE.  It supplies the empirical localization result and workflow
+guide rails that make a compute-bounded test of our independently proposed EE
+hypothesis feasible: instead of pretraining a new architecture from scratch,
+we can add expressivity at one high-contribution layer and compare it against a
+naive update of exactly the same layer.
+
+Our contributions are:
+
+\begin{itemize}
+  \item a precise EE taxonomy connecting multiplicative FFNs, hypernetworks,
+        routed low-rank experts, grid-wise modulation, and polynomial
+        activations;
+  \item an exact-function-preserving Layer-10 \TriGLU{}/\ToTGLU{} intervention
+        for Qwen3-1.7B-Base;
+  \item a matched six-GPU GRPO comparison from the same untuned base model,
+        with deterministic data exposure and five common evaluation
+        checkpoints;
+  \item corrected Math and out-of-distribution evaluation records, including a
+        strict free-form GPQA-Diamond audit and explicit protocol/cap-hit
+        boundaries;
+  \item a systems account of registered Hugging Face/vLLM integration,
+        continuous batching, live weight synchronization, and the current
+        serving-performance cost of the FP32 side branch.
+\end{itemize}
+
+\section{Expressivity Engineering}
+
+\subsection{A working definition}
+
+For an input vector $x$, a static linear map $Wx$ performs channel mixing.  EE
+introduces interactions such as
+\begin{equation}
+  y = W x \odot g(x),
+  \qquad
+  y = \left(W + \Delta W(x)\right)x,
+  \qquad
+  y = \sum_e \pi_e(x) f_e(x),
+  \label{eq:ee-family}
+\end{equation}
+where the effective transform depends on $x$, or where multiple learned
+streams are multiplied or routed.  Under this definition:
+
+\begin{itemize}
+  \item GLU/SwiGLU uses multiplicative feature interactions
+        \citep{shazeer2020glu};
+  \item HyperNetworks generate parameters for another network
+        \citep{ha2016hypernetworks};
+  \item HyperGrid decomposes task-conditioned modulation into grid-wise
+        projections \citep{tay2020hypergrid};
+  \item HyperFormer generates task/layer/position-conditioned adapter
+        parameters, and HyperLoRA generates constrained low-rank adapters
+        \citep{mahabadi2021hyperformer,lv2024hyperlora};
+  \item MoLoRA treats lightweight low-rank adapters as routed experts
+        \citep{zadouri2024molora};
+  \item PolyCom/PolyNorm makes higher-order interactions explicit in the
+        activation family \citep{zhuo2024polycom}.
+\end{itemize}
+
+These methods are related, not interchangeable.  HyperFormer and HyperLoRA are
+primarily task-conditioned parameter generators; MoLoRA routes among learned
+lightweight experts; HyperGrid modulates structured regions of weight matrices;
+PolyNorm uses elementwise polynomial powers and normalization.  The present
+\TriGLU{} branch instead computes a per-token multiplicative modulation of one
+existing FFN hidden state.
+
+\subsection{Scope beyond Transformers}
+
+The EE lens is not limited to language models.  Any architecture containing an
+MLP can, in principle, be augmented with multiplicative, routed, polynomial, or
+dynamically parameterized computation.  For Transformer FFNs, such operations
+remain linear in sequence length, unlike dense self-attention's quadratic
+token-pair interaction.  This does not make EE free: added FFN branches increase
+FLOPs, activation memory, kernel-launch overhead, and optimization difficulty.
+It does mean that richer channel computation can be explored without directly
+increasing the number of attention score pairs or the KV-cache length.
+
+Attention is itself an input-conditioned token-mixing mechanism and can be
+described within the broader EE taxonomy.  This controlled study nevertheless
+keeps the attention architecture unchanged: only the Layer-10 FFN computation
+differs between conditions, while the ordinary Layer-10 attention parameters
+remain trainable in both.
+
+\section{Model}
+
+\subsection{Backbone and update scope}
+
+The backbone is Qwen3-1.7B-Base \citep{yang2025qwen3}: 28 decoder layers,
+hidden width 2,048, FFN intermediate width 6,144, 16 query heads, 8 key/value
+heads, and a 32,768-token context window.  Both the baseline and EE variant
+update decoder Layer 10 only.  Layer-10 attention projections, RMSNorm
+parameters, and all original FFN projections are trainable.  Embeddings, the
+language-model head, and all other decoder layers are frozen.
+
+This is a stricter comparison than using the untuned base model as the primary
+control.  The question is not whether RL helps, but whether adding a particular
+expressivity mechanism improves a strong naive single-layer RL update.
+
+\subsection{TriGLU/ToTGLU side modulation}
+
+Let $x\in\mathbb{R}^{2048}$ be the Layer-10 FFN input.  The original SwiGLU
+hidden state is
+\begin{equation}
+  h_0 = \operatorname{SiLU}(W_g x) \odot (W_u x),
+  \qquad h_0\in\mathbb{R}^{6144}.
+\end{equation}
+The FP32 side network first compresses to a 512-dimensional bottleneck,
+$z=A x\in\mathbb{R}^{512}$, and forms three 2,048-dimensional streams:
+\begin{align}
+  v &= Vz, \\
+  g &= \operatorname{SiLU}(Gz), \\
+  q &= \operatorname{SiLU}\!\left(F_2\operatorname{GeLU}(F_1z)\right).
+\end{align}
+Their product is projected to the backbone intermediate width,
+\begin{equation}
+  s = U(v\odot g\odot q)\in\mathbb{R}^{6144},
+\end{equation}
+and modulates the original hidden state:
+\begin{equation}
+  h = h_0 \odot \left[1 + \alpha\tanh(s)\right],
+  \qquad
+  y = W_d h,
+  \qquad \alpha=0.1.
+  \label{eq:triglu}
+\end{equation}
+
+The code calls this module \TriGLU{}.  Because the base SwiGLU already contains
+two multiplicative streams and the side branch multiplies three more, we use
+\ToTGLU{} (``TriGLU on TriGLU'') when emphasizing its five-stream
+interpretation.  The name is descriptive rather than a claim that the module
+implements a standard architecture from prior work.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+  node distance=7mm and 10mm,
+  box/.style={draw=ink,rounded corners=2pt,fill=softgray,minimum height=7mm,minimum width=20mm,align=center,font=\small},
+  op/.style={draw=accent,circle,fill=softblue,minimum size=7mm,font=\small\bfseries},
+  arr/.style={-{Latex[length=2mm]},thick,draw=ink}
+]
+\node[box] (x) {$x$\,(2048)};
+\node[box, right=of x, yshift=10mm] (base) {base SwiGLU\\$h_0$ (6144)};
+\node[box, right=of x, yshift=-10mm] (bneck) {FP32 bottleneck\\$z$ (512)};
+\node[box, right=of bneck] (three) {value $\odot$ gate $\odot$\\GeLU--SiLU branch\\(2048)};
+\node[box, right=of three] (side) {zero-init return\\$s$ (6144)};
+\node[box, right=of side] (mod) {$1+0.1\tanh(s)$};
+\node[op, right=13mm of base] (mul) {$\odot$};
+\node[box, right=of mul] (down) {base $W_d$\\output};
+\draw[arr] (x) -- (base);
+\draw[arr] (x) -- (bneck);
+\draw[arr] (bneck) -- (three);
+\draw[arr] (three) -- (side);
+\draw[arr] (side) -- (mod);
+\draw[arr] (base) -- (mul);
+\draw[arr] (mod.east) -| (mul.south);
+\draw[arr] (mul) -- (down);
+\end{tikzpicture}
+\caption{Layer-10 \TriGLU{}/\ToTGLU{} intervention.  The original SwiGLU path
+is retained.  A per-token FP32 side network produces a bounded multiplicative
+modulator before the original down projection.}
+\label{fig:architecture}
+\end{figure}
+
+\subsection{Exact no-op initialization and parameter cost}
+
+The side return projection $U$ (named \texttt{triglu\_side.up} in code) is
+initialized to zero.  Therefore $s=0$, the multiplier in
+Eq.~\ref{eq:triglu} is exactly one, and the initial model is functionally
+identical to the unmodified backbone.  This invariant isolates subsequent
+behavior from a random architecture shock.
+
+The active dimensions are \texttt{side\_dim=512} and
+\texttt{side\_hidden=2048}.  The side network contains 20,986,368 trainable
+parameters, 41.69\% of the 50,337,792-parameter selected decoder layer.  The
+base Layer-10 parameters remain jointly trainable.  This is parameter-efficient
+relative to full-model RL, but it is deliberately a high-capacity intervention
+rather than a minimal adapter.
+
+\section{Experimental Design}
+
+\subsection{Relationship to the layer-selective RL workflow}
+
+The experiment follows the operational structure of
+\citet{zhang2026onelayer}: Qwen3-1.7B-Base, Layer 10, NuminaMath-CoT, GRPO,
+single-layer freezing, a 3,072-token response cap, and Math plus OOD benchmark
+families.  The original work reports that Layer 10 reaches 51.8 MathAvg versus
+50.8 for full-parameter RL under its protocol.  Its results and hyperparameters
+are guide rails, not copied output: its executable repository and exact
+evaluation harness were not available to this study, so absolute score parity
+is not claimed.
+
+Our scientific variable is the Layer-10 FFN architecture.  The baseline updates
+the ordinary Layer-10 Transformer block; the EE condition updates that same
+block plus the side network.  Both begin from the same untuned base model.
+
+\subsection{Data and decontamination}
+
+Training uses a 50,000-problem materialization derived from NuminaMath-CoT
+\citep{numina2024}.  A decontamination pass removes question-level overlap with
+the evaluation sets before training.  The two variants use the same parquet
+hashes, deterministic shuffled permutation, omitted-row set, initialization
+seed, and rollout seed (\texttt{20260707}).  This controls data exposure within
+the comparison; it does not prove that the local data processing exactly
+matches an unavailable external implementation.
+
+\subsection{GRPO and the six-GPU batch contract}
+
+GRPO samples a group of responses per prompt and normalizes their advantages
+within the group, avoiding a learned critic \citep{shao2024deepseekmath}.  The
+implementation uses veRL/HybridFlow \citep{sheng2025hybridflow} with vLLM
+rollouts \citep{kwon2023vllm}.  The paper-aligned tuple is train/mini/micro
+batch \texttt{512/128/8}, group size 4, KL coefficient 0.001, clip range 0.2,
+and four epochs.  The actual six-RTX-5090 matched run uses the explicitly
+approved divisible tuple in Table~\ref{tab:batch}.
+
+\begin{table}[!tbp]
+\centering
+\caption{Six-rank production contract.}
+\label{tab:batch}
+\begin{tabular}{lr}
+\toprule
+Field & Value \\
+\midrule
+Train batch & 504 prompts \\
+PPO mini batch & 126 prompts \\
+PPO micro batch & 6 prompts \\
+Group size & 4 responses/prompt \\
+Responses per global update & 2,016 \\
+Prompts through step 98 & 49,392 \\
+Deterministically omitted at step 98 & 608 / 50,000 \\
+Rollout replicas & 6 independent TP=1 replicas \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The loader uses \texttt{drop\_last=True}; step 98 is therefore a
+\emph{near-one-pass} milestone, not an exact epoch.  No irregular tail batch is
+introduced.  Both architectures omit exactly the same 608 rows, giving a
+matched comparison with a 1.56\% exposure deviation from $512\times98$.
+
+\subsection{Training stages and post-hoc interventions}
+
+The trajectory contains three 98-update stages.  The first uses the original
+$5\times10^{-6}$ learning rate.  The second keeps that rate through step 128
+and then applies cosine decay to $5\times10^{-7}$ at step 196.  The third
+decays from $5\times10^{-7}$ to $5\times10^{-8}$ at step 294.  Each variant's
+frozen KL reference is reset to its own step-98 policy for updates 99--196 and
+to its own step-196 policy for updates 197--294.
+
+The decay and reference resets were introduced during the live research cycle,
+not preregistered before update 1.  Step 158 is the first reported common
+checkpoint after the step-128 schedule change and the first point where the
+architectural trajectories visibly separated.  We report all available matched
+major checkpoints from 158 onward rather than selecting a single best model.
+
+\subsection{Historical SFT pilot}
+
+Before the main RL wave, a two-epoch, 50K-example supervised fine-tuning pilot
+compared SHS, the whole-layer baseline, \TriGLU{}, and OFT.  It completed
+operationally, but did not provide a reliable architecture selection signal.
+SHS, baseline, and \TriGLU{} had four-task Math averages within 0.32 points.
+OFT achieved the lowest teacher-forced validation loss (0.5893) yet collapsed
+under autoregressive evaluation (13.04 Math average versus approximately 43
+for the other three).  This is direct evidence in this project that
+same-distribution SFT loss is not a sufficient proxy for the intended
+generative reasoning behavior.  Consequently, the main GRPO comparison starts
+from the untuned base, not from an SFT checkpoint.
+
+OFT \citep{qiu2023oft} was scaffolded but not run as a GRPO comparator.  The
+implemented policy freezes the original Layer-10 SwiGLU matrices and trains
+orthogonal rotations, whereas \TriGLU{} jointly trains the original SwiGLU and
+the side branch.  A direct comparison would therefore confound architectural
+expressivity with different backbone adaptation constraints.  OFT remains a
+useful future control under a matched update policy.
+
+\section{Evaluation}
+
+\subsection{Benchmark suite and aggregate definitions}
+
+The in-domain Math category follows MATH-500 \citep{hendrycks2021math}, GSM8K
+\citep{cobbe2021gsm8k}, OlympiadBench \citep{he2024olympiadbench}, and the
+2023 AMC 10/12 competition set \citep{maa2023amc}.  MathAvg is the unweighted
+mean of those four scores and uses AMC
+Average@32, not AMC greedy pass@1.  AMC greedy is retained as a modal-path
+diagnostic.
+
+OOD evaluation includes:
+\begin{itemize}
+  \item Code: corrected HumanEval+ \citep{liu2023evalplus}, provisional MBPP
+        \citep{austin2021mbpp}, and corrected LiveCodeBench
+        \citep{jain2024livecodebench};
+  \item Reasoning: GPQA-Diamond \citep{rein2023gpqa} and MMLU-Pro
+        \citep{wang2024mmlupro}, plus a separate GPQA-Diamond-Freeform manual
+        diagnostic that is not included in ReasoningAvg;
+  \item Language and instruction following: C-Eval \citep{huang2023ceval},
+        IFEval \citep{zhou2023ifeval}, and MGSM \citep{shi2022mgsm}.
+\end{itemize}
+
+Except AMC Average@32, the primary corrected benchmark cells use greedy
+decoding.  This choice is especially important for the FP32 \TriGLU{} model,
+whose sampled generations at temperature 1 were less stable.  The report does
+not convert that observation into a deployment recommendation; temperature
+and logit-distillation behavior require a dedicated study.
+
+\subsection{Benchmark semantics and relative difficulty}
+
+The suite intentionally spans different capability regimes.  ``Difficulty''
+below is a qualitative task-level description, not a claim that scores are
+directly comparable across datasets.
+
+\begin{table}[H]
+\centering
+\small
+\caption{Benchmark roles in the evaluation suite.}
+\label{tab:benchmarkroles}
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.19\linewidth}
+                             >{\raggedright\arraybackslash}p{0.43\linewidth}
+                             >{\raggedright\arraybackslash}X}
+\toprule
+Benchmark & Task and answer format & Relative regime \\
+\midrule
+MATH-500 & Competition-style secondary mathematics; free-form numeric or symbolic answer & Harder than routine school arithmetic; broad algebra, geometry, number theory, and combinatorics \\
+GSM8K & Grade-school arithmetic word problems; free-form short answer & Elementary mathematics with multi-step linguistic reasoning \\
+OlympiadBench & Olympiad-oriented mathematics; free-form derivation and answer & Hardest in-domain mathematical set in this report \\
+AMC 2023 & AMC 10/12 high-school contest questions; multiple choice & Between routine K--12 work and olympiad-style proof problems \\
+HumanEval+ & Function synthesis from a specification; execution-based tests & Compact code generation with strengthened hidden tests \\
+MBPP & Short natural-language programming tasks; execution-based tests & Introductory-to-intermediate code generation; score remains provisional here \\
+LiveCodeBench & Time-indexed competitive-programming problems; execution-based tests & Harder and less contamination-prone coding evaluation \\
+GPQA-Diamond & Graduate-level science questions; four-way multiple choice & Expert factual and scientific reasoning; 25\% random-choice floor \\
+MMLU-Pro & Ten-choice, multi-domain knowledge and reasoning & Broad professional/academic reasoning with a 10\% random-choice floor \\
+GPQA-Diamond-Freeform & Same science questions without answer options; manual semantic audit & Stricter diagnostic that removes the multiple-choice floor \\
+C-Eval & Chinese multi-subject multiple choice & Broad school-to-professional knowledge in Chinese \\
+IFEval & Verifiable instruction-following constraints & Tests compliance rather than subject-matter depth \\
+MGSM & Multilingual grade-school mathematics; free-form short answer & Elementary mathematics under cross-lingual generation pressure \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Protocol corrections}
+
+Several legacy evaluation cells measured harness failures rather than model
+capability.  The corrected table therefore uses:
+\begin{itemize}
+  \item a raw no-chat HumanEval+ route after the chat-wrapped protocol caused
+        Hebrew/template collapse in both \TriGLU{} and the untuned base;
+  \item a corrected LiveCodeBench sandbox output contract after the legacy
+        contract produced an artificial all-zero result;
+  \item explicit separation of AMC Average@32 from greedy pass@1;
+  \item a row-by-row semantic audit of 1,260 GPQA-Diamond-Freeform responses,
+        with uncertain judgments counted as incorrect.
+\end{itemize}
+
+These corrections preserve prompts and scoring intent, but do not establish
+paper-exact evaluation parity.  MBPP still lacks a full protocol-matrix rerun;
+its score and the derived CodeAvg remain provisional.
+
+\subsection{Response-cap boundary}
+
+All Math benchmarks contain 3,072-token cap hits: 5.02\% on MATH-500, 0.43\%
+on GSM8K, 13.85\% on OlympiadBench, 3.84\% on AMC Average@32, and 8.25\% on
+AMC greedy.  Training rollouts also contain nonzero cap hits.  Many inspected
+cases are repetition loops, but a minority could conceivably reach a correct
+answer if continued.  We retain the paper-style cap-hit-inclusive results for
+matched comparison and do not describe them as uncapped capability ceilings.
+
+OOD cap rates are more heterogeneous.  HumanEval+ is 2.50\%, LiveCodeBench
+9.73\%, GPQA-Diamond 9.85\%, MMLU-Pro 4.73\%, MGSM 8.61\%, and
+GPQA-Diamond-Freeform 7.62\%.  MBPP (93.92\%), C-Eval (68.31\%), and IFEval
+(39.09\%) are severe exceptions that require protocol-aware reruns before
+strong absolute interpretation.
+
+\section{Results}
+
+\subsection{Across-checkpoint summary}
+
+Table~\ref{tab:means} reports population mean and standard deviation across
+the five matched checkpoints.  The checkpoints lie on one trajectory and are
+strongly correlated; the standard deviation measures checkpoint variation,
+not independent-seed uncertainty or a confidence interval.
+
+\begin{table}[H]
+\centering
+\caption{Corrected matched-checkpoint results (steps 158/196/226/256/294).
+Values are mean $\pm$ population standard deviation in percentage points.
+$^*$MBPP and therefore CodeAvg remain provisional.}
+\label{tab:means}
+\small
+\begin{tabular}{lrrr}
+\toprule
+Metric & \TriGLU{} & Baseline & Mean difference \\
+\midrule
+MATH-500 & $67.520\pm1.230$ & $66.880\pm0.412$ & $+0.640$ \\
+GSM8K & $82.942\pm0.322$ & $82.396\pm0.446$ & $+0.546$ \\
+OlympiadBench & $28.059\pm1.294$ & $25.511\pm0.533$ & $+2.548$ \\
+AMC 2023 Average@32 & $33.469\pm0.755$ & $34.109\pm0.950$ & $-0.640$ \\
+\textbf{MathAvg} & $\mathbf{52.997\pm0.184}$ & $\mathbf{52.224\pm0.393}$ & $\mathbf{+0.773}$ \\
+AMC 2023 greedy & $38.000\pm1.000$ & $35.500\pm2.915$ & $+2.500$ \\
+\midrule
+HumanEval+ corrected & $60.854\pm0.896$ & $59.512\pm1.131$ & $+1.342$ \\
+MBPP$^*$ & $29.280\pm1.121$ & $28.720\pm0.844$ & $+0.560$ \\
+LiveCodeBench corrected & $10.845\pm0.401$ & $9.782\pm0.139$ & $+1.063$ \\
+\textbf{CodeAvg}$^*$ & $\mathbf{33.659\pm0.260}$ & $\mathbf{32.671\pm0.567}$ & $\mathbf{+0.988}$ \\
+\midrule
+GPQA-Diamond (MCQ) & $26.566\pm1.880$ & $26.565\pm2.273$ & $+0.001$ \\
+MMLU-Pro & $33.895\pm0.576$ & $34.320\pm0.198$ & $-0.425$ \\
+\textbf{ReasoningAvg} & $\mathbf{30.230\pm0.691}$ & $\mathbf{30.443\pm1.121}$ & $\mathbf{-0.213}$ \\
+GPQA-Diamond-Freeform & $6.349\pm1.328$ & $4.603\pm1.053$ & $+1.746$ \\
+\midrule
+C-Eval & $47.548\pm0.566$ & $46.182\pm0.560$ & $+1.366$ \\
+IFEval & $27.421\pm0.669$ & $26.752\pm0.657$ & $+0.669$ \\
+MGSM & $56.538\pm5.340$ & $58.960\pm0.199$ & $-2.422$ \\
+\textbf{LanguageAvg} & $\mathbf{43.836\pm1.724}$ & $\mathbf{43.964\pm0.334}$ & $\mathbf{-0.128}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{What the result supports}
+
+The primary Math result is positive: \TriGLU{} improves MathAvg by 0.773
+points across the five matched checkpoints.  The gain is not uniform.  It is
+largest on OlympiadBench and is accompanied by positive MATH-500 and GSM8K
+differences, while AMC Average@32 is lower.  The separate greedy AMC diagnostic
+favors \TriGLU{} by 2.5 points, illustrating that sampled distribution-wide
+reliability and the greedy modal path need not move together.
+
+The OOD profile is also structured rather than uniformly positive.  Corrected
+HumanEval+ and LiveCodeBench favor \TriGLU{}, with the largest relative coding
+gain on the harder LiveCodeBench task.  GPQA-Diamond MCQ is effectively tied,
+MMLU-Pro slightly favors the baseline, and strict free-form GPQA favors
+\TriGLU{}.  C-Eval and IFEval improve, but a large MGSM deterioration at
+step 294 creates high \TriGLU{} variance and removes the category-average gain.
+The source guide's intuition---extra expressivity may improve hard reasoning
+while occasionally destabilizing simpler knowledge retrieval or multilingual
+behavior---is consistent with this profile, but is not uniquely established by
+it.
+
+Training reward and downstream evaluation were not monotonically aligned.  At
+several checkpoints the EE variant reached equal or lower recent reward while
+obtaining stronger held-out metrics.  This is evidence against selecting these
+models by training reward alone.  It does not show that lower reward causes
+better generalization; reward sampling, shuffled-batch composition, KL
+reference resets, and schedule changes all vary along the same trajectory.
+
+\subsection{Why checkpoint averaging is used}
+
+From step 158 onward, both variants occupy an oscillatory plateau: different
+shuffled batches pull the model toward different capability profiles.  In a
+production workflow, researchers often select a checkpoint during such a
+plateau.  Averaging matched checkpoints therefore reduces dependence on one
+post-hoc checkpoint choice and describes the typical observed trajectory.
+However, five checkpoints from one run are not five independent experiments.
+No claim of statistical significance is made, and a multiple-seed replication
+is the most important missing validation.
+
+\subsection{Full corrected checkpoint table}
+
+Figure~\ref{fig:mastertable} provides the complete per-checkpoint record.  The
+image is generated from the repository's machine-readable consolidated table;
+it excludes SFT, untuned-base, and early RL checkpoints by design.
+
+The body contains ten matched cells: five checkpoints for \TriGLU{} and five
+for the baseline.  The final rows report the population mean and standard
+deviation across checkpoints within each trajectory.  These are descriptive
+trajectory summaries rather than multi-seed confidence estimates.
+
+All displayed values use the corrected protocol where a correction was
+available.  HumanEval+ uses the raw no-chat route, and LiveCodeBench uses the
+repaired execution contract.  MBPP and its dependent CodeAvg remain marked
+provisional because their full protocol matrix is incomplete.  MathAvg is
+computed from MATH-500, GSM8K, OlympiadBench, and AMC Average@32; the adjacent
+AMC greedy column is intentionally outside that aggregate.  Likewise,
+GPQA-Diamond-Freeform is shown beside ReasoningAvg but is excluded from it.
+The table retains response-cap-inclusive values, so it should be read together
+with Section~5.4 rather than as an uncapped capability ceiling.
+
+\clearpage
+\begin{landscape}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\linewidth]{figures/corrected_master_table.png}
+\caption{Full corrected Math and OOD results at matched RL steps 158, 196,
+226, 256, and 294, including across-checkpoint means and population standard
+deviations.  MathAvg uses AMC Average@32, not AMC greedy.  ReasoningAvg excludes
+GPQA-Diamond-Freeform.  MBPP and CodeAvg remain provisional.}
+\label{fig:mastertable}
+\end{figure}
+\end{landscape}
+\clearpage
+
+\section{Systems Integration and Efficiency}
+
+The study required an architecture-aware serving route rather than only a
+training-time PyTorch patch.  The repository provides an explicit
+\texttt{Qwen3TriGLUForCausalLM}, an out-of-tree vLLM plugin, export metadata,
+dispatch receipts, post-load FP32 restoration for the side branch, live weight
+synchronization, and exact greedy-token parity in bounded HF/vLLM gates.  The
+production custom math still executes as ordinary PyTorch/cuBLAS operations
+inside vLLM; no production TriGLU Triton kernel is claimed.
+
+On two RTX 5090 GPUs, using independent TP=1 vLLM replicas, pressure-64 matched
+long decoding reached 2,872.1 generated tokens/s/GPU for \TriGLU{} versus
+5,442.1 for vanilla Qwen, or 52.8\% of the vanilla rate.  The same \TriGLU{}
+path was 151.8\% of the historical SHS reference path (1,892.1 tokens/s/GPU).
+Thus the architecture is substantially slower than the baseline even though it
+modifies only one layer: autoregressive decoding repeatedly invokes that layer,
+and the FP32 side path adds six projections, three nonlinear streams,
+elementwise products, and conversion/kernel-launch overhead at every generated
+token.
+
+This result motivates, but does not yet validate, three optimizations: a pure
+BF16 architecture path, fused side-branch kernels, and a native registered
+serving implementation that minimizes framework transitions.  Continuous
+batching is already demonstrated and is architecture-agnostic at the scheduler
+level; what must be integrated is the model's custom forward path, weight
+loading, export metadata, and synchronization semantics.
+
+If backend sensitivity remains after strict parity work, a second deployment
+path is to use the high-capacity EE model as a teacher rather than the final
+serving artifact.  Calibrated logit or sequence distillation into a conventional
+student could preserve part of the learned capability while recovering mature
+kernels and serving support.  This is a fallback research direction, not an
+explanation of the present gains, and it requires its own temperature,
+calibration, and teacher--student fidelity study.
+
+\section{Limitations}
+
+\begin{enumerate}
+  \item \textbf{One seed.}  Checkpoint averaging cannot substitute for
+        independent training seeds.
+  \item \textbf{Live schedule changes.}  Learning-rate decay and KL-reference
+        resets were introduced during the run.  They are matched between
+        variants, but prevent a clean claim about the original paper schedule.
+  \item \textbf{Protocol divergence.}  The study did not have an executable
+        paper repository.  Local absolute scores differ from the paper, and
+        several OOD evaluators required protocol repairs.
+  \item \textbf{Cap hits.}  Training and evaluation contain truncated
+        generations.  High-cap OOD cells are not capability ceilings.
+  \item \textbf{Provisional MBPP.}  CodeAvg inherits MBPP's unresolved
+        protocol boundary.
+  \item \textbf{Manual free-form audit.}  GPQA-Diamond-Freeform provides a
+        strict complementary diagnostic, but its semantic judgments include 13
+        uncertain responses counted as incorrect and are not directly
+        interchangeable with MCQ accuracy.
+  \item \textbf{Capacity mismatch.}  \TriGLU{} adds 41.69\% of one layer's
+        parameters.  The experiment tests this concrete architecture, not a
+        parameter-matched universal EE principle.
+  \item \textbf{Precision and backend sensitivity.}  The FP32 side branch and
+        generic PyTorch/cuBLAS execution affect both throughput and numerical
+        behavior.  Pure-BF16 and strict HF/vLLM parity remain pending.
+\end{enumerate}
+
+\section{Future Work}
+
+\subsection{Immediate controlled experiments}
+
+The next scientific priorities are:
+\begin{itemize}
+  \item repeat the matched baseline/\TriGLU{} comparison across multiple seeds;
+  \item complete the HF/vLLM evaluation parity matrix and cap-repair program;
+  \item train pure-BF16 \TriGLU{} and SHS variants, with accuracy and throughput
+        gates;
+  \item compare lower EE levels by reducing side width or the number of
+        multiplicative streams;
+  \item run OFT only under a matched backbone-adaptation policy, separating
+        geometry preservation from trainable-capacity differences;
+  \item replace fixed GeLU components with trainable polynomial activations,
+        informed by PolyCom/PolyNorm \citep{zhuo2024polycom};
+  \item test per-token HyperGrid- or HyperNetwork-style modulation, without
+        sequence pooling and beginning with factorized forms rather than full
+        dynamic weight generation.
+\end{itemize}
+
+\subsection{Joint adaptation and expressivity matching}
+
+The current intervention assumes that frozen surrounding layers can consume a
+representation produced by a more expressive Layer 10.  The MGSM instability
+suggests that this interface can become a bottleneck.  Two extensions follow.
+First, train adjacent layers jointly, perhaps with full updates near Layer 10
+and constrained updates farther away.  Second, add progressively weaker EE
+modules to neighboring layers, analogous to impedance matching: rather than a
+single abrupt change in representational geometry, increase and decrease the
+available interaction order gradually across depth.
+
+The layer-selective paper reports that guided multi-layer updates are especially
+strong on larger Qwen3 models, including a best-10 strategy on Qwen3-8B
+\citep{zhang2026onelayer}.  A direct Qwen3-8B B10 EE-PEFT comparison is therefore
+a high-value follow-up.  It would provide more layers in which the added
+architecture can co-adapt and test whether the present single-layer gains are
+limited by surrounding-layer geometry.
+
+\subsection{Fresh pretraining}
+
+The cleanest test of EE is fresh pretraining, where every layer can adapt to the
+new computation.  It removes the need for a residual $(1+\delta)$ constraint
+and permits side streams with scale comparable to the main stream.  A
+compute-aware program would begin with a dense model near one billion
+parameters, compare SwiGLU, reduced-branch TriGLU, polynomial activations, and
+factorized HyperGrid variants under matched FLOPs, and only then scale to MoE
+or recurrent architectures.
+
+\subsection{Scaling perspective}
+
+The long-term motivation is not that EE removes attention cost.  Full attention
+and KV-cache requirements remain major constraints, and sparse or linear
+attention may only replace part of a production model's dense attention.  The
+claim is narrower: for a fixed attention burden, richer FFN interactions can
+increase the model's representational options with compute and activation
+memory that scale linearly in sequence length.  SwiGLU's success over simpler
+MLPs is one precedent; whether more aggressive EE mechanisms preserve a useful
+quality/throughput frontier at large scale remains an empirical question.
+
+\section{Conclusion}
+
+We proposed \EE{} as a practical lens for organizing multiplicative,
+higher-order, routed, and dynamically parameterized neural computation.  Using
+the layer-localization and experimental workflow of
+\citet{zhang2026onelayer} as guide rails, we tested one high-capacity EE module
+at Qwen3-1.7B-Base Layer 10 under matched single-layer GRPO.  The intervention
+starts as an exact functional no-op and differs from the baseline only through
+the added side architecture and its parameters.
+
+Across five matched checkpoints, the EE variant improves the primary Math
+average and the provisional Code average, with especially consistent gains on
+OlympiadBench, corrected LiveCodeBench, and strict GPQA-Diamond-Freeform.  It
+does not uniformly dominate: aggregate Reasoning and Language are tied or
+slightly lower, MGSM contains a severe late outlier, and serving throughput is
+roughly half that of vanilla Qwen under the measured setup.  The appropriate
+conclusion is therefore a positive, artifact-backed pilot: added FFN expressivity
+can improve a strong single-layer RL baseline on several hard tasks, but the
+result still requires multi-seed replication, protocol closure, precision
+ablation, and efficiency engineering before it can support a broad claim.
+
+\section*{Artifact Availability}
+
+The accompanying repository contains architecture code, configs, deterministic
+data-order contracts, evaluation scripts, compact runtime receipts, manual
+audit packages, and the corrected consolidated result table.  Model weights,
+datasets, checkpoints, uncurated generations, private operational logs, and
+chat transcripts are excluded from the research release.  The report's numeric
+source of truth is the repository record
+\path{docs/experiment_records/2026-07-18_qwen3-1p7b-math-ood-corrected-consolidated-master-table.md}.
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\end{document}
