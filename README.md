@@ -15,11 +15,12 @@ bounded setup makes a higher-capacity architecture test possible without
 pretraining a new model from scratch.
 
 **Follow-up, 2026-07-31:** [Post-Kimi K3 Expressivity Engineering
-Outlook](docs/followups/2026-07-31_post-kimi-k3-expressivity-engineering-outlook.md)
-records a separate, post-report research agenda covering additive and
-multiplicative expert composition, structured multi-LoRA SHS HyperNetworks,
-full-rank dynamic SwiGLU components, corrected complexity accounting, and
-attention-replacement directions.
+Follow-up](docs/followups/2026-07-31_post-kimi-k3-expressivity-engineering-follow-up.md)
+records a separate, post-report retrospective and research agenda. It connects
+the empirically selected TriGLU bottleneck to LatentMoE, then develops additive
+and multiplicative expert composition, structured multi-LoRA SHS
+HyperNetworks, full-rank dynamic SwiGLU components, corrected complexity
+accounting, and attention-replacement directions.
 
 The repository contains GRPO / veRL-style training infrastructure, SHS,
 TriGLU and OFT variants, registered vLLM integration points, reproducible
