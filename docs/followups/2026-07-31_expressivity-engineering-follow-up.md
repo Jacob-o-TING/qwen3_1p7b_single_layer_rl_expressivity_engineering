@@ -1,6 +1,7 @@
-# Post-Kimi K3 Expressivity Engineering Follow-up
+# Expressivity Engineering Follow-up
 
 **Date:** 2026-07-31
+**Last updated:** 2026-08-01
 **Status:** Retrospective interpretation and research agenda; the new
 hypotheses are not yet independently validated
 
@@ -418,14 +419,36 @@ It should be described as complementary to sparse MoE, not as its replacement.
 ## 5. Expressivity Engineering for attention replacement
 
 Attention is already an EE mechanism: token-dependent weights modulate and mix
-value representations. This suggests testing whether structured HyperNetworks
-can replace a subset of attention layers rather than only modifying FFNs.
+value representations. This suggests testing whether structured HyperNetworks,
+selective state-space models, or hybrids can replace a subset of attention
+layers rather than only modifying FFNs.
 
-The relevant post-Kimi K3 baseline is
-[Kimi Delta Attention](https://arxiv.org/abs/2510.26692), a recurrent
-fast-weight mechanism with linear sequence-length scaling and a fixed-size
-state instead of a sequence-length-growing KV cache. A useful successor must be
-evaluated against KDA on more than asymptotic notation:
+Two important non-softmax baselines are
+[Kimi Delta Attention](https://arxiv.org/abs/2510.26692) (KDA) and
+[Mamba](https://arxiv.org/abs/2312.00752). KDA is a recurrent fast-weight
+mechanism with linear sequence-length scaling and a fixed-size state instead
+of a sequence-length-growing KV cache. Mamba is a selective state-space model
+whose recurrence can be written schematically as
+
+\[
+h_t = \bar A_t h_{t-1} + \bar B_t x_t,
+\qquad
+y_t = C_t h_t.
+\]
+
+In Mamba, the discretization step `Delta_t` and the write/read terms `B_t` and
+`C_t` depend on the current input. Consequently, the effective transition,
+write, and read operators are token-conditioned even though Mamba does not
+regenerate every parameter, such as the underlying continuous-time `A`, at
+every step. Under the EE lens, this selective recurrence is another instance
+of input-dependent multiplicative computation: the token helps determine how
+its information is retained, forgotten, written into state, and read out.
+Mamba therefore provides both an attention alternative and an established
+example of dynamic operators with linear sequence scaling and fixed-size
+recurrent state during autoregressive inference.
+
+A useful successor must be evaluated against KDA and Mamba on more than
+asymptotic notation:
 
 - quality at matched training FLOPs and activated parameters;
 - recurrent-state size and memory bandwidth;
@@ -443,7 +466,7 @@ again between alternative fast-weight memories.
 Promising controlled variants include:
 
 1. a HyperNetwork that generates low-rank write and erase updates to a
-   KDA-style fast-weight state;
+   KDA- or Mamba-style recurrent state;
 2. channel-wise or rank-`R` dynamic gates over the recurrent transition;
 3. nonlinear multi-branch write rules whose products are residualized and
    bounded;
@@ -481,6 +504,7 @@ the completed Qwen3-1.7B study.
 - Kimi Team. [Kimi K3: Open Frontier Intelligence](https://arxiv.org/abs/2607.24653), 2026.
 - Elango et al. [LatentMoE: Toward Optimal Accuracy per FLOP and Parameter in Mixture of Experts](https://arxiv.org/abs/2601.18089), 2026.
 - Kimi Team. [Kimi Linear: An Expressive, Efficient Attention Architecture](https://arxiv.org/abs/2510.26692), 2025.
+- Gu and Dao. [Mamba: Linear-Time Sequence Modeling with Selective State Spaces](https://arxiv.org/abs/2312.00752), 2023.
 - Su et al. [CartesianMoE: Boosting Knowledge Sharing among Experts via Cartesian Product Routing in Mixture-of-Experts](https://aclanthology.org/2025.naacl-long.505/), NAACL 2025.
 - Zhou et al. [Mixture-of-Experts with Expert Choice Routing](https://arxiv.org/abs/2202.09368), 2022.
 - Schlag et al. [Linear Transformers Are Secretly Fast Weight Programmers](https://arxiv.org/abs/2102.11174), 2021.
