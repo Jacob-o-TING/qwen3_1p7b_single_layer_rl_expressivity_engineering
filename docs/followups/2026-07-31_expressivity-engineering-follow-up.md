@@ -698,6 +698,58 @@ varying the multiplicative FFN level. This is plausible but unproven; Full
 Attention can have a large functional advantage on exact retrieval even when
 its algebraic "level" appears similar.
 
+The stronger proposal is therefore to **phase-lock attention type and FFN EE
+level**. Rather than treating their depth schedules as independent, assign a
+lower EE level to each efficient-attention layer and a higher EE level to each
+Full-Attention layer. For a nominal three-KDA-to-one-full stack, two naive
+instances are:
+
+```text
+attention: [KDA, KDA, KDA, Full] x R
+FFN level: [  1,   1,   1,    3] x R
+```
+
+and a uniformly elevated version:
+
+```text
+attention: [KDA, KDA, KDA, Full] x R
+FFN level: [  2,   2,   2,    4] x R
+```
+
+Here the KDA positions perform cheaper, lower-amplitude recurrent or selective
+token mixing, while the periodic Full-Attention position receives both global
+token-pair access and a higher-order multiplicative FFN. The combined layer can
+act as an `H`-like integration event after several `L`-like detail updates.
+Repeating this motif creates a multi-timescale hierarchy without literal
+parameter reuse, recurrent state cycling through the same block, or an
+explicit HRM loop. The hypothesis is not merely that attention alternation is
+a weak frequency; it is that synchronized peaks in token-mixing scope and FFN
+expressivity may reproduce part of HRM's fast-detail/slow-integration benefit
+while retaining independent parameters at every depth.
+
+The absolute level and the level contrast are separate variables. Comparing
+`1 -> 3` with `2 -> 4` holds the contrast at two levels while raising the
+entire expressivity floor. Additional controls are required:
+
+- **attention-only:** `[KDA-1, KDA-1, KDA-1, Full-1]`, testing the hybrid
+  attention schedule without an EE amplitude change;
+- **phase-aligned:** `[KDA-1, KDA-1, KDA-1, Full-3]`, the primary HRM-like
+  hypothesis;
+- **elevated phase-aligned:** `[KDA-2, KDA-2, KDA-2, Full-4]`, separating
+  absolute level from level contrast;
+- **anti-phase:** `[KDA-3, KDA-3, KDA-3, Full-1]`, testing whether the benefit
+  depends on placing the EE peak at the Full-Attention position;
+- **uniform-level:** all four positions at a parameter/FLOP-matched common
+  level, testing whether periodicity matters beyond average capacity; and
+- **shuffled phase:** preserve the number of high-level blocks but move them
+  away from Full Attention, testing alignment rather than count.
+
+These cells should match total parameters and active FLOPs wherever possible.
+Where exact matching is impossible, both must be reported and scaling controls
+must be fitted. A positive phase-aligned result is evidence for the coupled
+frequency hypothesis only if it exceeds the attention-only, anti-phase,
+uniform-level, and shuffled-phase controls.
+
 HydraHead changes this picture by mixing Full and Linear Attention inside each
 layer. If its head ratio is held constant over depth, the attention frequency
 is encoded as within-layer composition rather than alternating layer types,
@@ -721,7 +773,8 @@ The minimum native-training comparison should include:
 3. an untied unrolling of that schedule at matched active FLOPs;
 4. a middle-window `K = 2` damped-Euler control without added EE levels;
 5. flat-depth EE controls matched for parameters and FLOPs; and
-6. fixed versus depth-varying Full/Linear Attention allocations.
+6. attention-only, phase-aligned, elevated phase-aligned, anti-phase,
+   uniform-level, and shuffled-phase Full/KDA-to-EE schedules.
 
 Every comparison should report independent and activated parameters, training
 and inference FLOPs, wall-clock throughput, optimizer and checkpoint memory,
@@ -743,7 +796,9 @@ capacity without losing the multi-timescale inductive bias.
    both load and semantic specialization.
 5. Compare tied middle recurrence, damped-Euler recurrence, and untied
    frequency-shaped EE schedules at matched active FLOPs.
-6. Only after numerical and scaling gates pass, test full-rank dynamic SwiGLU
+6. Test phase-locked KDA/Full-Attention and FFN-level schedules against
+   anti-phase, uniform-level, and shuffled-placement controls.
+7. Only after numerical and scaling gates pass, test full-rank dynamic SwiGLU
    bases and attention-layer replacements.
 
 Every stage should begin as an exact functional no-op or a controlled

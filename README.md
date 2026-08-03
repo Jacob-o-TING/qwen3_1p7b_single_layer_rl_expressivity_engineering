@@ -21,7 +21,8 @@ connects the empirically selected TriGLU bottleneck to LatentMoE, then develops
 additive and multiplicative expert composition, structured multi-LoRA SHS
 HyperNetworks, full-rank dynamic SwiGLU components, corrected complexity
 accounting, attention-replacement directions including selective state-space
-models, and frequency-shaped EE schedules as alternatives to tied recurrence.
+models, frequency-shaped EE schedules as alternatives to tied recurrence, and
+phase-locked Full/Linear-Attention-to-FFN expressivity schedules.
 
 The repository contains GRPO / veRL-style training infrastructure, SHS,
 TriGLU and OFT variants, registered vLLM integration points, reproducible
