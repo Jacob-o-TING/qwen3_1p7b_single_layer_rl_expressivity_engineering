@@ -547,18 +547,29 @@ strong absolute interpretation.
 
 \textbf{Table~\ref{tab:means} reports the population mean and standard
 deviation across five matched late-stage checkpoints, not across independent
-training seeds.}  An independent multiple-seed sweep was computationally
-infeasible.  The checkpoints were therefore drawn from the regime in which
-both training reward and downstream evaluation had plateaued and then
-oscillated rather than exhibiting a sustained trend.  They sample local
-within-run variability from one seeded realization of the stochastic training
-process, including shuffled data order and rollout sampling.  Because they
-belong to one optimization trajectory, the observations are serially dependent
-and may be positively correlated.  This dependence does not invalidate their
-mean as a descriptive summary that reduces sensitivity to choosing one
-favorable checkpoint, but it lowers the effective sample size: the reported
-standard deviation measures checkpoint variation, not independent-seed
-uncertainty, a standard error, or a confidence interval.
+training seeds.}  An independent multiple-seed sweep was outside the available
+compute budget: the study had six RTX 5090 GPUs and was scoped to days rather
+than weeks.  The checkpoints were therefore drawn from the regime in which both
+training reward and downstream evaluation had plateaued and then oscillated
+rather than exhibiting a sustained trend.  They sample local within-run
+variability from one seeded realization of the stochastic training process,
+including shuffled data order and rollout sampling.  Because they belong to one
+optimization trajectory, the observations are serially dependent and may be
+positively correlated.  This dependence does not invalidate their mean as a
+descriptive summary that reduces sensitivity to choosing one favorable
+checkpoint, but it lowers the effective sample size: the reported standard
+deviation measures checkpoint variation, not independent-seed uncertainty, a
+standard error, or a confidence interval.
+
+This summary is operationally relevant because production model selection
+normally chooses the better validated checkpoint from a late-stage candidate
+pool rather than blindly deploying the final update.  The across-checkpoint
+mean characterizes the average quality available within that selection window,
+and the per-checkpoint record shows the candidates from which a deployment
+choice can be made.  It does not imply that every checkpoint is equally strong:
+the magnitude and even direction of the \TriGLU{}--baseline difference vary by
+checkpoint, and the benchmarks showing the most prominent gains are not
+identical at every checkpoint.
 
 \begin{table}[H]
 \centering
