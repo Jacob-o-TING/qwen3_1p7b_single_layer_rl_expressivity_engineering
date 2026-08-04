@@ -545,10 +545,20 @@ strong absolute interpretation.
 
 \subsection{Across-checkpoint summary}
 
-Table~\ref{tab:means} reports population mean and standard deviation across
-the five matched checkpoints.  The checkpoints lie on one trajectory and are
-strongly correlated; the standard deviation measures checkpoint variation,
-not independent-seed uncertainty or a confidence interval.
+\textbf{Table~\ref{tab:means} reports the population mean and standard
+deviation across five matched late-stage checkpoints, not across independent
+training seeds.}  An independent multiple-seed sweep was computationally
+infeasible.  The checkpoints were therefore drawn from the regime in which
+both training reward and downstream evaluation had plateaued and then
+oscillated rather than exhibiting a sustained trend.  They sample local
+within-run variability from one seeded realization of the stochastic training
+process, including shuffled data order and rollout sampling.  Because they
+belong to one optimization trajectory, the observations are serially dependent
+and may be positively correlated.  This dependence does not invalidate their
+mean as a descriptive summary that reduces sensitivity to choosing one
+favorable checkpoint, but it lowers the effective sample size: the reported
+standard deviation measures checkpoint variation, not independent-seed
+uncertainty, a standard error, or a confidence interval.
 
 \begin{table}[H]
 \centering
