@@ -758,6 +758,14 @@ calibration, and teacher--student fidelity study.
 \end{enumerate}
 
 \section{Future Work}
+\label{sec:future-work}
+
+The immediate items below arise directly from the completed study.  A broader
+post-study research agenda, developed after these experiments and therefore not
+part of their evidence, is summarized separately in
+Appendix~\ref{app:followup-agenda}.  That appendix preserves the distinction
+between measured findings, retrospective interpretation, and unvalidated
+architectural proposals.
 
 \subsection{Immediate controlled experiments}
 
@@ -841,6 +849,264 @@ conclusion is therefore a positive, artifact-backed pilot: added FFN expressivit
 can improve a strong single-layer RL baseline on several hard tasks, but the
 result still requires multi-seed replication, protocol closure, precision
 ablation, and efficiency engineering before it can support a broad claim.
+
+\clearpage
+\appendix
+\section{Follow-up Research Agenda}
+\label{app:followup-agenda}
+
+\subsection{Provenance and evidence boundary}
+
+This appendix condenses a research agenda formulated after the completed
+Qwen3-1.7B study, including retrospective connections made after reading the
+Kimi K3 and LatentMoE reports \citep{kimit2026k3,elango2026latentmoe}.  It does
+not retroactively change the design motivation, protocol, or claims of the
+main study.  None of the proposals below has been validated by the reported
+runs.  Their common premise is the multiplication-first definition of \EE{}:
+fixed linear maps mix channels, whereas input-conditioned multiplication,
+dynamic operators, and compositions of nonlinear components introduce
+higher-order or context-dependent interactions.  The complete provenance and
+long-form derivations remain in the repository follow-up note; this appendix
+retains the mechanisms, corrections, caveats, and falsification requirements
+needed to evaluate them.
+
+\subsection{Bottlenecks and structured dynamic parameterization}
+
+The implemented \TriGLU{} side path maps the 2,048-dimensional Layer-10 state
+through a 512-dimensional bottleneck, expands it into three 2,048-dimensional
+streams, multiplies those streams element-wise, and returns a 6,144-dimensional
+bounded modulation.  This bottleneck was selected from earlier toy-model
+ablations, before LatentMoE.  Its later resemblance to LatentMoE is substantive
+but limited: LatentMoE compresses routed expert computation to reduce parameter
+traffic and all-to-all communication, whereas \TriGLU{} compresses an
+always-active side modulator while retaining the full-dimensional base SwiGLU
+path \citep{elango2026latentmoe}.
+
+Writing the side return as $s(x)=f(Ax)$ with
+$A\in\mathbb{R}^{512\times 2048}$ gives, at differentiable points,
+\begin{equation}
+  J_s(x)=J_f(Ax)A,
+  \qquad \operatorname{rank}J_s(x)\leq 512.
+\end{equation}
+The new degree of freedom must therefore coordinate its output through a
+shared low-dimensional representation.  This may impose structured-feature
+pressure, suppress nuisance directions, improve conditioning, or reinvest
+saved input capacity into wider nonlinear streams.  ``Low-pass filter'' is
+only an analogy: without an ordered frequency basis, the defensible statement
+is rank-constrained learned compression.  A causal test must compare no
+bottleneck, widths from 256 to 2,048, parameter/FLOP-matched stream widths, and
+a low-rank linear control, while reporting quality, throughput, Jacobian
+spectra, activation covariance rank, and noise sensitivity.
+
+A lower-parameter SHS successor can replace HyperGrid modulation with a
+hierarchy of structured HyperNetwork gates.  For output-channel gating,
+\begin{equation}
+  y=[1+g(x)]\odot(Wx),
+\end{equation}
+where a zero-initialized generator head gives an exact no-op.  A richer
+rank-$R$ entry-wise gate is
+\begin{equation}
+  G(x)=\sum_{r=1}^{R}a_r(x)b_r(x)^\top,
+  \qquad W_{\mathrm{eff}}(x)=W\odot[1+G(x)],
+\end{equation}
+and an additive multi-LoRA HyperNetwork can use
+$\Delta W(x)=\sum_{\ell}\alpha_\ell(x)A_\ell B_\ell$.  The required comparison
+is channel-wise diagonal, rank-one, rank-$R$, dynamic mixtures of fixed LoRA
+bases, and shuffled HyperGrid under matched parameters and FLOPs.  Parameter
+savings come from diagonal structure, low-rank factorization, or basis sharing,
+not from generating a literal dense $d_{\mathrm{out}}\times d_{\mathrm{in}}$
+matrix.
+
+\subsection{Expert composition and dynamic SwiGLU components}
+
+Sparse MoE conventionally forms a router-weighted sum.  A distinct hypothesis
+is to combine bounded near-identity expert factors,
+\begin{equation}
+ m(x)=\prod_{j\in M(x)}[1+\epsilon_j(x)\tanh E_j(x)],
+ \quad
+ y=x+\sum_{i\in A(x)}p_i(x)E_i(x)
+   +\beta(x)\odot[m(x)-1].
+\end{equation}
+Shared and routed experts could be assigned additive or multiplicative roles,
+or several shared experts could multiply before modulating the routed
+aggregate.  Bounded branches, normalization, and exact-no-op or near-identity
+initialization are essential because raw products can produce exploding or
+vanishing activations and gradients.  CartesianMoE sequentially composes two
+routed sub-MoE layers, while Product of Experts multiplies normalized
+probabilistic factors; both are close precedents but neither is the same as an
+element-wise product of hidden expert representations in one aggregation stage
+\citep{su2025cartesianmoe,hinton2002poe}.  Kimi K3's Quantile Balancing weakens
+load imbalance as an argument against sparse routing, but does not guarantee
+semantic diversity or equal learning progress \citep{kimit2026k3}.
+
+A full-rank dynamic SwiGLU can instead mix matrix triplets in weight space,
+$W_{p,\mathrm{eff}}(x)=W_{p,0}+\sum_e\alpha_e(x)W_{p,e}$ for
+$p\in\{\mathrm{gate},\mathrm{up},\mathrm{down}\}$, or evaluate separate
+nonlinear experts and combine their outputs.  These are not equivalent:
+pre-adding static linear matrices collapses to one matrix, whereas separately
+evaluated SwiGLUs retain distinct nonlinear functions.  Dense nonzero
+coefficients also expose every component to gradient, avoiding discrete-routing
+starvation, but they do so by surrendering sparse conditional compute and can
+still learn redundant components.
+
+The compute boundary is important.  With $d_{\mathrm{ff}}=4d$, one SwiGLU
+costs approximately $12d^2$ multiply-accumulates per token, not $12d^3$.
+Sparse top-$k$ MoE costs approximately $12nkd^2$ for $n$ tokens; activating
+all $E$ experts costs approximately $12nEd^2$.  If one coefficient set is
+shared across a sequence or segment, forming an effective full-rank matrix
+mixture and then reusing it costs approximately
+$12Ed^2+12nd^2$, which can amortize when $E+n<kn$.  Per-token coefficients,
+however, restore the approximately $12nEd^2$ cost and defeat conditional
+compute.  Full-rank aggregation is therefore a complementary dense EE module
+or context-shared control, not a replacement for sparse MoE.
+
+\subsection{Attention alternatives as Expressivity Engineering}
+
+Attention itself is an EE mechanism because token-dependent weights modulate
+and mix values.  Kimi Delta Attention is a recurrent fast-weight mechanism
+with linear sequence scaling and fixed-size state, while Mamba makes the
+discretization step $\Delta_t$ and write/read terms $B_t,C_t$ depend on the
+current input \citep{kimit2025linear,schlag2021fastweights,gu2023mamba}.  In
+schematic form,
+\begin{equation}
+ h_t=\bar A_t h_{t-1}+\bar B_t x_t,
+ \qquad y_t=C_t h_t.
+\end{equation}
+Thus Mamba implements input-conditioned transition, write, and read behavior
+without regenerating every underlying parameter.  The correct systems target
+is no sequence-length-growing KV cache, not zero memory: recurrent state,
+generation compute, activation bandwidth, and training intermediates remain.
+
+Candidate replacements include HyperNetworks that generate low-rank write and
+erase updates, rank-$R$ gates over recurrent transitions, bounded
+multi-branch write products, shared generated bases across layers, and hybrid
+stacks that replace only selected attention layers.  They must be compared
+with KDA and Mamba at matched training FLOPs and activated parameters, recurrent
+state and bandwidth, prefill/decode throughput, numerical stability, parallel
+training efficiency, long-context retrieval, and overwrite behavior.  A
+stateless per-token HyperNetwork has no long-range memory unless it consumes a
+context summary or state; once state is added, the experiment compares
+alternative fast-weight memories rather than ``memory-free'' attention.
+
+\subsection{Frequency-shaped EE and recurrent depth}
+
+HRM and HRM-Text motivate hierarchical recurrence through fast local and slow
+high-level processing \citep{wang2025hrm,wang2026hrmtext}.  The verified
+HRM-Text schedule is $(L,L,L,H)\times2$ (H2L3), so one forward pass reuses $L$
+six times and $H$ twice.  Recurrence increases computation without adding
+independent weights.  The approximately 3.6 bits per parameter measured in a
+controlled memorization study is not a universal storage constant, but it
+sharpens a testable tradeoff: tied recurrence may improve iterative reasoning
+per parameter while offering less independent weight capacity than an untied
+model at equal active compute \citep{morris2025memorize}.
+
+The follow-up introduces a provisional EE level because the main report did
+not define one.  Ordinary SwiGLU is Level 1; each additional \emph{sequential}
+input-conditioned multiplicative composition along a path raises the level by
+one.  Parallel modulation sites are tracked separately.  In particular,
+$D_{\mathrm{mul}}$ records maximum sequential multiplicative depth and
+$S_{\mathrm{mod}}$ records the number of separately modulated tensors.  SHS
+may have one controller and $S_{\mathrm{mod}}=3$ across gate/up/down, but
+whether that behaves like one or three effective levels is an empirical,
+budget-matched question.
+
+Define a low-amplitude detail block and a broader abstraction block as
+\begin{equation}
+ L_{\mathrm{EE}}=[1,2,2,1],
+ \qquad
+ H_{\mathrm{EE}}=[1,2,3,4,3,2,1].
+\end{equation}
+The proposed analogue of H2L3 is
+$(L_{\mathrm{EE}},L_{\mathrm{EE}},L_{\mathrm{EE}},H_{\mathrm{EE}})\times2$.
+Here ``frequency'' means structured variation over network depth, not a
+Fourier frequency or literal brain oscillation.  A middle-window search is
+motivated by the Layer-10 contribution result and by Training-Free Looped
+Transformers, which reports strong loop windows centered around 45--60\% depth
+and uses Layers 12--15, $K=2$, and damped-Euler $\alpha=0.5$ for
+Qwen3-1.7B-Base \citep{zhang2026onelayer,chen2026looped}.  Together they suggest
+a provisional 35--60\% envelope, not a universal law.
+
+For an equal-cost window occupying fraction $w$ and executed $K$ times,
+\begin{equation}
+ C_{\mathrm{loop}}/C_{\mathrm{base}}=1+(K-1)w.
+\end{equation}
+A 25\% window repeated twice is therefore a recurrence-only $1.25\times$
+anchor.  Higher EE levels require measured $c(\mathrm{level})$ and cannot be
+folded into that estimate.  Untying the two cycles preserves approximately the
+same forward operator count while creating six independent $L_{\mathrm{EE}}$
+blocks and two independent $H_{\mathrm{EE}}$ blocks.  It may recover factual
+capacity but increases checkpoint, optimizer, communication, memory, and data
+requirements and discards recurrence-specific algorithm reuse, depth
+extrapolation, and adaptive-compute biases.  Native pretraining is the primary
+test; cloning middle blocks with exact-no-op EE branches is a separate retrofit
+experiment.
+
+Attention type supplies a second depth-domain pattern.  Kimi K3 contains 69
+KDA and 24 Gated MLA layers, approximately a three-KDA-to-one-full cadence
+\citep{kimit2026k3}.  A phase-locked hypothesis assigns lower FFN EE levels to
+efficient-attention layers and a higher level to periodic Full-Attention
+layers, for example
+\begin{equation}
+ [\mathrm{KDA}_1,\mathrm{KDA}_1,\mathrm{KDA}_1,\mathrm{Full}_3].
+\end{equation}
+This synchronizes broader token mixing with a higher-order FFN integration
+event and may reproduce part of an HRM-like detail/integration hierarchy
+without weight sharing.  The minimum controls are attention-only
+$[1,1,1,1]$, elevated aligned $[2,2,2,4]$, a budget-matched shifted peak
+$[1,1,3,1]$, uniform-level, and shuffled-peak schedules.  The raw diagnostic
+anti-phase $[3,3,3,1]$ is not budget-matched and must not be treated as the
+primary control.  HydraHead offers a distinct within-layer alternative by
+mixing Full and Linear Attention across heads; it must not be conflated with
+the earlier Hydra Attention mechanism \citep{tan2026hydrahead,bolya2022hydra}.
+Holding a trained HydraHead full/linear head ratio constant across depth would
+isolate the FFN-level envelope; varying the ratio jointly with FFN level would
+test whether their peaks should align, alternate, or remain independent.
+
+\subsection{Falsification matrix and experimental order}
+
+Table~\ref{tab:followup-matrix} compresses the acceptance logic.  Improvements
+must survive matched parameters, activated FLOPs, data, and evaluation; where
+exact matching is impossible, both resource axes and fitted scaling controls
+must be reported.
+
+\begin{table}[H]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3.2pt}
+\renewcommand{\arraystretch}{1.14}
+\caption{Post-study proposals and their minimum falsification controls.}
+\label{tab:followup-matrix}
+\begin{tabularx}{\linewidth}{@{}
+  >{\raggedright\arraybackslash}p{0.14\linewidth}
+  >{\raggedright\arraybackslash}p{0.20\linewidth}
+  >{\raggedright\arraybackslash}X
+  >{\raggedright\arraybackslash}p{0.20\linewidth}
+  >{\raggedright\arraybackslash}p{0.16\linewidth}@{}}
+\toprule
+Proposal & Mechanism & Expected benefit & Required control & Main risk \\
+\midrule
+TriGLU bottleneck & Rank-constrained side coordinates & Structure and conditioning & Width and no-bottleneck ablations & Under-capacity \\
+Structured SHS & Diagonal, rank-$R$, or multi-LoRA dynamic gates & Finer modulation per parameter & HyperGrid at matched budget & Generator overhead \\
+Expert products & Bounded multiplicative expert fusion & Higher-order expert interaction & Additive MoE at matched active cost & Numerical instability \\
+Dynamic SwiGLU & Context-shared full-rank basis mixture & Dense dynamic control & Sparse top-$k$ and static merged matrices & Loss of conditional compute \\
+Attention EE & Dynamic recurrent write/read operators & Linear-scaling context processing & KDA, Mamba, and Full Attention & State and bandwidth cost \\
+Frequency-shaped EE & Tied or untied level envelope; phase locking & Detail/integration hierarchy & Flat, shifted, shuffled, and recurrence-only cells & Capacity/compute confounding \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The staged order is: (1) compare diagonal, rank-one, rank-$R$, multi-LoRA, and
+HyperGrid gates; (2) test residualized two-expert products before scaling
+expert count; (3) separate shared/routed fusion policies and compare dense
+training with QB-balanced sparse routing; (4) compare tied, damped-Euler, and
+untied frequency-shaped middle windows at matched active FLOPs; (5) test
+phase-locked attention/FFN schedules against shifted, uniform, and shuffled
+controls; and only then (6) test full-rank dynamic SwiGLU bases and attention
+replacement.  Every cell should begin as an exact no-op or controlled
+near-identity perturbation and report independent and activated parameters,
+training and inference FLOPs, communication, state memory, throughput,
+factual-knowledge capacity, reasoning, generalization, and sensitivity to
+additional recurrent steps.
 
 \section*{Artifact Availability}
 
