@@ -256,6 +256,7 @@ changing attention.
 \section{Model}
 
 \subsection{Backbone and update scope}
+\label{sec:backbone-scope}
 
 The backbone is Qwen3-1.7B-Base \citep{yang2025qwen3}: 28 decoder layers,
 hidden width 2,048, FFN intermediate width 6,144, 16 query heads, 8 key/value
@@ -351,6 +352,7 @@ rather than a minimal adapter.
 \section{Experimental Design}
 
 \subsection{Relationship to the layer-selective RL workflow}
+\label{sec:layer-selective-workflow}
 
 The experiment follows the operational structure of
 \citet{zhang2026onelayer}: Qwen3-1.7B-Base, Layer 10, NuminaMath-CoT, GRPO,
@@ -577,7 +579,17 @@ identical at every checkpoint.
 Values are mean $\pm$ population standard deviation in percentage points.
 $^*$MBPP and therefore CodeAvg remain provisional.  $^\dagger$All category
 averages are equal-weight descriptive summaries and are intentionally muted;
-the three bold rows are the hard generative benchmarks discussed in the text.}
+the three bold rows are the hard generative benchmarks discussed in the text.
+\textbf{``Baseline'' denotes the best layer from the source single-layer
+reinforcement-learning (SLRL) study---Layer 10---not the untuned base model and
+not full-parameter RL.  A
+negative difference therefore means only that \TriGLU{} trails this strongest
+SLRL comparator on that metric; it does not establish fundamental capability
+degradation below the untuned base.  The source protocol reports Layer-10 SLRL
+at 51.8 MathAvg versus 50.8 for full-parameter RL, so parity or a small deficit
+relative to this baseline may still correspond to parity or an improvement
+relative to full RL, subject to the cross-harness boundary in
+Sections~\ref{sec:backbone-scope} and \ref{sec:layer-selective-workflow}.}}
 \label{tab:means}
 \small
 \begin{tabular}{lrrr}
@@ -629,6 +641,16 @@ The source guide's intuition---extra expressivity may improve hard reasoning
 while occasionally destabilizing simpler knowledge retrieval or multilingual
 behavior---is consistent with this profile, but is not uniquely established by
 it.
+
+These local deficits are relative to the strongest source-selected SLRL layer,
+not to the untuned base model.  The broader experiment is an RL improvement over
+that starting model; a negative \TriGLU{}--baseline cell therefore does not show
+that EE destroyed the underlying capability.  One plausible transfer-specific
+hypothesis is that the newly initialized EE path received math RL but no
+broad-domain pretraining, so it can trail the best SLRL comparator on isolated
+OOD tasks even while improving over the untuned starting point overall.  A
+same-harness per-benchmark base comparison and the staged EE-only warm start in
+Appendix~\ref{app:followup-agenda} are needed to test that interpretation.
 
 The OOD category averages should therefore be treated as deliberately weak
 summaries.  They assign equal weight to benchmarks with different domains,
@@ -1047,6 +1069,17 @@ and uses Layers 12--15, $K=2$, and damped-Euler $\alpha=0.5$ for
 Qwen3-1.7B-Base \citep{zhang2026onelayer,chen2026looped}.  Together they suggest
 a provisional 35--60\% envelope, not a universal law.
 
+For EE-PEFT, the loop can be restricted to the best contiguous middle window
+rather than applied model-wide.  Training-Free Looped Transformers is a frozen-
+checkpoint inference wrapper: it performs no fine-tuning, continued training,
+or learned parameter update \citep{chen2026looped}.  Two extensions should
+therefore be separated.  In \emph{EE then Loop}, the EE component is trained
+first and a damped loop is applied post hoc to the frozen result.  In
+\emph{Loop-mounted EE}, the same loop is active while the EE parameters train,
+allowing them to co-adapt to repeated hidden states.  The minimum controls are
+loop only, EE only, both orderings, and an unmodified checkpoint, all using the
+same selected window, $K$, damping, data, and activated-compute accounting.
+
 For an equal-cost window occupying fraction $w$ and executed $K$ times,
 \begin{equation}
  C_{\mathrm{loop}}/C_{\mathrm{base}}=1+(K-1)w.
@@ -1083,6 +1116,28 @@ Holding a trained HydraHead full/linear head ratio constant across depth would
 isolate the FFN-level envelope; varying the ratio jointly with FFN level would
 test whether their peaks should align, alternate, or remain independent.
 
+\subsection{A CPT--SFT--RL warm start for EE-PEFT}
+
+The reported direct-RL run is a cold start for the new EE component.  Its
+zero-initialized return makes the initial model an exact functional no-op, but
+its internal parameters have received no broad contiguous-document pretraining
+and no general instruction-following supervision before their first
+task-conditioned gradients arrive from math rollout traces.  The result
+therefore shows that a randomly initialized, non-pretrained EE path can grok
+part of the RL objective; it does not show that direct RL is the optimal
+curriculum.
+
+A staged alternative freezes the backbone and trains only the EE component:
+(1) broad-domain continued pretraining on a decontaminated mixture of books,
+web text, code, mathematics, multilingual text, and other long-form documents;
+(2) EE-only SFT on instruction-following and verified chain-of-thought data;
+and (3) the matched RL protocol.  This proposal is distinct from the historical
+SFT pilot: that pilot updated a broader selected-layer configuration and did
+not initialize the production RL runs.  The minimum ablation is direct RL,
+CPT-to-RL, SFT-to-RL, and CPT-to-SFT-to-RL, with matched RL prompts and seeds,
+explicit token/compute accounting, and a separately named backbone-unfrozen
+condition.
+
 \subsection{Falsification matrix and experimental order}
 
 Table~\ref{tab:followup-matrix} compresses the acceptance logic.  Improvements
@@ -1112,18 +1167,21 @@ Expert products & Bounded multiplicative expert fusion & Higher-order expert int
 Dynamic SwiGLU & Context-shared full-rank basis mixture & Dense dynamic control & Sparse top-$k$ and static merged matrices & Loss of conditional compute \\
 Attention EE & Dynamic recurrent write/read operators & Linear-scaling context processing & KDA, Mamba, and Full Attention & State and bandwidth cost \\
 Frequency-shaped EE & Tied or untied level envelope; phase locking & Detail/integration hierarchy & Flat, shifted, shuffled, and recurrence-only cells & Capacity/compute confounding \\
+EE warm start & EE-only CPT, SFT, then RL & General-language and instruction priors before reward optimization & Direct RL, CPT-only, and SFT-only starts & Extra-token/compute confounding \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-The staged order is: (1) compare diagonal, rank-one, rank-$R$, multi-LoRA, and
-HyperGrid gates; (2) test residualized two-expert products before scaling
-expert count; (3) separate shared/routed fusion policies and compare dense
-training with QB-balanced sparse routing; (4) compare tied, damped-Euler, and
-untied frequency-shaped middle windows at matched active FLOPs; (5) test
-phase-locked attention/FFN schedules against shifted, uniform, and shuffled
-controls; and only then (6) test full-rank dynamic SwiGLU bases and attention
-replacement.  Every cell should begin as an exact no-op or controlled
+The staged order is: (1) compare direct-RL cold start with EE-only CPT, SFT,
+and CPT-to-SFT warm starts; (2) compare diagonal, rank-one, rank-$R$, multi-LoRA,
+and HyperGrid gates; (3) test residualized two-expert products before scaling
+expert count; (4) separate shared/routed fusion policies and compare dense
+training with QB-balanced sparse routing; (5) compare loop-only, EE-only,
+post-hoc EE-then-Loop, Loop-mounted EE, and untied frequency-shaped middle
+windows at matched active FLOPs; (6) test phase-locked attention/FFN schedules
+against shifted, uniform, and shuffled controls; and only then (7) test
+full-rank dynamic SwiGLU bases and attention replacement.  Every cell should
+begin as an exact no-op or controlled
 near-identity perturbation and report independent and activated parameters,
 training and inference FLOPs, communication, state memory, throughput,
 factual-knowledge capacity, reasoning, generalization, and sensitivity to

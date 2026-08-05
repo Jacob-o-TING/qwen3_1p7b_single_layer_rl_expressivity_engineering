@@ -744,7 +744,41 @@ or distillation. Assuming a trained head-level hybrid allows the desired ratio
 to be represented in every layer, the first EE recurrence study can hold that
 ratio fixed and isolate the FFN level envelope.
 
-### 6.4 Unrolling the loop into independent parameters
+### 6.4 Looping the best contiguous layers in EE-PEFT
+
+For a parameter-efficient retrofit, literal recurrence need not cover the
+whole model. A more targeted design loops only the best contiguous middle
+window identified by a frozen-checkpoint search or a low-cost layer-selection
+proxy, while attaching EE components only inside that window. This combines
+the selected-layer premise of *Is One Layer Enough?* with the contiguous-window
+premise of [Training-Free Looped Transformers](https://arxiv.org/abs/2605.23872).
+
+The latter is strictly training-free: it freezes the checkpoint and changes
+only the inference graph, with no fine-tuning, continued training, or learned
+loop parameters. It uses damped residual substeps because naive reapplication
+of pretrained blocks often degrades. Any learned EE-plus-loop experiment is
+therefore an extension of that method, not a reproduction of its training
+procedure.
+
+Two orders should be compared:
+
+1. **EE then Loop.** Train the EE component without recurrence, freeze the
+   resulting checkpoint, select the best contiguous window, and apply the
+   damped loop post hoc. This cleanly tests whether a successful EE-PEFT model
+   also benefits from a training-free depth refinement.
+2. **Loop-mounted EE.** Install the damped loop during EE training so that the
+   EE component co-adapts to the repeated hidden-state distribution. The base
+   checkpoint may remain frozen while only the EE parameters train, or a
+   separately named cell may allow the selected base layers to co-adapt.
+
+The minimum comparison is frozen checkpoint, loop only, EE only, EE then Loop,
+and Loop-mounted EE. The same contiguous window, loop count `K`, damping
+coefficient, data exposure, and activated-compute budget must be reported.
+Because Loop-mounted EE sees repeated states during optimization while the
+post-hoc cell does not, their difference measures co-adaptation and cannot be
+attributed to recurrence alone.
+
+### 6.5 Unrolling the loop into independent parameters
 
 Once a frequency envelope has been defined without requiring literal module
 identity, recurrence can be removed entirely. Instead of applying the same
@@ -779,7 +813,7 @@ copy from its source layer, adding exact-no-op EE branches, and briefly
 continued-training with symmetry-breaking regularization. Both paths are worth
 testing, but their conclusions must remain separate.
 
-### 6.5 Attention patterns as a second generalized frequency
+### 6.6 Attention patterns as a second generalized frequency
 
 The same depth-domain perspective can include attention. Interleaving Full
 Attention with Sparse or Linear Attention creates another structured pattern:
@@ -871,7 +905,7 @@ This would test whether high-amplitude EE blocks should coincide with more
 full-attention capacity, alternate with it, or remain statistically
 independent.
 
-### 6.6 Required comparisons
+### 6.7 Required comparisons
 
 The minimum native-training comparison should include:
 
@@ -892,7 +926,60 @@ fixed parameter set more effectively, whether EE level schedules improve
 reasoning at matched compute, and whether untied unrolling recovers knowledge
 capacity without losing the multi-timescale inductive bias.
 
-## 7. Local geometric adaptation around an EE layer
+## 7. A CPT--SFT--RL warm start for EE-PEFT
+
+The completed direct-RL experiment is a particularly hard cold start for the
+new component. The exact-no-op return head protects the backbone function at
+initialization, but the internal EE parameters begin without broad-language
+pretraining. Before receiving task-conditioned RL gradients, they have not
+learned from complete, long-form, broad-domain documents or from a general
+instruction distribution. They must discover a useful representation and the
+math-reward target from rollout traces at the same time. The reported result is
+therefore evidence that a randomly initialized, non-pretrained EE component can
+grok part of the RL objective, not evidence that direct RL is its optimal
+training curriculum.
+
+A staged **EE-PEFT warm start** should test:
+
+1. **Broad-domain CPT.** Freeze the backbone and train only the exact-no-op EE
+   component on a decontaminated mixture of books, web text, code, mathematics,
+   multilingual text, and other contiguous documents. This stage teaches the
+   component general language and representation statistics rather than one
+   benchmark family.
+2. **EE-only SFT.** Keep every non-EE parameter frozen and train the EE
+   component on instruction-following and verified chain-of-thought data. This
+   stage teaches response formatting, instruction compliance, and long-form
+   reasoning before reward optimization.
+3. **RL.** Start the matched RL protocol from the warmed EE checkpoint, keeping
+   the scientific backbone policy explicit and identical across comparator
+   cells.
+
+A practical open-data starting point is
+[Dolma](https://arxiv.org/abs/2402.00159) as the broad English spine---it mixes
+web content, scientific papers, code, public-domain books, social media, and
+encyclopedic material---with a controlled
+[FineWeb-Edu](https://arxiv.org/abs/2406.17557) supplement for educational
+prose. Neither is a complete multilingual solution, so the CPT mixture still
+needs an explicitly licensed multilingual component. For EE-only SFT, the
+[Aya Collection](https://arxiv.org/abs/2402.06619) is a candidate source of
+multilingual instruction data, but verified chain-of-thought supervision must
+be curated separately rather than inferred from instruction diversity. Exact
+mixture weights, licenses, deduplication, benchmark decontamination, document
+lengths, and tokenizer-normalized token counts must be frozen in a manifest
+before comparing curricula.
+
+This proposal is distinct from the historical SFT pilot in the main study.
+That pilot trained a broader selected-layer configuration under a different
+objective and was not used to initialize production RL. The new proposal is a
+controlled curriculum specifically for newly introduced EE parameters.
+
+At minimum, compare direct RL, CPT-to-RL, SFT-to-RL, and CPT-to-SFT-to-RL. Match
+RL prompts and seeds, report pre-RL validation on broad text and instructions,
+and separate gains caused by additional tokens or compute from gains caused by
+curriculum order. A backbone-unfrozen warm start is a separate experiment; it
+must not be silently mixed with the EE-only PEFT claim.
+
+## 8. Local geometric adaptation around an EE layer
 
 The completed experiment modifies the FFN computation of one selected layer
 while allowing the rest of that layer to train. A broader successor could add
@@ -928,7 +1015,7 @@ required cells are no surrounding adaptation, selected-Attention OFT,
 selected-plus-next-Attention OFT, model-wide non-EE OFT, and local unconstrained
 adaptation, with identical EE parameters and training data.
 
-## 8. OFT as a proxy for layer selection
+## 9. OFT as a proxy for layer selection
 
 Exhaustive layer selection is expensive because a rigorous study compares RL
 at every individual layer with an all-layer reference. A possible screening
@@ -955,7 +1042,7 @@ or base-model sharding costs of executing a trillion-parameter model. The claim
 must therefore be demonstrated with measured end-to-end cost, not inferred from
 trainable parameter count alone.
 
-## 9. Proposed experimental order
+## 10. Proposed experimental order
 
 1. Compare channel-wise diagonal, rank-one, rank-`R`, and HyperGrid SHS gates
    at matched parameter count and FLOPs.
@@ -968,16 +1055,18 @@ trainable parameter count alone.
    multiplication, matching expert inventory, active experts, and router budget.
 5. Compare dense all-expert training with QB-balanced sparse routing, measuring
    both load and semantic specialization.
-6. Test local geometric adaptation scopes around one EE layer: no adaptation,
+6. Compare direct-RL cold start with CPT-to-RL, SFT-to-RL, and
+   CPT-to-SFT-to-RL EE-only warm starts.
+7. Test local geometric adaptation scopes around one EE layer: no adaptation,
    selected-Attention OFT, selected-plus-next-Attention OFT, model-wide non-EE
    OFT, and local unconstrained adaptation.
-7. Calibrate OFT-only layer screening against exhaustive full layer-local RL;
+8. Calibrate OFT-only layer screening against exhaustive full layer-local RL;
    scale the proxy only after rank and top-`k` agreement gates pass.
-8. Compare tied middle recurrence, damped-Euler recurrence, and untied
-   frequency-shaped EE schedules at matched active FLOPs.
-9. Test phase-locked KDA/Full-Attention and FFN-level schedules against
+9. Compare loop-only, EE-only, post-hoc EE-then-Loop, Loop-mounted EE, and
+   untied frequency-shaped schedules on the same selected contiguous window.
+10. Test phase-locked KDA/Full-Attention and FFN-level schedules against
    anti-phase, uniform-level, and shuffled-placement controls.
-10. Only after numerical and scaling gates pass, test full-rank dynamic SwiGLU
+11. Only after numerical and scaling gates pass, test full-rank dynamic SwiGLU
    bases and attention-layer replacements.
 
 Every stage should begin as an exact functional no-op or a controlled
