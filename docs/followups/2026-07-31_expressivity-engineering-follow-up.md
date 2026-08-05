@@ -137,6 +137,13 @@ low-dimensional-structure effect.
 
 ## 2. Additive and multiplicative expert composition
 
+**This family is designed for native pretraining, where expert topology,
+routing, normalization, and multiplicative interactions can co-adapt from
+initialization. It does not prescribe structural replacement inside an already
+trained MoE model. EE-PEFT on an existing checkpoint must respect the released
+expert skeleton and treat only architecture-compatible, exact-no-op additions
+as separate interventions.**
+
 ### 2.1 Proposed family
 
 A conventional sparse Mixture-of-Experts layer forms a router-weighted sum:

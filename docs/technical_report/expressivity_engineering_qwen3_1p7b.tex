@@ -79,8 +79,9 @@ these correlated checkpoints, \TriGLU{} improves MathAvg from 52.224 to 52.997
 (+0.773 points) and the provisional CodeAvg from 32.671 to 33.659 (+0.988),
 while Reasoning and Language category averages are approximately tied
 (-0.213 and -0.128).  The clearest gains occur on harder generative tasks:
-\textbf{OlympiadBench} (+2.548), \textbf{corrected LiveCodeBench} (+1.063), and a manually
-audited \textbf{GPQA-Diamond-Freeform} diagnostic (+1.746).  These results are promising
+\textbf{OlympiadBench} (+2.548), \textbf{corrected LiveCodeBench} (+1.063), and a
+row-by-row \texttt{GPT-5.6 Sol} audit at High reasoning effort of the
+\textbf{GPQA-Diamond-Freeform} diagnostic (+1.746).  These results are promising
 but not definitive: they come from one training seed, checkpoint variation is
 not independent-seed uncertainty, several evaluation protocols required
 correction, and response-length caps remain in both training and evaluation.
@@ -464,8 +465,9 @@ OOD evaluation includes:
         \citep{austin2021mbpp}, and corrected LiveCodeBench
         \citep{jain2024livecodebench};
   \item Reasoning: GPQA-Diamond \citep{rein2023gpqa} and MMLU-Pro
-        \citep{wang2024mmlupro}, plus a separate GPQA-Diamond-Freeform manual
-        diagnostic that is not included in ReasoningAvg;
+        \citep{wang2024mmlupro}, plus a separate GPQA-Diamond-Freeform
+        full-row semantic diagnostic, audited with \texttt{GPT-5.6 Sol} at High
+        reasoning effort, that is not included in ReasoningAvg;
   \item Language and instruction following: C-Eval \citep{huang2023ceval},
         IFEval \citep{zhou2023ifeval}, and MGSM \citep{shi2022mgsm}.
 \end{itemize}
@@ -502,7 +504,7 @@ MBPP & Short natural-language programming tasks; execution-based tests & Introdu
 LiveCodeBench & Time-indexed competitive-programming problems; execution-based tests & Harder and less contamination-prone coding evaluation \\
 GPQA-Diamond & Graduate-level science questions; four-way multiple choice & Expert factual and scientific reasoning; 25\% random-choice floor \\
 MMLU-Pro & Ten-choice, multi-domain knowledge and reasoning & Broad professional/academic reasoning with a 10\% random-choice floor \\
-GPQA-Diamond-Freeform & Same science questions without answer options; manual semantic audit & Stricter diagnostic that removes the multiple-choice floor \\
+GPQA-Diamond-Freeform & Same science questions without answer options; full-row \texttt{GPT-5.6 Sol} (High) semantic audit & Stricter diagnostic that removes the multiple-choice floor \\
 C-Eval & Chinese multi-subject multiple choice & Broad school-to-professional knowledge in Chinese \\
 IFEval & Verifiable instruction-following constraints & Tests compliance rather than subject-matter depth \\
 MGSM & Multilingual grade-school mathematics; free-form short answer & Elementary mathematics under cross-lingual generation pressure \\
@@ -520,8 +522,9 @@ capability.  The corrected table therefore uses:
   \item a corrected LiveCodeBench sandbox output contract after the legacy
         contract produced an artificial all-zero result;
   \item explicit separation of AMC Average@32 from greedy pass@1;
-  \item a row-by-row semantic audit of 1,260 GPQA-Diamond-Freeform responses,
-        with uncertain judgments counted as incorrect.
+  \item a row-by-row semantic audit of 1,260 GPQA-Diamond-Freeform responses
+        performed with \texttt{GPT-5.6 Sol} at High reasoning effort, with
+        uncertain judgments counted as incorrect.
 \end{itemize}
 
 These corrections preserve prompts and scoring intent, but do not establish
@@ -579,10 +582,6 @@ identical at every checkpoint.
 Values are mean $\pm$ population standard deviation in percentage points.
 $^*$MBPP and therefore CodeAvg remain provisional.
 \protect\newline
-$^\dagger$All category
-averages are equal-weight descriptive summaries and are intentionally muted;
-the three bold rows are the hard generative benchmarks discussed in the text.
-\protect\newline
 \textbf{``Baseline'' denotes the best layer from the source single-layer
 reinforcement-learning (SLRL) study---Layer 10---not the untuned base model and
 not full-parameter RL.}
@@ -592,7 +591,11 @@ degradation below the untuned base.  The source protocol reports Layer-10 SLRL
 at 51.8 MathAvg versus 50.8 for full-parameter RL, so parity or a small deficit
 relative to this baseline may still correspond to parity or an improvement
 relative to full RL, subject to the cross-harness boundary in
-Sections~\ref{sec:backbone-scope} and \ref{sec:layer-selective-workflow}.}
+Sections~\ref{sec:backbone-scope} and \ref{sec:layer-selective-workflow}.
+\protect\newline
+$^\dagger$All category averages are equal-weight descriptive summaries and are
+intentionally muted; the three bold rows are the hard generative benchmarks
+discussed in the text.}
 \label{tab:means}
 \small
 \begin{tabular}{lrrr}
@@ -664,8 +667,9 @@ The raw benchmark vector, protocol status, and cross-checkpoint stability are
 more informative than the sign of a single unweighted OOD average.
 
 The \textbf{GPQA-Diamond-Freeform} table cell is computed from checkpoint-level strict
-accuracy.  Each of the five checkpoints contributes 126 manually audited
-responses; uncertain judgments count as incorrect.  Averaging those five
+accuracy.  Each of the five checkpoints contributes 126 responses audited
+row by row with \texttt{GPT-5.6 Sol} at High reasoning effort; uncertain
+judgments count as incorrect.  Averaging those five
 equal-denominator accuracies is equivalent to 40 correct checkpoint--question
 runs out of 630 for \TriGLU{} (6.349\%) and 29 out of 630 for the baseline
 (4.603\%).  A separate union diagnostic asks how many distinct questions were
@@ -791,10 +795,12 @@ calibration, and teacher--student fidelity study.
         generations.  High-cap OOD cells are not capability ceilings.
   \item \textbf{Provisional MBPP.}  CodeAvg inherits MBPP's unresolved
         protocol boundary.
-  \item \textbf{Manual free-form audit.}  GPQA-Diamond-Freeform provides a
-        strict complementary diagnostic, but its semantic judgments include 13
-        uncertain responses counted as incorrect and are not directly
-        interchangeable with MCQ accuracy.
+  \item \textbf{Model-assisted free-form audit.}  GPQA-Diamond-Freeform
+        provides a strict complementary diagnostic, but its row-by-row
+        semantic judgments were produced by \texttt{GPT-5.6 Sol} at High
+        reasoning effort rather than by independent human annotators.  They
+        include 13 uncertain responses counted as incorrect and are not
+        directly interchangeable with MCQ accuracy.
   \item \textbf{Capacity mismatch.}  \TriGLU{} adds 41.69\% of one layer's
         parameters.  The experiment tests this concrete architecture, not a
         parameter-matched universal EE principle.
@@ -964,6 +970,13 @@ not from generating a literal dense $d_{\mathrm{out}}\times d_{\mathrm{in}}$
 matrix.
 
 \subsection{Expert composition and dynamic SwiGLU components}
+
+\textbf{The proposals in this subsection are designed for native pretraining,
+where expert topology, routing, normalization, and multiplicative interactions
+can co-adapt from initialization.  They do not prescribe structural replacement
+inside an already trained MoE model: EE-PEFT on an existing checkpoint must
+respect its released expert skeleton and treat only architecture-compatible,
+exact-no-op additions as separate interventions.}
 
 Sparse MoE conventionally forms a router-weighted sum.  A distinct hypothesis
 is to combine bounded near-identity expert factors,
