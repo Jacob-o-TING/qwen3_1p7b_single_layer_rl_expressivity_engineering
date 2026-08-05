@@ -648,6 +648,19 @@ while occasionally destabilizing simpler knowledge retrieval or multilingual
 behavior---is consistent with this profile, but is not uniquely established by
 it.
 
+The MMLU-Pro deficit also admits a layer-selection interpretation.  In the
+independent training-free Loop study on Qwen3-1.7B, a position-searched window
+covering Layer 10 improves the selected 16-task aggregate while regressing
+held-out MMLU \citep{chen2026looped}.  Although that intervention and benchmark
+protocol differ from ours, it demonstrates that emphasizing the Layer-10
+neighborhood can favor a selection objective without uniformly improving broad
+knowledge evaluation.  Our MMLU-Pro weakness may therefore partly reflect an
+inherited Layer-10 selection bias or an interaction between that bias and EE,
+rather than an EE-only failure.  Because both of our matched arms update Layer
+10, layer selection alone cannot explain the within-study \TriGLU{}--baseline
+difference; resolving the interaction requires matched non-Layer-10 SLRL and EE
+controls.
+
 These local deficits are relative to the strongest source-selected SLRL layer,
 not to the untuned base model.  The broader experiment is an RL improvement over
 that starting model; a negative \TriGLU{}--baseline cell therefore does not show

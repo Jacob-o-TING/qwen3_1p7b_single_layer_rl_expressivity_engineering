@@ -736,6 +736,16 @@ aggregate by more, but regresses held-out MMLU; optimizing overlap can therefore
 overfit the selection metric. Combined experiments must compare aligned,
 partially shifted, and disjoint EE/Loop placement under held-out validation.
 
+This external result also changes how the completed study's MMLU-Pro deficit
+should be interpreted. Emphasizing the Layer-10 neighborhood may itself favor
+the selected aggregate while weakening broad-knowledge evaluation, so the
+observed deficit may partly reflect an inherited Layer-10 selection bias or an
+`EE x layer-selection` interaction rather than an EE-only failure. Because the
+matched TriGLU and naive-SLRL arms both update Layer 10, selection alone cannot
+explain their within-study difference. The minimum causal test must therefore
+repeat matched SLRL and EE cells at non-Layer-10 controls under one MMLU-Pro
+protocol.
+
 The minimum factorial comparison is no Loop/no EE, Loop only, EE only, EE then
 Loop, and Loop-mounted EE. Window, `K`, integrator, data, and activated compute
 must be matched. The combined cells additionally require the aligned, shifted,
