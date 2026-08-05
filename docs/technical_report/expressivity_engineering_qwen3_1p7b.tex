@@ -577,19 +577,22 @@ identical at every checkpoint.
 \centering
 \caption{Corrected matched-checkpoint results (steps 158/196/226/256/294).
 Values are mean $\pm$ population standard deviation in percentage points.
-$^*$MBPP and therefore CodeAvg remain provisional.  $^\dagger$All category
+$^*$MBPP and therefore CodeAvg remain provisional.
+\protect\newline
+$^\dagger$All category
 averages are equal-weight descriptive summaries and are intentionally muted;
 the three bold rows are the hard generative benchmarks discussed in the text.
+\protect\newline
 \textbf{``Baseline'' denotes the best layer from the source single-layer
 reinforcement-learning (SLRL) study---Layer 10---not the untuned base model and
-not full-parameter RL.  A
-negative difference therefore means only that \TriGLU{} trails this strongest
+not full-parameter RL.}
+A negative difference therefore means only that \TriGLU{} trails this strongest
 SLRL comparator on that metric; it does not establish fundamental capability
 degradation below the untuned base.  The source protocol reports Layer-10 SLRL
 at 51.8 MathAvg versus 50.8 for full-parameter RL, so parity or a small deficit
 relative to this baseline may still correspond to parity or an improvement
 relative to full RL, subject to the cross-harness boundary in
-Sections~\ref{sec:backbone-scope} and \ref{sec:layer-selective-workflow}.}}
+Sections~\ref{sec:backbone-scope} and \ref{sec:layer-selective-workflow}.}
 \label{tab:means}
 \small
 \begin{tabular}{lrrr}
