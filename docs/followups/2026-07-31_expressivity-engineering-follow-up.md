@@ -588,9 +588,147 @@ backpropagation; and any long-range recurrent mechanism requires persistent
 state. The defensible target is **no sequence-length-growing KV cache**, not
 zero memory.
 
-## 6. Frequency-shaped EE as an alternative to recursive depth
+## 6. Plain middle-layer Looping as an independent intervention
 
-### 6.1 What HRM-Text actually repeats
+Looping and frequency-shaped EE are separate architectural axes. A **plain
+Loop** reuses an existing layer or contiguous block one or more extra times; it
+does not require an EE component, an EE-level schedule, or any multiplicative
+shape beyond the operations already present in the checkpoint. Conversely, a
+frequency-shaped EE model can assign different EE levels to independent layers
+without reusing any weights. Their combination is optional and must be tested
+as a separate factorial cell.
+
+### 6.1 What Training-Free Looped Transformers changes
+
+[Training-Free Looped Transformers](https://arxiv.org/abs/2605.23872) starts
+from a completely frozen released checkpoint. Choose a contiguous window
+`[a, b]` and write its composition as:
+
+```text
+g = L_b o ... o L_a.
+```
+
+The ordinary model applies `g` once between the unchanged pre-window and
+post-window layers. The wrapper evaluates the same frozen operator multiple
+times at inference. It adds no parameters and performs no fine-tuning,
+continued training, SFT, RL, or benchmark-specific weight update.
+
+The paper distinguishes two execution modes. **Block mode** repeats the whole
+window, `(L_b o ... o L_a)^K`. **Layer mode** repeats each layer before moving
+on, `L_b^K o ... o L_a^K`. Dense checkpoints behave broadly similarly under
+the two modes, while layer mode is safer for MoE because repeated block-mode
+states can change router decisions and accumulate routing noise.
+
+The window must remain narrow. In the Qwen3-1.7B-Base window-size sweep, the
+four-layer window `[12, 15]` with `K = 2` forward-Euler substeps improves the
+reported 16-task aggregate by `+0.55` points. Six layers give `-0.82`, twelve
+give `-0.63`, and looping all 28 layers collapses by `-27.73`. This supports a
+middle-window search, not a rule that more repeated depth is always better.
+The paper's broader out-of-the-box recipe uses the middle four layers and a
+three-stage Runge--Kutta strategy; the `K = 2` result is specifically the
+Qwen3-1.7B window-selection experiment.
+
+### 6.2 The forward-Euler intuition
+
+Define the residual displacement of the selected frozen operator as:
+
+```text
+F_g(x) = g(x) - x,
+so g(x) = x + F_g(x).
+```
+
+This has the algebraic form of one forward-Euler step of size `h = 1` for the
+virtual ODE `dx/dt = F_g(x)`. The ODE is an interpretation of the residual
+map, not a claim that the Transformer literally follows a known physical
+dynamical system.
+
+The original checkpoint and its post-window layers were trained around the
+one-step endpoint:
+
+```text
+x_1 = x_0 + F_g(x_0) = g(x_0),       virtual time: 0 -> 1.
+```
+
+Naively applying `g` another `K - 1` times uses a full `h = 1` step every time:
+
+```text
+x_{k+1} = g(x_k) = x_k + F_g(x_k).
+```
+
+After `K` applications this approximates virtual time `t = K`, not a more
+accurate version of the trained `t = 1` endpoint. The following layers were
+not trained to consume that extrapolated state, which explains why naive
+reapplication often drifts out of the low-loss region.
+
+Damped Euler instead divides the same total interval `[0, 1]` into `K` smaller
+steps:
+
+```text
+x_{k+1} = x_k + (1 / K) F_g(x_k)
+          = (1 - 1 / K) x_k + (1 / K) g(x_k).
+```
+
+For `K = 2`, each update is simply halfway between the current state and the
+full frozen-block output. Two half-steps still target virtual time `t = 1`;
+they do not advance to `t = 2`. This is the central intuition behind the
+damping coefficient `alpha = 1 / K`, including `alpha = 0.5` for `K = 2`.
+
+The paper also tests higher-order integrators. Its practical Runge--Kutta form
+interpolates between the checkpoint's original one-step output and the
+`K`-substep damped-Euler endpoint using an anchor weight `beta`. `beta = 1`
+recovers the original output, `beta = 0` uses the fully substepped endpoint,
+and intermediate values stay biased toward the state distribution seen during
+training. Higher order is not automatically safer: the paper reports several
+failed solver and wide-window configurations, so the numerical analogy still
+requires empirical validation.
+
+### 6.3 Window placement and compute accounting
+
+Two independent observations motivate a middle search envelope. *Is One Layer
+Enough?* finds that high-contribution RL layers concentrate in the middle; for
+Qwen3-1.7B, Layer 10 of 28 is the strongest reported single-layer math result.
+Training-Free Looped Transformers finds that the centers of the best loop
+windows lie around 45--60% depth for seven of nine tested checkpoints. These
+results motivate searching a narrow middle window, but do not imply that the
+best RL layer and best Loop window must be identical.
+
+If the selected window accounts for fraction `w` of the baseline forward cost
+and is evaluated `K` times total, only `K - 1` evaluations are extra. The
+first-order multiplier is therefore:
+
+```text
+C_loop / C_base = 1 + (K - 1) w.
+```
+
+For example, if the window is one quarter of the model (`w = 0.25`) and is
+evaluated twice (`K = 2`), the unchanged baseline already pays for the first
+quarter-window pass; the Loop adds exactly one more quarter-window pass. Total
+cost is therefore `1 + 1 * 0.25 = 1.25x`, not `2x`. With the same window and
+`K = 3`, two extra quarter-window passes give `1.50x`. This estimate assumes
+equal per-layer cost and excludes cache, routing, kernel, and orchestration
+overhead.
+
+### 6.4 Optional interaction with EE-PEFT
+
+Plain Looping should be evaluated before assuming an EE shape. A
+parameter-efficient successor can then restrict Looping to the best contiguous
+window and independently choose whether that window contains EE components.
+Two orderings remain important:
+
+1. **EE then Loop.** Train EE without recurrence, freeze the result, and apply
+   the training-free damped/RK wrapper post hoc.
+2. **Loop-mounted EE.** Keep the same Loop active while the EE component
+   trains, allowing it to co-adapt to repeated hidden states.
+
+The minimum factorial comparison is no Loop/no EE, Loop only, EE only, EE then
+Loop, and Loop-mounted EE. Window, `K`, integrator, data, and activated compute
+must be matched. A Loop-only gain is evidence for recurrent-depth refinement,
+not frequency-shaped EE; an EE-only gain is evidence for the EE intervention,
+not Looping.
+
+## 7. Frequency-shaped EE across independently parameterized depth
+
+### 7.1 What HRM-Text actually repeats
 
 [HRM](https://arxiv.org/abs/2506.21734) and
 [HRM-Text](https://arxiv.org/abs/2605.20613) motivate hierarchical recurrence
@@ -612,7 +750,8 @@ the `L` module six times and the `H` module twice. Because each module contains
 approximately half of the non-embedding recurrent-core parameters, the paper
 counts the eight module applications as four recursion-equivalent units of
 compute. The EE schedule below consequently adopts the verified `3:1` cadence
-rather than retaining the earlier `2:1` simplification.
+rather than retaining the earlier `2:1` simplification. This borrows HRM's
+multi-timescale shape, not its requirement to reuse the same weights.
 
 Recurrence exposes a fundamental compute-capacity tradeoff. Reapplying a block
 increases FLOPs, activation traffic, and latency without creating new learned
@@ -629,7 +768,7 @@ which to encode factual information. Recurrence may therefore exchange some
 potential knowledge-storage capacity for more computation over the knowledge
 and algorithms already represented.
 
-### 6.2 An operational EE level and a depth-domain frequency
+### 7.2 An operational EE level and a depth-domain frequency
 
 The technical report defines EE through a multiplication-first primitive: a
 fixed linear map performs channel mixing, whereas an input-derived quantity
@@ -681,110 +820,21 @@ L_EE, L_EE, L_EE, H_EE
    1, 2, 3, 4, 3, 2, 1]
 ```
 
-and executes that cycle twice. This preserves the intended analogy: repeated
+and places two copies of that cycle across depth. By default, every position
+has independent parameters. This preserves the intended analogy: repeated
 lower-amplitude detail processing is periodically coordinated by a broader,
-higher-level abstraction block. In compact notation, the complete schedule is:
+higher-level abstraction block, without a Loop. In compact notation, the
+complete depth schedule is:
 
 ```text
 (L_EE, L_EE, L_EE, H_EE) x 2.
 ```
 
-### 6.3 A middle-loop implementation and its compute boundary
+### 7.3 Untied frequency-shaped EE
 
-The recurrent region should initially be restricted to the middle of the
-stack. This is supported by two separate observations. *Is One Layer Enough?*
-finds that high-contribution RL layers concentrate in the middle; for
-Qwen3-1.7B, Layer 10 of 28 is the strongest reported single-layer math result
-and lies roughly 36--39% into the stack depending on the indexing convention.
-[Training-Free Looped Transformers](https://arxiv.org/abs/2605.23872) finds
-that the centers of the best loop windows lie around 45--60% depth for seven
-of nine tested checkpoints. Its Qwen3-1.7B-Base configuration loops Layers
-12--15 with `K = 2` and a damped-Euler treatment. Together these findings
-motivate a provisional 35--60% search envelope, not a universal biological or
-architectural law.
-
-The training-free method also supplies an important stability warning. Naive
-reapplication often degrades performance because a pretrained residual block
-is not necessarily contractive. The paper interprets a pre-norm block as a
-forward-Euler step and replaces one large residual update with smaller damped
-substeps; for Qwen3-1.7B, the reported reference uses `K = 2` and
-`alpha = 0.5`. Native training may learn a recurrent block directly, but it
-should still compare undamped, damped, normalized, and residual-scaled forms.
-
-If a middle window accounts for a fraction `w` of otherwise equal-cost layers
-and is executed `K` total times, its first-order compute multiplier is:
-
-```text
-C_loop / C_base = 1 + (K - 1) w.
-```
-
-Thus a 25% middle window executed twice gives approximately `1.25x` total
-forward compute. This estimate is valid only when repeated layers have the
-same cost as their baseline counterparts and ignores orchestration overhead.
-The proposed higher EE levels themselves add branches or multiplicative
-operators, so their true cost must instead use the measured cost `c(level)`:
-
-```text
-C_EE / C_base
-= [C_outside + sum_j c(level_j)] / [N c(1)].
-```
-
-The `1.25x` figure is therefore the recurrence-only anchor, not a guaranteed
-end-to-end cost for the frequency-shaped EE architecture.
-
-For an initial FFN-focused experiment, attention-mode variation can be held
-approximately constant by assigning Full and Linear Attention at head level.
-The architecture matching that description is
-[HydraHead](https://arxiv.org/abs/2606.20097), which hybridizes Full and Linear
-Attention along the head axis; it is distinct from the 2022
-[Hydra Attention](https://arxiv.org/abs/2209.07484) mechanism for vision
-transformers. HydraHead makes the full/linear head fraction a design axis, but
-does not establish that an arbitrary ratio can be changed without retraining
-or distillation. Assuming a trained head-level hybrid allows the desired ratio
-to be represented in every layer, the first EE recurrence study can hold that
-ratio fixed and isolate the FFN level envelope.
-
-### 6.4 Looping the best contiguous layers in EE-PEFT
-
-For a parameter-efficient retrofit, literal recurrence need not cover the
-whole model. A more targeted design loops only the best contiguous middle
-window identified by a frozen-checkpoint search or a low-cost layer-selection
-proxy, while attaching EE components only inside that window. This combines
-the selected-layer premise of *Is One Layer Enough?* with the contiguous-window
-premise of [Training-Free Looped Transformers](https://arxiv.org/abs/2605.23872).
-
-The latter is strictly training-free: it freezes the checkpoint and changes
-only the inference graph, with no fine-tuning, continued training, or learned
-loop parameters. It uses damped residual substeps because naive reapplication
-of pretrained blocks often degrades. Any learned EE-plus-loop experiment is
-therefore an extension of that method, not a reproduction of its training
-procedure.
-
-Two orders should be compared:
-
-1. **EE then Loop.** Train the EE component without recurrence, freeze the
-   resulting checkpoint, select the best contiguous window, and apply the
-   damped loop post hoc. This cleanly tests whether a successful EE-PEFT model
-   also benefits from a training-free depth refinement.
-2. **Loop-mounted EE.** Install the damped loop during EE training so that the
-   EE component co-adapts to the repeated hidden-state distribution. The base
-   checkpoint may remain frozen while only the EE parameters train, or a
-   separately named cell may allow the selected base layers to co-adapt.
-
-The minimum comparison is frozen checkpoint, loop only, EE only, EE then Loop,
-and Loop-mounted EE. The same contiguous window, loop count `K`, damping
-coefficient, data exposure, and activated-compute budget must be reported.
-Because Loop-mounted EE sees repeated states during optimization while the
-post-hoc cell does not, their difference measures co-adaptation and cannot be
-attributed to recurrence alone.
-
-### 6.5 Unrolling the loop into independent parameters
-
-Once a frequency envelope has been defined without requiring literal module
-identity, recurrence can be removed entirely. Instead of applying the same
-`L_EE` and `H_EE` parameters across two cycles, instantiate two untied copies
-with the same level schedule. The forward graph then preserves the proposed
-multi-timescale pattern but becomes an ordinary deeper network:
+The default frequency-shaped realization instantiates two untied copies with
+the same level schedule. The forward graph preserves the proposed
+multi-timescale pattern but remains an ordinary feed-forward deeper network:
 
 ```text
 cycle 1: unique L_EE(1), L_EE(2), L_EE(3), H_EE(1)
@@ -813,7 +863,7 @@ copy from its source layer, adding exact-no-op EE branches, and briefly
 continued-training with symmetry-breaking regularization. Both paths are worth
 testing, but their conclusions must remain separate.
 
-### 6.6 Attention patterns as a second generalized frequency
+### 7.4 Attention patterns as a second generalized frequency
 
 The same depth-domain perspective can include attention. Interleaving Full
 Attention with Sparse or Linear Attention creates another structured pattern:
@@ -905,17 +955,21 @@ This would test whether high-amplitude EE blocks should coincide with more
 full-attention capacity, alternate with it, or remain statistically
 independent.
 
-### 6.7 Required comparisons
+### 7.5 Required comparisons
 
-The minimum native-training comparison should include:
+The first comparison should isolate frequency-shaped EE without any Loop:
 
 1. a standard non-recurrent Transformer with constant `Level = 1`;
-2. tied `(L_EE, L_EE, L_EE, H_EE) x 2` recurrence;
-3. an untied unrolling of that schedule at matched active FLOPs;
-4. a middle-window `K = 2` damped-Euler control without added EE levels;
-5. flat-depth EE controls matched for parameters and FLOPs; and
-6. attention-only, phase-aligned, elevated phase-aligned, anti-phase,
+2. the untied `(L_EE, L_EE, L_EE, H_EE) x 2` depth schedule;
+3. flat-depth and uniform-level EE controls matched for parameters and FLOPs;
+4. shuffled placement preserving the same level histogram; and
+5. attention-only, phase-aligned, elevated phase-aligned, anti-phase,
    uniform-level, and shuffled-phase Full/KDA-to-EE schedules.
+
+A second factorial comparison can then cross that untied EE schedule with the
+plain-Loop axis from Section 6: no Loop/no EE, Loop only, EE only, EE then Loop,
+and Loop-mounted EE. A tied reuse of the EE schedule belongs in this second
+matrix, not in the definition of frequency-shaped EE.
 
 Every comparison should report independent and activated parameters, training
 and inference FLOPs, wall-clock throughput, optimizer and checkpoint memory,
@@ -926,7 +980,7 @@ fixed parameter set more effectively, whether EE level schedules improve
 reasoning at matched compute, and whether untied unrolling recovers knowledge
 capacity without losing the multi-timescale inductive bias.
 
-## 7. A CPT--SFT--RL warm start for EE-PEFT
+## 8. A CPT--SFT--RL warm start for EE-PEFT
 
 The completed direct-RL experiment is a particularly hard cold start for the
 new component. The exact-no-op return head protects the backbone function at
@@ -979,7 +1033,7 @@ and separate gains caused by additional tokens or compute from gains caused by
 curriculum order. A backbone-unfrozen warm start is a separate experiment; it
 must not be silently mixed with the EE-only PEFT claim.
 
-## 8. Local geometric adaptation around an EE layer
+## 9. Local geometric adaptation around an EE layer
 
 The completed experiment modifies the FFN computation of one selected layer
 while allowing the rest of that layer to train. A broader successor could add
@@ -1015,7 +1069,7 @@ required cells are no surrounding adaptation, selected-Attention OFT,
 selected-plus-next-Attention OFT, model-wide non-EE OFT, and local unconstrained
 adaptation, with identical EE parameters and training data.
 
-## 9. OFT as a proxy for layer selection
+## 10. OFT as a proxy for layer selection
 
 Exhaustive layer selection is expensive because a rigorous study compares RL
 at every individual layer with an all-layer reference. A possible screening
@@ -1042,7 +1096,7 @@ or base-model sharding costs of executing a trillion-parameter model. The claim
 must therefore be demonstrated with measured end-to-end cost, not inferred from
 trainable parameter count alone.
 
-## 10. Proposed experimental order
+## 11. Proposed experimental order
 
 1. Compare channel-wise diagonal, rank-one, rank-`R`, and HyperGrid SHS gates
    at matched parameter count and FLOPs.
@@ -1062,11 +1116,14 @@ trainable parameter count alone.
    OFT, and local unconstrained adaptation.
 8. Calibrate OFT-only layer screening against exhaustive full layer-local RL;
    scale the proxy only after rank and top-`k` agreement gates pass.
-9. Compare loop-only, EE-only, post-hoc EE-then-Loop, Loop-mounted EE, and
-   untied frequency-shaped schedules on the same selected contiguous window.
-10. Test phase-locked KDA/Full-Attention and FFN-level schedules against
+9. Validate plain frozen-model Looping without EE, including naive,
+   damped-Euler, and Runge--Kutta strategies at matched windows and cost.
+10. Compare untied frequency-shaped EE against flat, uniform, and shuffled
+    depth schedules without Looping.
+11. Cross the independent axes with EE-then-Loop and Loop-mounted EE cells.
+12. Test phase-locked KDA/Full-Attention and FFN-level schedules against
    anti-phase, uniform-level, and shuffled-placement controls.
-11. Only after numerical and scaling gates pass, test full-rank dynamic SwiGLU
+13. Only after numerical and scaling gates pass, test full-rank dynamic SwiGLU
    bases and attention-layer replacements.
 
 Every stage should begin as an exact functional no-op or a controlled

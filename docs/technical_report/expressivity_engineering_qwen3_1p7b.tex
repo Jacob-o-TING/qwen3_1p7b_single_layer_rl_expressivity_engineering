@@ -1031,7 +1031,96 @@ stateless per-token HyperNetwork has no long-range memory unless it consumes a
 context summary or state; once state is added, the experiment compares
 alternative fast-weight memories rather than ``memory-free'' attention.
 
-\subsection{Frequency-shaped EE and recurrent depth}
+\subsection{Training-free Loop as an independent inference intervention}
+
+Plain Looping is independent of frequency-shaped EE.  It reuses an existing
+layer or contiguous block without requiring any new EE component or
+depth-varying EE-level schedule.  Conversely, frequency-shaped EE can use
+independent parameters at every depth and need not loop any block.  Combining
+the two is an optional factorial intervention, not part of either definition.
+
+Training-Free Looped Transformers formalizes the plain-Loop case for frozen
+released checkpoints \citep{chen2026looped}.  For a contiguous window
+$[a,b]$, define
+\begin{equation}
+ g=L_b\circ\cdots\circ L_a,
+ \qquad F_g(x)=g(x)-x.
+\end{equation}
+The ordinary checkpoint applies $g$ once between unchanged pre-window and
+post-window layers.  The wrapper adds no parameters and performs no
+fine-tuning, continued training, SFT, RL, or other weight update.  Block mode
+repeats the whole window, $(L_b\circ\cdots\circ L_a)^K$, whereas layer mode
+repeats each layer before moving on, $L_b^K\circ\cdots\circ L_a^K$.  Dense
+models behave broadly similarly under the two modes; layer mode is safer for
+MoE because block-mode perturbations can change router decisions between
+iterations and accumulate routing noise.
+
+The Euler interpretation begins with the identity
+\begin{equation}
+ g(x)=x+F_g(x).
+\end{equation}
+This has exactly the algebraic form of one forward-Euler step of size $h=1$
+for the virtual residual ODE $\dot{x}=F_g(x)$.  The ODE is a numerical
+interpretation of the residual map, not a claim that the Transformer follows a
+known physical dynamical system.  The frozen checkpoint targets the one-step
+endpoint
+\begin{equation}
+ x_1=x_0+F_g(x_0)=g(x_0),
+ \qquad t:0\rightarrow1.
+\end{equation}
+Naively applying $g$ a total of $K$ times takes $K$ full steps,
+$x_{k+1}=g(x_k)$, and therefore approximates virtual time $t=K$.  The
+post-window layers were trained to consume the $t=1$ state, not this
+extrapolated endpoint.  This explains why naive reapplication commonly drifts
+out of the trained low-loss region.
+
+Damped Euler instead divides the same total interval $[0,1]$ into $K$ smaller
+steps:
+\begin{equation}
+ x_{k+1}=x_k+\frac{1}{K}F_g(x_k)
+ =\left(1-\frac{1}{K}\right)x_k+\frac{1}{K}g(x_k).
+ \label{eq:damped-loop}
+\end{equation}
+For $K=2$, each update lies halfway between the current state and the full
+frozen-window output.  Two half-steps still target $t=1$; they do not advance
+to $t=2$.  This is the intuition behind $\alpha=1/K$, including
+$\alpha=0.5$ for $K=2$.  The paper's practical Runge--Kutta construction also
+interpolates between the checkpoint's original one-step output and the
+$K$-substep damped-Euler endpoint using an anchor weight $\beta$: $\beta=1$
+preserves the original output, $\beta=0$ uses the fully substepped endpoint,
+and intermediate values remain biased toward the trained endpoint.  Higher
+order is not automatically safer; the paper reports failed wide-window and
+solver configurations.
+
+The Qwen3-1.7B-Base window-size sweep uses $K=2$ forward-Euler substeps.  Its
+four-layer window $[12,15]$ improves the reported 16-task aggregate by
+$+0.55$ points, while six layers give $-0.82$, twelve give $-0.63$, and all
+28 layers collapse by $-27.73$.  The broader fixed recipe uses the middle four
+layers and a three-stage Runge--Kutta strategy.  These results motivate a
+narrow middle-window search but do not imply that the best Loop window, the
+best RL layer, or an EE peak must coincide.
+
+If the selected window accounts for fraction $w$ of baseline forward cost and
+is evaluated $K$ times total, only $K-1$ evaluations are extra:
+\begin{equation}
+ C_{\mathrm{loop}}/C_{\mathrm{base}}=1+(K-1)w.
+ \label{eq:loop-cost}
+\end{equation}
+For $w=0.25$ and $K=2$, the baseline already pays for the first quarter-window
+pass and the Loop adds one more, giving $1+0.25=1.25\times$ total cost rather
+than $2\times$.  With $K=3$, two extra quarter-window passes give
+$1.50\times$.  This first-order estimate excludes unequal layer costs, caches,
+routing, kernels, and orchestration overhead.
+
+EE can be added only after the plain-Loop axis is visible.  In \emph{EE then
+Loop}, EE is trained without recurrence and the damped/RK wrapper is applied
+post hoc to the frozen result.  In \emph{Loop-mounted EE}, the same Loop is
+active while EE trains and can co-adapt to repeated hidden states.  The minimum
+factorial comparison is no Loop/no EE, Loop only, EE only, EE then Loop, and
+Loop-mounted EE, with matched window, $K$, integrator, data, and activated
+compute.
+
+\subsection{Frequency-shaped EE across independently parameterized depth}
 
 HRM and HRM-Text motivate hierarchical recurrence through fast local and slow
 high-level processing \citep{wang2025hrm,wang2026hrmtext}.  The verified
@@ -1041,7 +1130,9 @@ independent weights.  The approximately 3.6 bits per parameter measured in a
 controlled memorization study is not a universal storage constant, but it
 sharpens a testable tradeoff: tied recurrence may improve iterative reasoning
 per parameter while offering less independent weight capacity than an untied
-model at equal active compute \citep{morris2025memorize}.
+model at equal active compute \citep{morris2025memorize}.  This motivates the
+frequency analogy below, but recurrence is not part of the frequency-shaped EE
+definition.
 
 The follow-up introduces a provisional EE level because the main report did
 not define one.  Ordinary SwiGLU is Level 1; each additional \emph{sequential}
@@ -1059,40 +1150,19 @@ Define a low-amplitude detail block and a broader abstraction block as
  \qquad
  H_{\mathrm{EE}}=[1,2,3,4,3,2,1].
 \end{equation}
-The proposed analogue of H2L3 is
+The proposed depth-domain analogue of H2L3 is
 $(L_{\mathrm{EE}},L_{\mathrm{EE}},L_{\mathrm{EE}},H_{\mathrm{EE}})\times2$.
 Here ``frequency'' means structured variation over network depth, not a
-Fourier frequency or literal brain oscillation.  A middle-window search is
-motivated by the Layer-10 contribution result and by Training-Free Looped
-Transformers, which reports strong loop windows centered around 45--60\% depth
-and uses Layers 12--15, $K=2$, and damped-Euler $\alpha=0.5$ for
-Qwen3-1.7B-Base \citep{zhang2026onelayer,chen2026looped}.  Together they suggest
-a provisional 35--60\% envelope, not a universal law.
-
-For EE-PEFT, the loop can be restricted to the best contiguous middle window
-rather than applied model-wide.  Training-Free Looped Transformers is a frozen-
-checkpoint inference wrapper: it performs no fine-tuning, continued training,
-or learned parameter update \citep{chen2026looped}.  Two extensions should
-therefore be separated.  In \emph{EE then Loop}, the EE component is trained
-first and a damped loop is applied post hoc to the frozen result.  In
-\emph{Loop-mounted EE}, the same loop is active while the EE parameters train,
-allowing them to co-adapt to repeated hidden states.  The minimum controls are
-loop only, EE only, both orderings, and an unmodified checkpoint, all using the
-same selected window, $K$, damping, data, and activated-compute accounting.
-
-For an equal-cost window occupying fraction $w$ and executed $K$ times,
-\begin{equation}
- C_{\mathrm{loop}}/C_{\mathrm{base}}=1+(K-1)w.
-\end{equation}
-A 25\% window repeated twice is therefore a recurrence-only $1.25\times$
-anchor.  Higher EE levels require measured $c(\mathrm{level})$ and cannot be
-folded into that estimate.  Untying the two cycles preserves approximately the
-same forward operator count while creating six independent $L_{\mathrm{EE}}$
-blocks and two independent $H_{\mathrm{EE}}$ blocks.  It may recover factual
-capacity but increases checkpoint, optimizer, communication, memory, and data
-requirements and discards recurrence-specific algorithm reuse, depth
-extrapolation, and adaptive-compute biases.  Native pretraining is the primary
-test; cloning middle blocks with exact-no-op EE branches is a separate retrofit
+Fourier frequency or literal brain oscillation.  The default realization uses
+independent parameters at every depth: the two copies contain six independent
+$L_{\mathrm{EE}}$ blocks and two independent $H_{\mathrm{EE}}$ blocks.  This is
+an ordinary feed-forward depth schedule, not a Loop.  It increases checkpoint,
+optimizer, communication, memory, and data requirements relative to tied
+recurrence, but retains more independent weight capacity.  A tied version that
+reuses the same $L_{\mathrm{EE}}$ and $H_{\mathrm{EE}}$ blocks is a separate
+Loop-plus-frequency experiment governed by Eq.~\ref{eq:damped-loop}, not the
+default frequency-shaped EE proposal.  Native pretraining is the primary test;
+cloning middle blocks with exact-no-op EE branches is a separate retrofit
 experiment.
 
 Attention type supplies a second depth-domain pattern.  Kimi K3 contains 69
@@ -1166,7 +1236,8 @@ Structured SHS & Diagonal, rank-$R$, or multi-LoRA dynamic gates & Finer modulat
 Expert products & Bounded multiplicative expert fusion & Higher-order expert interaction & Additive MoE at matched active cost & Numerical instability \\
 Dynamic SwiGLU & Context-shared full-rank basis mixture & Dense dynamic control & Sparse top-$k$ and static merged matrices & Loss of conditional compute \\
 Attention EE & Dynamic recurrent write/read operators & Linear-scaling context processing & KDA, Mamba, and Full Attention & State and bandwidth cost \\
-Frequency-shaped EE & Tied or untied level envelope; phase locking & Detail/integration hierarchy & Flat, shifted, shuffled, and recurrence-only cells & Capacity/compute confounding \\
+Plain middle Loop & Frozen block reuse with damped Euler or RK & Inference-time depth refinement & No-Loop checkpoint and naive Loop & State drift and extra latency \\
+Frequency-shaped EE & Untied depth-varying level envelope; phase locking & Detail/integration hierarchy & Flat, shifted, shuffled, and plain-Loop cells & Capacity/compute confounding \\
 EE warm start & EE-only CPT, SFT, then RL & General-language and instruction priors before reward optimization & Direct RL, CPT-only, and SFT-only starts & Extra-token/compute confounding \\
 \bottomrule
 \end{tabularx}
@@ -1176,11 +1247,13 @@ The staged order is: (1) compare direct-RL cold start with EE-only CPT, SFT,
 and CPT-to-SFT warm starts; (2) compare diagonal, rank-one, rank-$R$, multi-LoRA,
 and HyperGrid gates; (3) test residualized two-expert products before scaling
 expert count; (4) separate shared/routed fusion policies and compare dense
-training with QB-balanced sparse routing; (5) compare loop-only, EE-only,
-post-hoc EE-then-Loop, Loop-mounted EE, and untied frequency-shaped middle
-windows at matched active FLOPs; (6) test phase-locked attention/FFN schedules
-against shifted, uniform, and shuffled controls; and only then (7) test
-full-rank dynamic SwiGLU bases and attention replacement.  Every cell should
+training with QB-balanced sparse routing; (5) validate the plain frozen-model
+Loop axis and its damped-Euler/RK strategy without added EE; (6) compare
+untied frequency-shaped EE with flat and shuffled depth schedules; (7) cross
+the independent Loop and EE axes using post-hoc EE-then-Loop and Loop-mounted
+EE; (8) test phase-locked attention/FFN schedules against shifted, uniform, and
+shuffled controls; and only then (9) test full-rank dynamic SwiGLU bases and
+attention replacement.  Every cell should
 begin as an exact no-op or controlled
 near-identity perturbation and report independent and activated parameters,
 training and inference FLOPs, communication, state memory, throughput,
