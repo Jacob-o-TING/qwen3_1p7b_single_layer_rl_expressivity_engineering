@@ -1,7 +1,7 @@
 # Expressivity Engineering Follow-up
 
 **Date:** 2026-07-31
-**Last updated:** 2026-08-03
+**Last updated:** 2026-08-05
 **Status:** Retrospective interpretation and research agenda; the new
 hypotheses are not yet independently validated
 
@@ -22,6 +22,12 @@ The common design premise remains multiplication-first Expressivity
 Engineering: fixed linear maps mix channels, whereas input-conditioned
 multiplication, dynamic weights, and compositions of nonlinear components
 create higher-order or context-dependent interactions.
+
+The 2026-08-05 extension adds three owner-authored directions without replacing
+the earlier agenda: multiplicative-router semantics and grouped expert products,
+local geometric adaptation around an EE-modified layer, and OFT as a possible
+low-cost proxy for layer-contribution screening. These remain proposals rather
+than findings from the completed Qwen3-1.7B experiment.
 
 ## 1. Retrospective connection: the TriGLU bottleneck and LatentMoE
 
@@ -213,6 +219,107 @@ under-specialization. A dense all-expert path guarantees that every expert
 receives a gradient when its coefficient is nonzero, but it sacrifices the
 conditional-compute advantage of sparse MoE and can still learn redundant
 experts.
+
+### 2.4 Router semantics for multiplicative experts
+
+Multiplication is not a free replacement for additive MoE aggregation. Raw
+products can explode or vanish, low-precision arithmetic can amplify outliers,
+and the optimization landscape can become poorly conditioned. The first line
+of defense is therefore explicit scale control: RMSNorm before or between
+product stages, bounded `tanh` or `sigmoid` expert returns, residualized
+near-identity factors, and higher-precision or log-domain accumulation where
+needed. These mechanisms should be ablated rather than stacked without a
+control, because each changes both optimization and representational capacity.
+
+An additive router weight has an immediate interpretation as a coefficient in
+a weighted sum. A multiplicative router needs a different semantics. For one
+expert output vector `e_i(x)` and a nonnegative router score `p_i(x)`, one
+candidate is a sign-preserving element-wise power:
+
+```text
+phi_i(x)
+  = sign(e_i(x))
+    elementwise_mul (abs(e_i(x)) + delta) ^ p_i(x).
+```
+
+As `p_i(x)` approaches zero, the magnitude of each nonzero coordinate approaches
+one, so the expert becomes multiplicatively neutral in magnitude rather than
+being additively suppressed toward zero. Preserving `sign(e_i)` avoids the
+directional ambiguity that would otherwise make negative coordinates behave
+qualitatively differently under even, odd, or non-integer powers. `delta > 0`,
+clamping, and an explicit zero convention are required because the gradient
+contains `log(abs(e_i) + delta)` and can be singular or very large near zero.
+
+The original proposal also allows a learned global or per-expert exponent:
+
+```text
+q_i(x) = tanh(alpha_i) * p_i(x)
+phi_i(x) = sign(e_i(x)) * (abs(e_i(x)) + delta) ^ q_i(x).
+```
+
+This exact form should be tested because it expresses whether routing should
+amplify or invert an expert's magnitude contribution. However, negative
+`tanh(alpha_i)` creates inverse powers and is especially unstable near zero. A
+nonnegative control such as `sigmoid(alpha_i) * p_i(x)` or
+`abs(tanh(alpha_i)) * p_i(x)` is therefore mandatory. The signed-power family
+should also be compared with the earlier bounded near-identity product
+`1 + epsilon_i tanh(e_i)`, which has a clearer exact-no-op limit.
+
+### 2.5 Shared-only and grouped multiplicative routing
+
+The simplest mixed policy is to multiply only the shared experts while keeping
+selectively activated routed experts additive:
+
+```text
+shared_product(x)
+  = product_j phi_shared,j(x)
+
+y(x)
+  = additive_sparse_route(x)
+    + beta(x) elementwise_mul shared_product(x).
+```
+
+This assigns the extra multiplicative expressivity to universal shared
+transformations while preserving sparse experts as selectors for broad or
+specialized knowledge domains. Because only a small number of shared experts
+participate in the product, it also limits product depth and numerical risk.
+Kimi K3 provides a scale reference rather than a direct implementation of this
+proposal: it activates 16 of 896 routed experts per token and uses two
+full-width shared experts, while its published aggregation remains additive.
+
+A second family uses **grouped multiplicative experts**. In the atomic-group
+variant, experts are partitioned into small groups, for example pairs. Selecting
+one route activates every member of the group and multiplies their stabilized
+outputs; different groups remain additive. This reduces the number of router
+branches for a fixed expert inventory and ensures that complementary factors
+co-activate. The tradeoff is reduced routing granularity: under a fixed
+parameter or branch budget, grouping can reduce the number of independently
+addressable semantic expert slots. In particular, if each group replaces one
+previous router branch without increasing the number of underlying subexperts,
+the effective number of separately routable experts is lower. An apparently
+interpretable group also need not learn an interpretable decomposition.
+
+A more permissive variant routes individual experts as usual but changes the
+fusion rule only when multiple selected experts belong to the same predefined
+group:
+
+```text
+A_g(x) = TopK(x) intersect group_g
+
+group_output_g(x)
+  = product_{i in A_g(x)} phi_i(x)
+
+y(x) = sum_g w_g(x) * group_output_g(x).
+```
+
+If only one member of a group is selected, the group reduces to that expert; if
+several are selected, they multiply; groups remain additive with respect to one
+another. This preserves more routing freedom than atomic activation but creates
+a combinatorial and less immediately interpretable fusion rule. Both grouped
+variants must be matched on total experts, activated experts, router entropy,
+parameters, FLOPs, communication, and product depth. They should be rejected if
+their gains disappear under these controls or if numerical stabilization costs
+erase the conditional-compute benefit.
 
 ## 3. SHS as a structured multi-LoRA HyperNetwork
 
@@ -785,20 +892,92 @@ fixed parameter set more effectively, whether EE level schedules improve
 reasoning at matched compute, and whether untied unrolling recovers knowledge
 capacity without losing the multi-timescale inductive bias.
 
-## 7. Proposed experimental order
+## 7. Local geometric adaptation around an EE layer
+
+The completed experiment modifies the FFN computation of one selected layer
+while allowing the rest of that layer to train. A broader successor could add
+Orthogonal Fine-Tuning (OFT) to non-EE components so that the surrounding model
+can adapt its representation geometry without receiving unconstrained dense
+updates. Several scopes must remain distinct:
+
+1. apply OFT broadly to all non-EE components across the model;
+2. apply OFT to the selected layer's Attention while leaving its EE-modified
+   SwiGLU under its intended full or architecture-specific update policy;
+3. apply OFT to Attention in the selected layer and the immediately following
+   layer; or
+4. fully update the selected layer's original SwiGLU together with the EE
+   component when the base FFN must co-adapt, while constraining only the
+   surrounding Attention geometry.
+
+The global form is not automatically preferable. Applying OFT to every layer
+weakens the scientific meaning of ``only one selected layer changes,'' adds a
+model-wide adaptation channel, and may reduce performance by allowing distant
+layers to drift in response to a local intervention. The minimal local proposal
+is therefore the selected layer plus the next layer's Attention, with the
+selected SwiGLU policy treated as a separate variable rather than silently
+folded into OFT.
+
+The geometric intuition is that Attention can be viewed heuristically as a
+generalized dot product under learned, potentially lower-rank query/key
+geometry. An EE-modified FFN can change the representation presented to the
+following token-mixing operation. Constrained adaptation of Attention before
+and after that FFN may therefore align the local metric and subspace geometry
+with the new component. This is an architectural hypothesis, not a claim that
+standard Attention literally implements a fixed non-Euclidean metric. The
+required cells are no surrounding adaptation, selected-Attention OFT,
+selected-plus-next-Attention OFT, model-wide non-EE OFT, and local unconstrained
+adaptation, with identical EE parameters and training data.
+
+## 8. OFT as a proxy for layer selection
+
+Exhaustive layer selection is expensive because a rigorous study compares RL
+at every individual layer with an all-layer reference. A possible screening
+strategy is to run OFT-only RL for every candidate layer and ask whether its
+layer-contribution landscape agrees with the landscape produced by full
+layer-local RL. If the best layer, top-`k` set, and relative ordering are stable,
+OFT could serve as a low-cost first-stage proxy and reserve full RL for only the
+most promising layers.
+
+This proposal requires an explicit calibration study rather than an assumption
+of equivalence. On a model where exhaustive full layer-local RL is affordable,
+compare OFT-only and full-update contribution scores using best-layer agreement,
+top-`k` overlap, Spearman and Kendall rank correlation, benchmark-wise ranking,
+and transfer across data mixtures and seeds. The all-layer RL reference remains
+necessary for interpreting the selected-layer ceiling. Failure to preserve
+rankings would show that OFT's geometry-preserving constraint changes the layer
+importance question rather than merely estimating it more cheaply.
+
+If the proxy is validated, its reduced trainable state and optimizer footprint
+could make layer screening on much larger, potentially trillion-parameter
+models accessible to academic-scale resources. This is a conditional systems
+hypothesis: OFT does not remove the forward, rollout, activation, communication,
+or base-model sharding costs of executing a trillion-parameter model. The claim
+must therefore be demonstrated with measured end-to-end cost, not inferred from
+trainable parameter count alone.
+
+## 9. Proposed experimental order
 
 1. Compare channel-wise diagonal, rank-one, rank-`R`, and HyperGrid SHS gates
    at matched parameter count and FLOPs.
-2. Test residualized two-expert products against additive two-expert mixtures
-   before scaling expert count.
-3. Separate shared-expert and routed-expert fusion policies in a small MoE.
-4. Compare dense all-expert training with QB-balanced sparse routing, measuring
+2. Compare residualized near-identity and signed-power two-expert products
+   against additive mixtures, including RMSNorm, bounded-return, exponent-sign,
+   precision, and log-domain controls.
+3. Separate shared-expert and routed-expert fusion policies in a small MoE,
+   beginning with shared-only multiplication.
+4. Compare atomic grouped activation with individually routed within-group
+   multiplication, matching expert inventory, active experts, and router budget.
+5. Compare dense all-expert training with QB-balanced sparse routing, measuring
    both load and semantic specialization.
-5. Compare tied middle recurrence, damped-Euler recurrence, and untied
+6. Test local geometric adaptation scopes around one EE layer: no adaptation,
+   selected-Attention OFT, selected-plus-next-Attention OFT, model-wide non-EE
+   OFT, and local unconstrained adaptation.
+7. Calibrate OFT-only layer screening against exhaustive full layer-local RL;
+   scale the proxy only after rank and top-`k` agreement gates pass.
+8. Compare tied middle recurrence, damped-Euler recurrence, and untied
    frequency-shaped EE schedules at matched active FLOPs.
-6. Test phase-locked KDA/Full-Attention and FFN-level schedules against
+9. Test phase-locked KDA/Full-Attention and FFN-level schedules against
    anti-phase, uniform-level, and shuffled-placement controls.
-7. Only after numerical and scaling gates pass, test full-rank dynamic SwiGLU
+10. Only after numerical and scaling gates pass, test full-rank dynamic SwiGLU
    bases and attention-layer replacements.
 
 Every stage should begin as an exact functional no-op or a controlled
@@ -824,3 +1003,4 @@ the completed Qwen3-1.7B study.
 - Zhou et al. [Mixture-of-Experts with Expert Choice Routing](https://arxiv.org/abs/2202.09368), 2022.
 - Schlag et al. [Linear Transformers Are Secretly Fast Weight Programmers](https://arxiv.org/abs/2102.11174), 2021.
 - Hinton. [Training Products of Experts by Minimizing Contrastive Divergence](https://doi.org/10.1162/089976602760128018), 2002.
+- Qiu et al. [Controlling Text-to-Image Diffusion by Orthogonal Finetuning](https://arxiv.org/abs/2306.07280), 2023.
