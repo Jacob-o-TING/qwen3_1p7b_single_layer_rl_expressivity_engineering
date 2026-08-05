@@ -727,11 +727,21 @@ Two orderings remain important:
 2. **Loop-mounted EE.** Keep the same Loop active while the EE component
    trains, allowing it to co-adapt to repeated hidden states.
 
+The ideal co-design hypothesis aligns the Loop window with the layers carrying
+elevated EE, so recurrent refinement repeatedly applies the most expressive
+region. This is not an empirical law. On Qwen3-1.7B, the source SLRL result
+selects Layer 10, whereas the canonical Loop window is `[12, 15]`. A
+position-searched `[7, 10]` window includes Layer 10 and improves the 16-task
+aggregate by more, but regresses held-out MMLU; optimizing overlap can therefore
+overfit the selection metric. Combined experiments must compare aligned,
+partially shifted, and disjoint EE/Loop placement under held-out validation.
+
 The minimum factorial comparison is no Loop/no EE, Loop only, EE only, EE then
 Loop, and Loop-mounted EE. Window, `K`, integrator, data, and activated compute
-must be matched. A Loop-only gain is evidence for recurrent-depth refinement,
-not frequency-shaped EE; an EE-only gain is evidence for the EE intervention,
-not Looping.
+must be matched. The combined cells additionally require the aligned, shifted,
+and disjoint placement controls above. A Loop-only gain is evidence for
+recurrent-depth refinement, not frequency-shaped EE; an EE-only gain is
+evidence for the EE intervention, not Looping.
 
 ## 7. Frequency-shaped EE across independently parameterized depth
 
