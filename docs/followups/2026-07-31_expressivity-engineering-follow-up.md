@@ -33,9 +33,12 @@ The **2026-08-27 extension** adds a second clearly dated group of proposals:
 asymmetric exact-no-op side-branch initialization, cascaded correction-order
 gates, additional SwiGLU-internal insertion sites, a staged curriculum for
 adding EE across B5/B10 layer sets, and a stricter rule that training reward or
-pretraining loss cannot replace downstream evaluation. Sections 11 and 12 are
-the canonical record of this extension. They are research hypotheses and
-protocol recommendations, not retrospective claims about the completed run.
+pretraining loss cannot replace downstream evaluation. It also introduces a
+gated positive-polynomial PolyNorm family, with hard-rectified and smooth
+Swish/SiLU members, as a separate biologically inspired hypothesis. Sections
+11--13 are the canonical record of this extension. They are research
+hypotheses and protocol recommendations, not retrospective claims about the
+completed run.
 
 ## 1. Retrospective connection: the TriGLU bottleneck and LatentMoE
 
@@ -1337,44 +1340,224 @@ rather than discarding them as noise. A curriculum expansion from Best Layer to
 B4/B5/B10 should proceed only after the current stage passes these downstream
 gates.
 
-## 13. Proposed experimental order
+## 13. Gated positive-polynomial PolyNorm (2026-08-27 extension)
+
+### 13.1 Definition and construction
+
+The proposed activation combines a polynomial that passes through the origin
+with a rectifier:
+
+```text
+P_+(z) = sum_{k=1}^K a_k z^k,        a_k > 0
+RPP(z) = ReLU(z) * P_+(z).
+```
+
+`z` is the normalized pre-activation of one channel, `K` is the maximum
+polynomial degree, and `a_k` is the learned coefficient of degree `k`. The sum
+begins at `k = 1`, so there is no constant term and `P_+(0) = 0`. Strictly
+positive coefficients should be produced by an unconstrained trainable
+parameter `theta_k`, for example:
+
+```text
+a_k = a_min + softplus(theta_k),      a_min >= 0.
+```
+
+This parameterization makes positivity part of the forward definition rather
+than a constraint that an optimizer can violate. Coefficients can be shared
+globally, learned per channel, or learned per channel group; these are distinct
+capacity settings and must not be compared without parameter matching.
+
+The corresponding PolyNorm block is:
+
+```text
+x
+ -> channel normalization
+ -> z
+ -> two parallel paths:
+      rectifier path: ReLU(z)
+      polynomial path: P_+(z)
+ -> element-wise product
+ -> RPP(z)
+ -> next Linear or residual/side-gate operation.
+```
+
+For `z <= 0`, `ReLU(z) = 0`, so the entire activation is exactly zero. For
+`z > 0`,
+
+```text
+RPP(z) = sum_{k=1}^K a_k z^(k+1).
+```
+
+The positive half-axis is therefore a learned activation composed only of
+positive powers with positive coefficients. Its slope is nonnegative for
+positive `z`, and its response becomes increasingly superlinear as higher
+degrees contribute. In EE terms, the polynomial supplies explicit
+self-interaction orders while the rectifier defines a one-sided activation
+domain.
+
+### 13.2 Gate family: ReLU and Swish/SiLU
+
+ReLU need not be the only outer gate. A more general family separates the
+gate `g` from the coordinate `q` on which the positive polynomial is
+evaluated:
+
+```text
+phi_{g,q}(z) = g(z) * sum_{k=1}^K a_k q(z)^k,    a_k > 0.
+```
+
+Here `g(z)` controls thresholding and output sign, while `q(z)` controls the
+domain seen by the polynomial. This distinction matters whenever `z` is
+negative. Candidate variants include:
+
+```text
+hard rectified:
+    g(z) = ReLU(z),       q(z) = ReLU(z)
+
+smooth Swish/SiLU:
+    g(z) = z * sigmoid(beta z),
+    q(z) = softplus(z)
+
+hybrid smooth gate, hard polynomial coordinate:
+    g(z) = z * sigmoid(beta z),
+    q(z) = ReLU(z).
+```
+
+`beta > 0` controls the sharpness of Swish; `beta = 1` is the standard
+SiLU/Swish-1 form. `softplus(z) = log(1 + exp(z))` gives the polynomial a
+strictly positive smooth coordinate. The ReLU variant has an exactly zero
+negative half-axis. The Swish variants instead retain a small, smooth negative
+tail, which can improve gradient flow and reduce dead units but weakens the
+hard firing-threshold analogy.
+
+Directly using `g(z) = Swish(z)` and `q(z) = z` is also a valid exploratory
+control, but positive coefficients no longer guarantee a positive or monotone
+polynomial factor on the negative axis: odd and even powers contribute with
+different signs. It must therefore be named as the **direct signed-domain
+Swish control**, not grouped with the nonnegative-coordinate family.
+
+The gate comparison should include ReLU, Swish/SiLU, and optionally GELU while
+holding polynomial degree, coefficient policy, normalization, parameter count,
+and surrounding Linear maps fixed. This determines whether any gain comes
+from the positive polynomial interaction itself, the hard biological-style
+threshold, or the smoother gradient supplied by the outer gate.
+
+### 13.3 Biological interpretation and its boundary
+
+The biological inspiration is a coarse firing-rate analogy. In the hard ReLU
+member, inputs below a threshold produce no output, while supra-threshold input
+produces a nonnegative, learnable response whose gain can increase with
+stimulation. Compared with an unconstrained polynomial that oscillates or
+changes sign, positive coefficients yield an excitatory, monotone positive-side
+response that more closely resembles a rectified firing curve. The Swish/SiLU
+members deliberately relax the hard threshold and should be interpreted as
+smooth optimization-oriented relatives rather than exact instances of that
+analogy.
+
+This is not a claim of biological fidelity. Real neurons have membrane
+dynamics, inhibitory and excitatory synapses, refractory behavior, adaptation,
+noise, temporal integration, and saturation. `ReLU(z) P_+(z)` is a static
+rate-style abstraction that captures only thresholding and a learnable
+positive response. The term "biologically inspired" should therefore remain
+qualified rather than being used as evidence of biological realism.
+
+### 13.4 Consequences for optimization
+
+Requiring the polynomial itself to pass through the origin has a nontrivial
+effect. If the first term is `a_1 z`, then the complete positive-side
+activation begins as `a_1 z^2`, not as a linear ReLU. Consequently,
+
+```text
+RPP(0) = 0,
+d RPP(z) / dz -> 0 as z -> 0+.
+```
+
+This creates a smooth, low-gain onset but can also slow early learning near the
+threshold. Negative pre-activations receive zero activation gradient through
+the rectifier, preserving the standard dead-unit risk of ReLU. A preceding
+trainable Linear bias can move a channel across the threshold, but that does
+not eliminate the need to measure inactive-channel fractions.
+
+The all-positive basis also restricts shape. On the positive axis it cannot
+learn a decreasing region, a sign change, or saturation by itself. High-degree
+terms can grow rapidly and create activation or gradient outliers. PolyNorm's
+normalization is therefore essential rather than cosmetic. Candidate controls
+include normalizing `z` before exponentiation, limiting `K`, scaling each power
+by a degree-dependent constant, bounding the positive input, or applying a
+post-polynomial normalization. Any bound that changes the exact polynomial
+must be reported as a separate variant.
+
+The zero-slope statement above applies to the strict ReLU/origin-passing cell.
+Swish/SiLU variants have different behavior around zero and must report their
+left and right derivatives separately rather than inheriting the ReLU
+analysis.
+
+### 13.5 Required ablations
+
+The first study should compare:
+
+1. standard ReLU, SiLU/Swish, GELU, and the existing PolyNorm activation;
+2. the strict origin-passing ReLU proposal with `k = 1, ..., K`;
+3. a positive-constant control
+   `ReLU(z) * [a_0 + sum_{k=1}^K a_k z^k]`, where `a_0 > 0`, which restores a
+   linear term near the origin even though the polynomial no longer passes
+   through the origin;
+4. Swish/SiLU with `q(z) = softplus(z)`, `q(z) = ReLU(z)`, and the direct
+   signed-domain control `q(z) = z`;
+5. fixed versus learned Swish `beta` and, where useful, a GELU-gated control;
+6. positive versus unconstrained or signed polynomial coefficients;
+7. shared, grouped, and per-channel coefficient policies; and
+8. polynomial degree and normalization/bounding choices.
+
+Match parameters, activated FLOPs, surrounding Linear layers, data order,
+optimizer, and initialization. Report validation loss and downstream quality,
+but also positive/negative activation fractions, near-zero slope statistics,
+coefficient trajectories, per-degree contribution, output moments, saturation
+or outlier rates, dead-channel persistence, gradient norms, BF16 stability,
+and serving throughput. The activation should enter the cascaded-gate study in
+Section 11 only after this isolated comparison establishes a numerically stable
+configuration.
+
+## 14. Proposed experimental order
 
 1. Compare asymmetric exact-no-op side initialization against all-zero,
    standard random-plus-zero-return, and near-identity controls; audit early
    gradient flow and output drift.
 2. Compare one-order TriGLU/ToTGLU modulation with two- and three-level
    cascaded PolyNorm gates at matched parameters and FLOPs.
-3. Test one-at-a-time SwiGLU insertion sites after `up_proj`, on the activated
+3. Isolate gated positive-polynomial PolyNorm across ReLU, Swish/SiLU, and
+   optional GELU outer gates, including nonnegative-coordinate and direct
+   signed-domain controls, before using it inside a cascade.
+4. Test one-at-a-time SwiGLU insertion sites after `up_proj`, on the activated
    gate stream, before `down_proj`, and at the final return.
-4. Compare channel-wise diagonal, rank-one, rank-`R`, and HyperGrid SHS gates
+5. Compare channel-wise diagonal, rank-one, rank-`R`, and HyperGrid SHS gates
    at matched parameter count and FLOPs.
-5. Compare residualized near-identity and signed-power two-expert products
+6. Compare residualized near-identity and signed-power two-expert products
    against additive mixtures, including RMSNorm, bounded-return, exponent-sign,
    precision, and log-domain controls.
-6. Separate shared-expert and routed-expert fusion policies in a small MoE,
+7. Separate shared-expert and routed-expert fusion policies in a small MoE,
    beginning with shared-only multiplication.
-7. Compare atomic grouped activation with individually routed within-group
+8. Compare atomic grouped activation with individually routed within-group
    multiplication, matching expert inventory, active experts, and router budget.
-8. Compare dense all-expert training with QB-balanced sparse routing, measuring
+9. Compare dense all-expert training with QB-balanced sparse routing, measuring
    both load and semantic specialization.
-9. Compare direct-RL cold start with CPT-to-RL, SFT-to-RL, and
+10. Compare direct-RL cold start with CPT-to-RL, SFT-to-RL, and
    CPT-to-SFT-to-RL EE-only warm starts.
-10. Scale EE through Best Layer, B4/B5, and B10 before testing progressive
+11. Scale EE through Best Layer, B4/B5, and B10 before testing progressive
     outward activation; evaluate all constituent math tasks and hard OOD
     benchmarks at every stage rather than selecting by reward alone.
-11. Test local geometric adaptation scopes around one EE layer: no adaptation,
+12. Test local geometric adaptation scopes around one EE layer: no adaptation,
    selected-Attention OFT, selected-plus-next-Attention OFT, model-wide non-EE
    OFT, and local unconstrained adaptation.
-12. Calibrate OFT-only layer screening against exhaustive full layer-local RL;
+13. Calibrate OFT-only layer screening against exhaustive full layer-local RL;
    scale the proxy only after rank and top-`k` agreement gates pass.
-13. Validate plain frozen-model Looping without EE, including naive,
+14. Validate plain frozen-model Looping without EE, including naive,
    damped-Euler, and Runge--Kutta strategies at matched windows and cost.
-14. Compare untied frequency-shaped EE against flat, uniform, and shuffled
+15. Compare untied frequency-shaped EE against flat, uniform, and shuffled
     depth schedules without Looping.
-15. Cross the independent axes with EE-then-Loop and Loop-mounted EE cells.
-16. Test phase-locked KDA/Full-Attention and FFN-level schedules against
+16. Cross the independent axes with EE-then-Loop and Loop-mounted EE cells.
+17. Test phase-locked KDA/Full-Attention and FFN-level schedules against
    anti-phase, uniform-level, and shuffled-placement controls.
-17. Only after numerical and scaling gates pass, test full-rank dynamic SwiGLU
+18. Only after numerical and scaling gates pass, test full-rank dynamic SwiGLU
    bases and attention-layer replacements.
 
 Every stage should begin as an exact functional no-op or a controlled

@@ -27,6 +27,9 @@ phase-locked Full/Linear-Attention-to-FFN expressivity schedules. The dated
 PolyNorm correction gates, SwiGLU-internal gate placement, progressive
 Best-Layer-to-B5/B10 EE curricula, and downstream-evaluation requirements that
 do not treat training reward or pretraining loss as final quality selectors.
+It also proposes a gated positive-polynomial PolyNorm family: a hard ReLU
+variant with an exactly zero negative half-axis and smooth Swish/SiLU variants
+that trade the strict threshold for improved gradient flow.
 
 The repository contains GRPO / veRL-style training infrastructure, SHS,
 TriGLU and OFT variants, registered vLLM integration points, reproducible
