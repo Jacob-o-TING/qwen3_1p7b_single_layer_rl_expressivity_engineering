@@ -33,6 +33,14 @@ with an exactly zero negative half-axis, plus smooth Swish/SiLU members that
 trade the strict threshold for improved gradient flow while preserving a
 first-order response.
 
+**Follow-up, 2026-08-27:** [Beyond The First Stars: 初星之晨 · 更加遥远的天空](docs/followups/2026-08-27_beyond-the-first-stars.md)
+develops a separate architecture agenda beyond local EE. It proposes a
+WONN-like, persistent reasoning residual stream alongside the ordinary
+Transformer stream, with one input-dependent frequency state per major layer,
+weight-tied fast phase updates, explicit cross-stream reads and writes, causal
+language adaptations, and a staged experimental program that separates
+parameter efficiency from test-time compute.
+
 The repository contains GRPO / veRL-style training infrastructure, SHS,
 TriGLU and OFT variants, registered vLLM integration points, reproducible
 evaluation utilities, and compact experiment records.
