@@ -1344,22 +1344,32 @@ gates.
 
 ### 13.1 Definition and construction
 
-The proposed activation combines a polynomial that passes through the origin
-with a rectifier:
+The canonical proposal uses a positive-coefficient polynomial **with a
+constant term**, multiplied by an activation gate:
 
 ```text
-P_+(z) = sum_{k=1}^K a_k z^k,        a_k > 0
-RPP(z) = ReLU(z) * P_+(z).
+P_+(z) = sum_{k=0}^K a_k z^k,        a_k > 0, a_0 > 0
+phi_g(z) = g(z) * P_+(z).
 ```
 
 `z` is the normalized pre-activation of one channel, `K` is the maximum
-polynomial degree, and `a_k` is the learned coefficient of degree `k`. The sum
-begins at `k = 1`, so there is no constant term and `P_+(0) = 0`. Strictly
-positive coefficients should be produced by an unconstrained trainable
-parameter `theta_k`, for example:
+polynomial degree, `a_k` is the learned coefficient of degree `k`, and `g` is
+the selected gate. The polynomial itself no longer has to pass through the
+origin. The complete activation still passes through the origin whenever
+`g(0) = 0`, which holds for ReLU, Swish/SiLU, and GELU.
+
+The constant term is essential. Near zero, it multiplies the gate's ordinary
+first-order response instead of forcing the complete activation to begin at
+quadratic order. The earlier same-day draft
+`ReLU(z) * sum_{k=1}^K a_k z^k` is superseded as the primary proposal because
+its smallest term is proportional to `z^2` on the positive side. It remains
+only as a diagnostic ablation.
+
+Strictly positive coefficients should be produced by unconstrained trainable
+parameters, for example:
 
 ```text
-a_k = a_min + softplus(theta_k),      a_min >= 0.
+a_k = a_min,k + softplus(theta_k),    a_min,k >= 0.
 ```
 
 This parameterization makes positivity part of the forward definition rather
@@ -1374,66 +1384,58 @@ x
  -> channel normalization
  -> z
  -> two parallel paths:
-      rectifier path: ReLU(z)
-      polynomial path: P_+(z)
+      gate path: g(z), such as ReLU(z) or Swish_beta(z)
+      polynomial path: P_+(z), including a_0
  -> element-wise product
- -> RPP(z)
+ -> phi_g(z)
  -> next Linear or residual/side-gate operation.
 ```
 
-For `z <= 0`, `ReLU(z) = 0`, so the entire activation is exactly zero. For
-`z > 0`,
+For the ReLU member and positive `z`,
 
 ```text
-RPP(z) = sum_{k=1}^K a_k z^(k+1).
+phi_ReLU(z) = a_0 z + a_1 z^2 + ... + a_K z^(K+1).
 ```
 
-The positive half-axis is therefore a learned activation composed only of
-positive powers with positive coefficients. Its slope is nonnegative for
-positive `z`, and its response becomes increasingly superlinear as higher
-degrees contribute. In EE terms, the polynomial supplies explicit
-self-interaction orders while the rectifier defines a one-sided activation
-domain.
+The `a_0 z` term preserves first order, while `a_1 z^2` and higher terms add
+explicit self-interaction orders. With positive coefficients, the ReLU member
+is zero on the negative half-axis and monotone on the positive half-axis.
 
 ### 13.2 Gate family: ReLU and Swish/SiLU
 
-ReLU need not be the only outer gate. A more general family separates the
-gate `g` from the coordinate `q` on which the positive polynomial is
-evaluated:
-
-```text
-phi_{g,q}(z) = g(z) * sum_{k=1}^K a_k q(z)^k,    a_k > 0.
-```
-
-Here `g(z)` controls thresholding and output sign, while `q(z)` controls the
-domain seen by the polynomial. This distinction matters whenever `z` is
-negative. Candidate variants include:
+The same constant-term polynomial can be paired with several gates:
 
 ```text
 hard rectified:
-    g(z) = ReLU(z),       q(z) = ReLU(z)
+    g(z) = ReLU(z)
 
 smooth Swish/SiLU:
-    g(z) = z * sigmoid(beta z),
-    q(z) = softplus(z)
+    g(z) = Swish_beta(z) = z * sigmoid(beta z),    beta > 0
 
-hybrid smooth gate, hard polynomial coordinate:
-    g(z) = z * sigmoid(beta z),
-    q(z) = ReLU(z).
+optional smooth control:
+    g(z) = GELU(z).
 ```
 
-`beta > 0` controls the sharpness of Swish; `beta = 1` is the standard
-SiLU/Swish-1 form. `softplus(z) = log(1 + exp(z))` gives the polynomial a
-strictly positive smooth coordinate. The ReLU variant has an exactly zero
-negative half-axis. The Swish variants instead retain a small, smooth negative
-tail, which can improve gradient flow and reduce dead units but weakens the
-hard firing-threshold analogy.
+`beta = 1` gives standard SiLU/Swish-1. Near zero, the direct-polynomial ReLU
+and Swish members have the expansions:
 
-Directly using `g(z) = Swish(z)` and `q(z) = z` is also a valid exploratory
-control, but positive coefficients no longer guarantee a positive or monotone
-polynomial factor on the negative axis: odd and even powers contribute with
-different signs. It must therefore be named as the **direct signed-domain
-Swish control**, not grouped with the nonnegative-coordinate family.
+```text
+phi_ReLU(z)  = a_0 z + O(z^2),       z -> 0+
+phi_Swish(z) = (a_0 / 2) z + O(z^2), z -> 0.
+```
+
+Both therefore preserve a first-order channel. ReLU gives an exactly zero
+negative half-axis. Swish retains a small, smooth negative tail and converges
+toward zero for very negative input, which can improve gradient flow and reduce
+dead units but relaxes the strict firing-threshold analogy.
+
+For Swish or GELU, the polynomial is evaluated on negative `z` as well. Positive
+coefficients guarantee a positive, monotone polynomial only on `z >= 0`; odd
+and even powers can interact differently on the negative side. The direct
+`P_+(z)` member must therefore be compared with a nonnegative-coordinate
+control such as `P_+(softplus(z))`. Because the gate itself is zero at the
+origin, the complete activation remains origin-passing even though
+`P_+(softplus(0))` is positive.
 
 The gate comparison should include ReLU, Swish/SiLU, and optionally GELU while
 holding polynomial degree, coefficient policy, normalization, parameter count,
@@ -1443,15 +1445,13 @@ threshold, or the smoother gradient supplied by the outer gate.
 
 ### 13.3 Biological interpretation and its boundary
 
-The biological inspiration is a coarse firing-rate analogy. In the hard ReLU
+The biological inspiration is a coarse firing-rate analogy. In the ReLU
 member, inputs below a threshold produce no output, while supra-threshold input
 produces a nonnegative, learnable response whose gain can increase with
-stimulation. Compared with an unconstrained polynomial that oscillates or
-changes sign, positive coefficients yield an excitatory, monotone positive-side
-response that more closely resembles a rectified firing curve. The Swish/SiLU
-members deliberately relax the hard threshold and should be interpreted as
-smooth optimization-oriented relatives rather than exact instances of that
-analogy.
+stimulation. Positive coefficients yield an excitatory, monotone positive-side
+response. The Swish/SiLU members deliberately relax the hard threshold and
+should be interpreted as smooth optimization-oriented relatives rather than
+exact instances of that analogy.
 
 This is not a claim of biological fidelity. Real neurons have membrane
 dynamics, inhibitory and excitatory synapses, refractory behavior, adaptation,
@@ -1462,20 +1462,28 @@ qualified rather than being used as evidence of biological realism.
 
 ### 13.4 Consequences for optimization
 
-Requiring the polynomial itself to pass through the origin has a nontrivial
-effect. If the first term is `a_1 z`, then the complete positive-side
-activation begins as `a_1 z^2`, not as a linear ReLU. Consequently,
+The superseded no-constant form begins at quadratic order and is not the
+primary proposal. The revised ReLU form satisfies:
 
 ```text
-RPP(0) = 0,
-d RPP(z) / dz -> 0 as z -> 0+.
+phi_ReLU(0) = 0,
+d phi_ReLU(z) / dz -> a_0 as z -> 0+.
 ```
 
-This creates a smooth, low-gain onset but can also slow early learning near the
-threshold. Negative pre-activations receive zero activation gradient through
-the rectifier, preserving the standard dead-unit risk of ReLU. A preceding
+The constant coefficient `a_0` therefore controls the initial positive-side
+gain. Negative pre-activations still receive zero activation gradient through
+ReLU, preserving its standard dead-unit risk. A preceding
 trainable Linear bias can move a channel across the threshold, but that does
-not eliminate the need to measure inactive-channel fractions.
+not eliminate the need to measure inactive-channel fractions. The smooth
+Swish member provides nonzero gradients around and below zero and is a
+direct control for this tradeoff.
+
+A stable initialization can set `a_0` near one and initialize higher-order
+coefficients to small positive values. The activation then begins close to its
+base gate while retaining trainable higher-order corrections. Compare fixed
+`a_0 = 1`, learned positive `a_0`, and jointly scaled coefficients; otherwise a
+large initial constant or high-order tail could change the activation scale
+before learning begins.
 
 The all-positive basis also restricts shape. On the positive axis it cannot
 learn a decreasing region, a sign change, or saturation by itself. High-degree
@@ -1486,27 +1494,28 @@ by a degree-dependent constant, bounding the positive input, or applying a
 post-polynomial normalization. Any bound that changes the exact polynomial
 must be reported as a separate variant.
 
-The zero-slope statement above applies to the strict ReLU/origin-passing cell.
-Swish/SiLU variants have different behavior around zero and must report their
-left and right derivatives separately rather than inheriting the ReLU
-analysis.
+The one-sided derivative statement above applies to the ReLU form.
+Swish/SiLU variants are differentiable at zero and must report their local
+slope separately rather than inheriting the hard-gate analysis.
 
 ### 13.5 Required ablations
 
 The first study should compare:
 
 1. standard ReLU, SiLU/Swish, GELU, and the existing PolyNorm activation;
-2. the strict origin-passing ReLU proposal with `k = 1, ..., K`;
-3. a positive-constant control
-   `ReLU(z) * [a_0 + sum_{k=1}^K a_k z^k]`, where `a_0 > 0`, which restores a
-   linear term near the origin even though the polynomial no longer passes
-   through the origin;
-4. Swish/SiLU with `q(z) = softplus(z)`, `q(z) = ReLU(z)`, and the direct
-   signed-domain control `q(z) = z`;
-5. fixed versus learned Swish `beta` and, where useful, a GELU-gated control;
-6. positive versus unconstrained or signed polynomial coefficients;
-7. shared, grouped, and per-channel coefficient policies; and
-8. polynomial degree and normalization/bounding choices.
+2. `ReLU(z) P_+(z)`, `Swish_beta(z) P_+(z)`, and optionally
+   `GELU(z) P_+(z)`, all with the same positive constant-term polynomial;
+3. fixed `a_0 = 1` versus a learned positive constant term, with higher-order
+   coefficients initialized at matched small scales;
+4. the superseded quadratic-onset form
+   `ReLU(z) sum_{k=1}^K a_k z^k` as a diagnostic control rather than the main
+   proposal;
+5. fixed versus learned Swish `beta`;
+6. direct `P_+(z)` versus nonnegative-coordinate `P_+(softplus(z))` for smooth
+   gates;
+7. positive versus unconstrained or signed polynomial coefficients;
+8. shared, grouped, and per-channel coefficient policies; and
+9. polynomial degree and normalization/bounding choices.
 
 Match parameters, activated FLOPs, surrounding Linear layers, data order,
 optimizer, and initialization. Report validation loss and downstream quality,
