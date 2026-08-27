@@ -14,7 +14,7 @@ The EE hypothesis and TriGLU intervention are separate contributions. This
 bounded setup makes a higher-capacity architecture test possible without
 pretraining a new model from scratch.
 
-**Follow-up, 2026-07-31; updated 2026-08-03:** [Expressivity Engineering
+**Follow-up, 2026-07-31; updated 2026-08-27:** [Expressivity Engineering
 Follow-up](docs/followups/2026-07-31_expressivity-engineering-follow-up.md)
 records a separate, post-report retrospective and general research agenda. It
 connects the empirically selected TriGLU bottleneck to LatentMoE, then develops
@@ -22,7 +22,11 @@ additive and multiplicative expert composition, structured multi-LoRA SHS
 HyperNetworks, full-rank dynamic SwiGLU components, corrected complexity
 accounting, attention-replacement directions including selective state-space
 models, frequency-shaped EE schedules as alternatives to tied recurrence, and
-phase-locked Full/Linear-Attention-to-FFN expressivity schedules.
+phase-locked Full/Linear-Attention-to-FFN expressivity schedules. The dated
+2026-08-27 extension adds asymmetric exact-no-op initialization, cascaded
+PolyNorm correction gates, SwiGLU-internal gate placement, progressive
+Best-Layer-to-B5/B10 EE curricula, and downstream-evaluation requirements that
+do not treat training reward or pretraining loss as final quality selectors.
 
 The repository contains GRPO / veRL-style training infrastructure, SHS,
 TriGLU and OFT variants, registered vLLM integration points, reproducible

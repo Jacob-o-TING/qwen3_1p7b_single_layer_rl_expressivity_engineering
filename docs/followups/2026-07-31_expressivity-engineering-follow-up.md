@@ -1,7 +1,7 @@
 # Expressivity Engineering Follow-up
 
 **Date:** 2026-07-31
-**Last updated:** 2026-08-05
+**Last updated:** 2026-08-27
 **Status:** Retrospective interpretation and research agenda; the new
 hypotheses are not yet independently validated
 
@@ -28,6 +28,14 @@ the earlier agenda: multiplicative-router semantics and grouped expert products,
 local geometric adaptation around an EE-modified layer, and OFT as a possible
 low-cost proxy for layer-contribution screening. These remain proposals rather
 than findings from the completed Qwen3-1.7B experiment.
+
+The **2026-08-27 extension** adds a second clearly dated group of proposals:
+asymmetric exact-no-op side-branch initialization, cascaded correction-order
+gates, additional SwiGLU-internal insertion sites, a staged curriculum for
+adding EE across B5/B10 layer sets, and a stricter rule that training reward or
+pretraining loss cannot replace downstream evaluation. Sections 11 and 12 are
+the canonical record of this extension. They are research hypotheses and
+protocol recommendations, not retrospective claims about the completed run.
 
 ## 1. Retrospective connection: the TriGLU bottleneck and LatentMoE
 
@@ -1123,34 +1131,250 @@ or base-model sharding costs of executing a trillion-parameter model. The claim
 must therefore be demonstrated with measured end-to-end cost, not inferred from
 trainable parameter count alone.
 
-## 11. Proposed experimental order
+## 11. Stabilized and cascaded side branches (2026-08-27 extension)
 
-1. Compare channel-wise diagonal, rank-one, rank-`R`, and HyperGrid SHS gates
+### 11.1 Asymmetric exact-no-op initialization
+
+A factorized side branch should distinguish the matrix that creates latent
+features from the matrix that returns a correction to the main stream. For a
+two-matrix branch,
+
+```text
+h(x) = F(W_in x),
+s(x) = W_out h(x),
+y(x) = main(x) elementwise_mul [1 + epsilon tanh(s(x))],
+```
+
+initialize the upstream matrix `W_in` with small random values, for example a
+zero-mean distribution whose entries have magnitude below `0.01`, while
+initializing the downstream return matrix `W_out` exactly to zero. Biases on
+the return path should also be zero. This is the precise interpretation of a
+"random upper matrix and zero lower matrix": upper and lower refer to upstream
+and downstream position in the computation graph, not to geometric halves of
+one tensor.
+
+Because `W_out = 0`, the initial side output is exactly zero and the complete
+model is an exact functional no-op regardless of the nonzero `W_in`. The small
+random `W_in` breaks symmetry and gives the return matrix heterogeneous latent
+features to read once optimization starts. At the first backward pass,
+`W_out` can receive a gradient while `W_in` generally receives zero gradient
+through the zero return matrix; after `W_out` moves away from zero, gradients
+can reach the upstream branch. This short staged onset is intentional. It
+avoids the potentially large main-output perturbation produced by a fully
+random return path while avoiding an all-zero internal branch whose units
+remain symmetry-equivalent.
+
+This policy must be compared with three controls: all-zero internal and return
+matrices, standard random internal weights with a zero return matrix, and a
+small but nonzero return matrix that is only near-identity rather than exact
+no-op. Report the first several optimizer steps separately, including output
+drift, gradient norms for every side matrix, activation scale, and the step at
+which each initially blocked upstream tensor first receives a nonzero update.
+
+### 11.2 Cascaded correction-order gating
+
+Instead of placing a high-capacity TriGLU/ToTGLU computation inside one side
+gate, distribute correction capacity across a nested hierarchy. A two-level
+example is:
+
+```text
+u_2(x) = PolyNormMLP_2(x)
+g_2(x) = 1 + epsilon_2 tanh(u_2(x))
+
+u_1(x) = PolyNormMLP_1(x) elementwise_mul g_2(x)
+g_1(x) = 1 + epsilon_1 tanh(u_1(x))
+
+y(x) = main(x) elementwise_mul g_1(x),
+```
+
+with `epsilon_1 = epsilon_2 = 0.01` as an initial scale proposal. In the
+owner's compact notation, this is:
+
+```text
+main' = main *
+        [1 + 0.01 * tanh(side_1 *
+             [1 + 0.01 * tanh(side_2)])].
+```
+
+Each `PolyNormMLP_i` is intentionally modest: two Linear layers and two
+PolyNorm transformations, rather than a complete TriGLU branch. Here PolyNorm
+means an explicit polynomial interaction followed by normalization; its exact
+order, normalization placement, hidden width, and residual convention must be
+frozen in the experiment manifest rather than hidden behind the name.
+
+The design hypothesis is that `g_2` provides a lower-level correction to the
+features used by `g_1`, while `g_1` supplies the final correction to the main
+stream. Capacity is therefore divided across **orders of correction** instead
+of being concentrated in one extremely expressive order. This may improve
+conditioning and reduce an optimization burden observed in the original
+ToTGLU idea, where a full three-stream multiplicative branch was inserted into
+one side order. Nesting itself does not prove a mathematical perturbation
+order, however. The interpretation must be tested by ablations over cascade
+depth, `epsilon_i`, PolyNorm degree, branch width, and reversed or shuffled
+gate order, all under matched parameters and active FLOPs.
+
+The near-identity scales compound. Even when every factor is individually
+bounded, deeper cascades can change activation and gradient distributions.
+Required diagnostics include the product of gate magnitudes, saturation rates,
+per-level Jacobian norms, BF16 stability, and whether deeper levels receive a
+useful learning signal rather than remaining effectively dormant.
+
+### 11.3 SwiGLU-internal insertion sites
+
+EE gates need not act only on the final SwiGLU return. A particularly natural
+site is after the `up_proj` representation has been formed and before the
+element-wise multiplication with the activated `gate_proj` stream and the
+subsequent `down_proj`:
+
+```text
+u = up_proj(x)
+v = SiLU(gate_proj(x))
+u' = u elementwise_mul G_up(x)
+h = v elementwise_mul u'
+y = down_proj(h).
+```
+
+The additional gate `G_up(x)` can use the asymmetric initialization and
+cascaded construction above. Related cells can gate `v`, gate both `u` and
+`v` separately, gate their product `h` immediately before `down_proj`, or
+combine an internal gate with the existing final-output modulation. These
+locations are not algebraically interchangeable: pre-product gates alter the
+multiplicative feature basis seen by `down_proj`, whereas a post-return gate
+rescales an already mixed output.
+
+The first insertion-site study should change one site at a time. It must match
+parameter count, active FLOPs, initialization scale, and trainable-backbone
+policy, then report both quality and kernel/serving cost. Multi-site gating is
+justified only after the single-site cells establish that the added locations
+provide complementary rather than redundant corrections.
+
+## 12. Scaling EE from the best layer to B5/B10 (2026-08-27 extension)
+
+### 12.1 Evaluation boundary of the source B5/B10 result
+
+The source single-layer RL study defines B5 and B10 as the five or ten layers
+with the highest measured layer contribution. Its guided-training section
+reports only the average over four in-domain math benchmarks for these
+multi-layer interventions, with three independent evaluation runs. It does
+not provide the individual MATH500, GSM8K, OlympiadBench, and AMC cells for
+every B5/B10 intervention, nor the Code, Reasoning, Language, or hard-benchmark
+OOD breakdowns for those interventions. The strong Qwen3-8B Only-B10
+MathAvg result therefore establishes an in-domain aggregate gain, not uniform
+improvement across math difficulty levels or OOD generalization.
+
+Any EE-augmented B5/B10 replication must retain MathAvg for comparability but
+also report every constituent math benchmark. OlympiadBench and other hard
+generative evaluations should be treated as primary safety checks rather than
+being hidden by an average. OOD evaluation must likewise preserve individual
+hard benchmarks, especially LiveCodeBench and GPQA-Diamond-Freeform or a
+subsequent equally strict free-form protocol, instead of relying only on naive
+category averages. A gain in MathAvg cannot by itself authorize scaling the
+architecture.
+
+The source paper does report per-benchmark and OOD results for selected
+single-layer models, and it reports category-level OOD averages in its main
+per-layer table. The limitation stated here is specifically about the B5/B10
+guided multi-layer interventions, not the entire paper.
+
+### 12.2 A layer-count curriculum for EE
+
+Applying a new EE module to all B5 or B10 layers at initialization may create a
+much larger optimization problem than either single-layer EE or selective
+training of unchanged Transformer blocks. The conservative curriculum is:
+
+1. add EE to the single best layer and establish an exact-no-op, throughput,
+   reward, and full downstream-evaluation baseline;
+2. expand to the best few layers, with the best four as a particularly useful
+   Qwen3-8B checkpoint because the displayed source results contain four
+   individual layers that meet or exceed the full-RL MathAvg (three above it
+   and one tied at the reported precision);
+3. compare B4/B5 with B10 under the same total data, seeds, per-layer EE width,
+   and trainable-backbone policy; and
+4. only then consider a scheduled expansion in which training begins with the
+   best layer or best few layers and activates progressively more outward
+   layers partway through training.
+
+Progressive activation must be specified before launch. The manifest should
+name the activation steps, new-module initialization, optimizer-state policy,
+learning-rate treatment, KL-reference policy, and whether already active
+layers continue training unchanged. Newly activated EE modules should begin as
+exact no-ops, and their optimizer state should be newly initialized rather
+than silently inherited from unrelated tensors. A matched static-B10 control
+is necessary to determine whether curriculum helps or merely changes total
+effective training time per layer.
+
+The layer-count axis and EE-capacity axis must remain distinct. If B10 performs
+worse than B4, the result could reflect too many modified locations, too much
+total EE capacity, insufficient data per trainable parameter, or optimization
+interference. Factorial controls should therefore compare fixed per-layer
+width with fixed total EE parameter budget distributed across one, four, five,
+or ten layers.
+
+### 12.3 Reward and loss are diagnostics, not final selectors
+
+The completed Qwen3-1.7B experiment repeatedly showed checkpoints with lower
+training reward but better final held-out evaluation. This breaks any simple
+rule that selects architecture or stopping time from mean GRPO reward alone.
+Reward remains useful for detecting verifier failures, collapse, or whether
+the policy is learning the sampled training distribution, but it is not a
+sufficient proxy for benchmark generalization, calibration, robust reasoning,
+or preservation of OOD capabilities.
+
+The same caution extends to fresh pretraining loss. Cross-entropy loss measures
+average next-token fit on the chosen validation distribution. Small loss
+differences can be dominated by frequent or easy tokens and need not preserve
+the ordering on rare knowledge, long-horizon reasoning, instruction following,
+or hard downstream tasks. This does not make loss useless; it means that loss
+is an optimization and distribution-fit diagnostic rather than a complete
+model-quality objective.
+
+Consequently, every architecture and layer-count decision must use a frozen
+downstream suite with checkpointed trajectories. Report reward and loss beside,
+not instead of, final-task metrics. Selection should require individual hard
+benchmarks, not only category averages; compare reward-vs-eval rank correlation
+and checkpoint lag; and preserve apparently "worse reward, better eval" cells
+rather than discarding them as noise. A curriculum expansion from Best Layer to
+B4/B5/B10 should proceed only after the current stage passes these downstream
+gates.
+
+## 13. Proposed experimental order
+
+1. Compare asymmetric exact-no-op side initialization against all-zero,
+   standard random-plus-zero-return, and near-identity controls; audit early
+   gradient flow and output drift.
+2. Compare one-order TriGLU/ToTGLU modulation with two- and three-level
+   cascaded PolyNorm gates at matched parameters and FLOPs.
+3. Test one-at-a-time SwiGLU insertion sites after `up_proj`, on the activated
+   gate stream, before `down_proj`, and at the final return.
+4. Compare channel-wise diagonal, rank-one, rank-`R`, and HyperGrid SHS gates
    at matched parameter count and FLOPs.
-2. Compare residualized near-identity and signed-power two-expert products
+5. Compare residualized near-identity and signed-power two-expert products
    against additive mixtures, including RMSNorm, bounded-return, exponent-sign,
    precision, and log-domain controls.
-3. Separate shared-expert and routed-expert fusion policies in a small MoE,
+6. Separate shared-expert and routed-expert fusion policies in a small MoE,
    beginning with shared-only multiplication.
-4. Compare atomic grouped activation with individually routed within-group
+7. Compare atomic grouped activation with individually routed within-group
    multiplication, matching expert inventory, active experts, and router budget.
-5. Compare dense all-expert training with QB-balanced sparse routing, measuring
+8. Compare dense all-expert training with QB-balanced sparse routing, measuring
    both load and semantic specialization.
-6. Compare direct-RL cold start with CPT-to-RL, SFT-to-RL, and
+9. Compare direct-RL cold start with CPT-to-RL, SFT-to-RL, and
    CPT-to-SFT-to-RL EE-only warm starts.
-7. Test local geometric adaptation scopes around one EE layer: no adaptation,
+10. Scale EE through Best Layer, B4/B5, and B10 before testing progressive
+    outward activation; evaluate all constituent math tasks and hard OOD
+    benchmarks at every stage rather than selecting by reward alone.
+11. Test local geometric adaptation scopes around one EE layer: no adaptation,
    selected-Attention OFT, selected-plus-next-Attention OFT, model-wide non-EE
    OFT, and local unconstrained adaptation.
-8. Calibrate OFT-only layer screening against exhaustive full layer-local RL;
+12. Calibrate OFT-only layer screening against exhaustive full layer-local RL;
    scale the proxy only after rank and top-`k` agreement gates pass.
-9. Validate plain frozen-model Looping without EE, including naive,
+13. Validate plain frozen-model Looping without EE, including naive,
    damped-Euler, and Runge--Kutta strategies at matched windows and cost.
-10. Compare untied frequency-shaped EE against flat, uniform, and shuffled
+14. Compare untied frequency-shaped EE against flat, uniform, and shuffled
     depth schedules without Looping.
-11. Cross the independent axes with EE-then-Loop and Loop-mounted EE cells.
-12. Test phase-locked KDA/Full-Attention and FFN-level schedules against
+15. Cross the independent axes with EE-then-Loop and Loop-mounted EE cells.
+16. Test phase-locked KDA/Full-Attention and FFN-level schedules against
    anti-phase, uniform-level, and shuffled-placement controls.
-13. Only after numerical and scaling gates pass, test full-rank dynamic SwiGLU
+17. Only after numerical and scaling gates pass, test full-rank dynamic SwiGLU
    bases and attention-layer replacements.
 
 Every stage should begin as an exact functional no-op or a controlled
